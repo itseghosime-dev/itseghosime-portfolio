@@ -9,6 +9,10 @@ export const projectSections = defineType({
     defineArrayMember({type: 'narrativeSection'}),
     defineArrayMember({type: 'contributionGridSection'}),
     defineArrayMember({type: 'mediaShowcaseSection'}),
+    defineArrayMember({type: 'processSection'}),
+    defineArrayMember({type: 'codeShowcaseSection'}),
+    defineArrayMember({type: 'interactiveSandboxSection'}),
+    defineArrayMember({type: 'outcomesSection'}),
   ],
 
   validation: (rule) =>
@@ -26,6 +30,10 @@ export const projectSections = defineType({
 
         const heroSections = sectionItems.filter((section) => section._type === 'heroSection')
 
+        const sandboxSections = sectionItems.filter(
+          (section) => section._type === 'interactiveSandboxSection',
+        )
+
         if (heroSections.length === 0) {
           return 'Add one hero section.'
         }
@@ -36,6 +44,10 @@ export const projectSections = defineType({
 
         if (sectionItems[0]?._type !== 'heroSection') {
           return 'The hero section must be the first section.'
+        }
+
+        if (sandboxSections.length > 1) {
+          return 'A project can only have one interactive sandbox.'
         }
 
         return true
