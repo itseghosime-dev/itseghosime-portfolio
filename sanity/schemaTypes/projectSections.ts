@@ -8,6 +8,7 @@ export const projectSections = defineType({
     defineArrayMember({type: 'heroSection'}),
     defineArrayMember({type: 'narrativeSection'}),
     defineArrayMember({type: 'contributionGridSection'}),
+    defineArrayMember({type: 'mediaShowcaseSection'}),
   ],
 
   validation: (rule) =>
