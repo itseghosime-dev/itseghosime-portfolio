@@ -109,3 +109,43 @@ export const HOME_METADATA_QUERY = defineQuery(`{
     }
   }
 }`)
+
+export const WORK_ARCHIVE_QUERY = defineQuery(`{
+  "projects": *[
+    _type == "project" &&
+    defined(slug.current)
+  ] | order(displayOrder asc, year desc)[0...8]{
+    _id,
+    title,
+    "slug": slug.current,
+    subtitle,
+    summary,
+    role,
+    client,
+    year,
+    timeline,
+    projectType,
+    status,
+    liveUrl,
+    repositoryUrl,
+    "coverImage": coverImage ${IMAGE_PROJECTION},
+    "supportingImage": supportingImage ${IMAGE_PROJECTION},
+    "technologies": technologyStack[]->{name}
+  },
+  "labExperiments": *[
+    _type == "labExperiment" &&
+    defined(slug.current)
+  ] | order(displayOrder asc, _createdAt asc)[0...8]{
+    _id,
+    title,
+    "slug": slug.current,
+    summary,
+    status,
+    startedAt,
+    completedAt,
+    demoUrl,
+    repositoryUrl,
+    "coverImage": coverImage ${IMAGE_PROJECTION},
+    "technologies": technologies[]->{name}
+  }
+}`)

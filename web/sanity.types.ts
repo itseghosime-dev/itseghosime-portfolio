@@ -940,11 +940,82 @@ export type HOME_METADATA_QUERY_RESULT = {
     | null;
 };
 
+// Source: ../web/sanity/lib/queries.ts
+// Variable: WORK_ARCHIVE_QUERY
+// Query: {  "projects": *[    _type == "project" &&    defined(slug.current)  ] | order(displayOrder asc, year desc)[0...8]{    _id,    title,    "slug": slug.current,    subtitle,    summary,    role,    client,    year,    timeline,    projectType,    status,    liveUrl,    repositoryUrl,    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    "supportingImage": supportingImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    "technologies": technologyStack[]->{name}  },  "labExperiments": *[    _type == "labExperiment" &&    defined(slug.current)  ] | order(displayOrder asc, _createdAt asc)[0...8]{    _id,    title,    "slug": slug.current,    summary,    status,    startedAt,    completedAt,    demoUrl,    repositoryUrl,    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    "technologies": technologies[]->{name}  }}
+export type WORK_ARCHIVE_QUERY_RESULT = {
+  projects: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    subtitle: string | null;
+    summary: string | null;
+    role: string | null;
+    client: string | null;
+    year: number | null;
+    timeline: string | null;
+    projectType:
+      | "automation"
+      | "concept"
+      | "experiment"
+      | "softwareProduct"
+      | "webApplication"
+      | "website"
+      | null;
+    status: "archived" | "concept" | "inProgress" | "live" | null;
+    liveUrl: string | null;
+    repositoryUrl: string | null;
+    coverImage: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+    supportingImage: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+    technologies: Array<{
+      name: string | null;
+    }> | null;
+  }>;
+  labExperiments: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    summary: string | null;
+    status:
+      "archived" | "completed" | "exploring" | "paused" | "planned" | null;
+    startedAt: string | null;
+    completedAt: string | null;
+    demoUrl: string | null;
+    repositoryUrl: string | null;
+    coverImage: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+    technologies: Array<{
+      name: string | null;
+    }> | null;
+  }>;
+};
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
     '{\n  "profile": *[_id == "profile"][0]{\n    fullName,\n    professionalTitle,\n    introduction,\n    location,\n    availability,\n    availabilityNote,\n    targetRoles,\n    professionalStrengths,\n    workingPrinciples,\n    email,\n    socialLinks[]{platform, label, url},\n    "biography": biography[]{\n      _key,\n      _type,\n      style,\n      children[]{_key, _type, text, marks}\n    },\n    "portrait": portrait {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  },\n  "settings": *[_id == "siteSettings"][0]{\n    siteName,\n    siteDescription,\n    canonicalUrl,\n    navigation[]{label, destination, externalUrl},\n    contactHeading,\n    contactMessage,\n    contactButtonLabel,\n    footerText,\n    indexing,\n    googleSiteVerification,\n    defaultSeo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "projects": *[\n    _type == "project" &&\n    featured == true &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc)[0...3]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologyStack[]->{name, "slug": slug.current}\n  },\n  "technologies": *[\n    _type == "technology" &&\n    name in ["JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS", "Node.js", "Sanity", "Git"]\n  ] | order(displayOrder asc, name asc){\n    _id,\n    name,\n    summary,\n    relationship,\n    firstUsedYear\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    featured == true &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt desc)[0...3]{\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    status\n  }\n}': HOME_PAGE_QUERY_RESULT;
     '{\n  "profile": *[_id == "profile"][0]{fullName, professionalTitle},\n  "settings": *[_id == "siteSettings"][0]{\n    siteName,\n    siteDescription,\n    canonicalUrl,\n    indexing,\n    googleSiteVerification,\n    defaultSeo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  }\n}': HOME_METADATA_QUERY_RESULT;
+    '{\n  "projects": *[\n    _type == "project" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc)[0...8]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologyStack[]->{name}\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt asc)[0...8]{\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    status,\n    startedAt,\n    completedAt,\n    demoUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologies[]->{name}\n  }\n}': WORK_ARCHIVE_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
