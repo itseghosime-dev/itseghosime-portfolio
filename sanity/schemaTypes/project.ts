@@ -246,11 +246,20 @@ export const project = defineType({
       title: 'title',
       role: 'role',
       year: 'year',
+      status: 'status',
       media: 'coverImage',
     },
 
-    prepare({title, role, year, media}) {
-      const details = [role, year].filter(Boolean).join(' · ')
+    prepare({title, role, year, status, media}) {
+      const statusLabels: Record<string, string> = {
+        concept: 'Concept',
+        inProgress: 'In progress',
+        live: 'Live',
+        archived: 'Archived',
+      }
+      const details = [role, status ? statusLabels[status] : undefined, year]
+        .filter(Boolean)
+        .join(' · ')
 
       return {
         title: title || 'Untitled project',

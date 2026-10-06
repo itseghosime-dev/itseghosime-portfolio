@@ -93,7 +93,7 @@ export const siteSettings = defineType({
       description: 'Block indexing only while the entire website should remain private.',
       type: 'string',
       group: 'search',
-      initialValue: 'allow',
+      initialValue: 'block',
       options: {
         list: [
           {title: 'Allow search indexing', value: 'allow'},
@@ -114,11 +114,12 @@ export const siteSettings = defineType({
   ],
 
   preview: {
-    select: {title: 'siteName', subtitle: 'canonicalUrl'},
-    prepare({title, subtitle}) {
+    select: {title: 'siteName', canonicalUrl: 'canonicalUrl', indexing: 'indexing'},
+    prepare({title, canonicalUrl, indexing}) {
+      const searchStatus = indexing === 'allow' ? 'Search indexing enabled' : 'Search indexing blocked'
       return {
         title: title || 'Site settings',
-        subtitle: subtitle || 'Global portfolio configuration',
+        subtitle: [canonicalUrl || 'Domain not configured', searchStatus].join(' · '),
         media: CogIcon,
       }
     },

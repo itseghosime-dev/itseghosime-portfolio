@@ -230,7 +230,18 @@ export const careerMilestone = defineType({
       media: 'organisationLogo',
     },
     prepare({title, organisation, startDate, status, media}) {
-      const details = [organisation, startDate?.slice(0, 4), status].filter(Boolean).join(' · ')
+      const statusLabels: Record<string, string> = {
+        completed: 'Completed',
+        inProgress: 'In progress',
+        upcoming: 'Upcoming',
+      }
+      const details = [
+        organisation,
+        startDate?.slice(0, 4),
+        status ? statusLabels[status] : undefined,
+      ]
+        .filter(Boolean)
+        .join(' · ')
       return {
         title: title || 'Untitled milestone',
         subtitle: details,

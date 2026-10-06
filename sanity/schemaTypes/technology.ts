@@ -152,12 +152,42 @@ export const technology = defineType({
       title: 'name',
       category: 'category',
       relationship: 'relationship',
+      firstUsedYear: 'firstUsedYear',
       media: 'logo',
     },
-    prepare({title, category, relationship, media}) {
+    prepare({title, category, relationship, firstUsedYear, media}) {
+      const categoryLabels: Record<string, string> = {
+        language: 'Programming language',
+        framework: 'Framework',
+        library: 'Library',
+        runtime: 'Runtime',
+        cms: 'Content management',
+        styling: 'Styling and UI',
+        testing: 'Testing and quality',
+        automation: 'Automation',
+        ai: 'AI and machine learning',
+        tooling: 'Developer tooling',
+        platform: 'Platform and infrastructure',
+        database: 'Database',
+        other: 'Other',
+      }
+      const relationshipLabels: Record<string, string> = {
+        core: 'Core skill',
+        working: 'Working knowledge',
+        learning: 'Currently learning',
+        exploring: 'Exploring',
+        historical: 'Previously used',
+      }
+
       return {
         title: title || 'Untitled technology',
-        subtitle: [category, relationship].filter(Boolean).join(' · '),
+        subtitle: [
+          category ? categoryLabels[category] : undefined,
+          relationship ? relationshipLabels[relationship] : undefined,
+          firstUsedYear ? `Since ${firstUsedYear}` : undefined,
+        ]
+          .filter(Boolean)
+          .join(' · '),
         media: media || TagIcon,
       }
     },

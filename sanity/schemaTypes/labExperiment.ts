@@ -193,9 +193,16 @@ export const labExperiment = defineType({
   preview: {
     select: {title: 'title', status: 'status', media: 'coverImage'},
     prepare({title, status, media}) {
+      const statusLabels: Record<string, string> = {
+        planned: 'Planned',
+        exploring: 'Exploring',
+        completed: 'Completed',
+        paused: 'Paused',
+        archived: 'Archived',
+      }
       return {
         title: title || 'Untitled experiment',
-        subtitle: status || 'No status',
+        subtitle: status ? statusLabels[status] : 'No status',
         media: media || CodeIcon,
       }
     },

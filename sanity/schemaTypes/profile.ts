@@ -163,11 +163,30 @@ export const profile = defineType({
   ],
 
   preview: {
-    select: {title: 'fullName', subtitle: 'professionalTitle', media: 'portrait'},
-    prepare({title, subtitle, media}) {
+    select: {
+      title: 'fullName',
+      professionalTitle: 'professionalTitle',
+      location: 'location',
+      availability: 'availability',
+      media: 'portrait',
+    },
+    prepare({title, professionalTitle, location, availability, media}) {
+      const availabilityLabels: Record<string, string> = {
+        open: 'Open to opportunities',
+        freelance: 'Available for freelance work',
+        selective: 'Open to selected projects',
+        unavailable: 'Not currently available',
+      }
+
       return {
         title: title || 'Professional profile',
-        subtitle,
+        subtitle: [
+          professionalTitle,
+          location,
+          availability ? availabilityLabels[availability] : undefined,
+        ]
+          .filter(Boolean)
+          .join(' · '),
         media: media || UserIcon,
       }
     },

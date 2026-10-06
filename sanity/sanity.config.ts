@@ -4,12 +4,14 @@ import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import {structure} from './structure'
 import {studioTheme} from './studioTheme'
+import {StudioIcon} from './studio/components/StudioIcon'
 
 const singletonTypes = new Set(['profile', 'siteSettings'])
 
 export default defineConfig({
   name: 'default',
   title: 'ITSEGHOSIME',
+  icon: StudioIcon,
 
   projectId: 's3e4rrk9',
   dataset: 'production',
