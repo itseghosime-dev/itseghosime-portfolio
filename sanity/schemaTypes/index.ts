@@ -10,6 +10,7 @@ import {interactiveSandboxSection} from './blocks/interactiveSandboxSection'
 import {outcomesSection} from './blocks/outcomesSection'
 import {projectSections} from './projectSections'
 import {project} from './project'
+import {technology} from './technology'
 
 export const schemaTypes = [
   accessibleImage,
@@ -24,4 +25,5 @@ export const schemaTypes = [
   outcomesSection,
   projectSections,
   project,
+  technology,
 ]

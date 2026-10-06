@@ -146,9 +146,25 @@ export const project = defineType({
     }),
 
     defineField({
+      name: 'technologyStack',
+      title: 'Technology stack',
+      description: 'Reference the technologies actually used to create this project.',
+      type: 'array',
+      group: 'classification',
+      of: [
+        defineArrayMember({
+          type: 'reference',
+          to: [{type: 'technology'}],
+        }),
+      ],
+      validation: (rule) =>
+        rule.unique().min(1).warning('Add at least one technology before publishing.'),
+    }),
+
+    defineField({
       name: 'technologies',
-      title: 'Technologies used',
-      description: 'Only include technologies actually used on this project.',
+      title: 'Legacy technology tags',
+      description: 'Preserved temporarily so existing project data is not lost.',
       type: 'array',
       group: 'classification',
       of: [
@@ -159,7 +175,12 @@ export const project = defineType({
       options: {
         layout: 'tags',
       },
-      validation: (rule) => rule.required().min(1).unique(),
+      deprecated: {
+        reason: 'Use the Technology stack reference field instead.',
+      },
+      readOnly: true,
+      hidden: ({value}) => value === undefined,
+      initialValue: undefined,
     }),
 
     defineField({
