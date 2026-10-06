@@ -26,6 +26,10 @@ export const project = defineType({
       title: 'Links',
     },
     {
+      name: 'seo',
+      title: 'SEO and sharing',
+    },
+    {
       name: 'visibility',
       title: 'Visibility',
     },
@@ -173,6 +177,14 @@ export const project = defineType({
       description: 'Build the case study by adding and reordering reusable sections.',
       type: 'projectSections',
       group: 'content',
+    }),
+
+    defineField({
+      name: 'seo',
+      title: 'SEO and social sharing',
+      description: 'Optional search and sharing overrides for this project.',
+      type: 'seoMetadata',
+      group: 'seo',
     }),
 
     defineField({

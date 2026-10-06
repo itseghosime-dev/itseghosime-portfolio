@@ -1,4 +1,5 @@
 import {accessibleImage} from './objects/accessibleImage'
+import {seoMetadata} from './objects/seoMetadata'
 import {heroSection} from './blocks/heroSection'
 import {narrativeSection} from './blocks/narrativeSection'
 import {contributionGridSection} from './blocks/contributionGridSection'
@@ -12,6 +13,7 @@ import {project} from './project'
 
 export const schemaTypes = [
   accessibleImage,
+  seoMetadata,
   heroSection,
   narrativeSection,
   contributionGridSection,
