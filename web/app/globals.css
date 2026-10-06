@@ -125,14 +125,14 @@ body {
     text-decoration-thickness: 0.08em;
     text-underline-offset: 0.18em;
   }
-}
 
-button,
-input,
-textarea,
-select {
-  color: inherit;
-  font: inherit;
+  button,
+  input,
+  textarea,
+  select {
+    color: inherit;
+    font: inherit;
+  }
 }
 
 button,

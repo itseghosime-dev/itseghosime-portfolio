@@ -3,11 +3,18 @@
 import { useState } from "react";
 
 type CopyEmailProps = {
+  className?: string;
   email: string;
 };
 
-export function CopyEmail({ email }: CopyEmailProps) {
+export function CopyEmail({ className, email }: CopyEmailProps) {
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
+  const classes = [
+    "group flex min-h-12 cursor-pointer flex-wrap items-center gap-4 rounded-xl border border-black/[0.08] bg-surface-container px-6 py-3.5 text-left transition-colors hover:border-accent",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   async function copyEmail() {
     try {
@@ -20,7 +27,7 @@ export function CopyEmail({ email }: CopyEmailProps) {
 
   return (
     <button
-      className="group flex min-h-12 cursor-pointer flex-wrap items-center gap-4 rounded-xl border border-black/[0.08] bg-surface-container px-6 py-3.5 text-left hover:border-accent"
+      className={classes}
       type="button"
       onClick={copyEmail}
     >

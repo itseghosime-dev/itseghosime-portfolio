@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import type { ImageAsset, ProjectSummary } from "@/types/home";
 
@@ -9,18 +10,16 @@ type WorkSectionProps = {
 };
 
 function ProjectLink({ project }: { project: ProjectSummary }) {
-  const href = `/projects/${project.slug}`;
+  const href = `/work/${project.slug}`;
 
   if (!href) {
     return null;
   }
 
   return (
-    <a
+    <Link
       className="group inline-flex min-h-8 items-center gap-2 text-sm font-semibold text-accent no-underline"
       href={href}
-      rel="noreferrer"
-      target="_blank"
     >
       <span>View case study</span>
       <span
@@ -29,7 +28,7 @@ function ProjectLink({ project }: { project: ProjectSummary }) {
       >
         ↗
       </span>
-    </a>
+    </Link>
   );
 }
 

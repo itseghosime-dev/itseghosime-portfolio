@@ -9,11 +9,16 @@ import { Container } from "@/components/ui/container";
 import { MobileNavigation } from "./mobile-navigation";
 
 type SiteHeaderProps = {
+  contactHref?: string;
   navigation: NavigationItem[];
   siteName: string;
 };
 
-export function SiteHeader({ navigation, siteName }: SiteHeaderProps) {
+export function SiteHeader({
+  contactHref = "/#contact",
+  navigation,
+  siteName,
+}: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-50 h-20 border-b border-black/[0.06] bg-background/90 backdrop-blur-md">
       <Container className="flex h-full items-center justify-between gap-6">
@@ -52,7 +57,7 @@ export function SiteHeader({ navigation, siteName }: SiteHeaderProps) {
 
         <div className="flex items-center gap-3">
           <div className="hidden md:block">
-            <ButtonLink href="/#contact">Get in touch</ButtonLink>
+            <ButtonLink href={contactHref}>Get in touch</ButtonLink>
           </div>
           <MobileNavigation navigation={navigation} siteName={siteName} />
         </div>
