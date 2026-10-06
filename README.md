@@ -14,8 +14,12 @@ portfolio-design/
 
 - Structured project documents for portfolio case studies
 - Reorderable hero, narrative, contribution, media, process, code, sandbox, and outcome sections
-- Accessible image metadata
-- Per-project SEO and social-sharing metadata
+- Notes, lab experiments, and career milestones
+- A reusable technology library that connects evidence across the portfolio
+- Singleton Profile and Site Settings documents
+- Accessible images, reusable rich text, code blocks, navigation, and social links
+- Page-specific and default SEO and social-sharing metadata
+- A themed Sanity publishing workspace organised into Content, Library, and Settings
 - Next.js frontend foundation
 
 ## Local development
@@ -45,4 +49,3 @@ Local environment files are intentionally excluded from version control. Create 
 This repository is public so recruiters and other developers can inspect the author's work and technical approach. It is not an open-source template and does not grant permission to reproduce, redistribute, sell, deploy, or publish a substantially similar portfolio.
 
 See [LICENSE](./LICENSE) for the full notice.
-
