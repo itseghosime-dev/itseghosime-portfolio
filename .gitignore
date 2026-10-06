@@ -19,6 +19,7 @@
 # Test and build output
 **/coverage/
 **/*.tsbuildinfo
+**/next-env.d.ts
 **/*.log
 
 # Deployment tools
@@ -32,4 +33,3 @@
 .idea/
 .vscode/
 *.pem
-
