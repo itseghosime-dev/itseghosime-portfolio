@@ -15,6 +15,7 @@
 # Sanity
 **/.sanity/
 **/dist/
+/sanity/schema.json
 
 # Test and build output
 **/coverage/

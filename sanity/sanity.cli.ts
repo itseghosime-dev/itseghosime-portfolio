@@ -5,6 +5,12 @@ export default defineCliConfig({
     projectId: 's3e4rrk9',
     dataset: 'production'
   },
+  typegen: {
+    path: '../web/sanity/lib/queries.ts',
+    schema: './schema.json',
+    generates: '../web/sanity.types.ts',
+    overloadClientMethods: true,
+  },
   deployment: {
     /**
      * Enable auto-updates for studios.

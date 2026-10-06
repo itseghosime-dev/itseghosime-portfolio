@@ -13,7 +13,9 @@
     "build:web": "npm run build --workspace portfolio-web",
     "build:studio": "npm run build --workspace sanity-studio",
     "lint": "npm run lint --workspace portfolio-web",
-    "typecheck:studio": "npm run typecheck --workspace sanity-studio"
+    "typecheck:studio": "npm run typecheck --workspace sanity-studio",
+    "schema:extract": "npm exec --workspace sanity-studio -- sanity schema extract --path schema.json --force",
+    "typegen": "npm run schema:extract && npm exec --workspace sanity-studio -- sanity typegen generate"
   },
   "engines": {
     "node": ">=20"
