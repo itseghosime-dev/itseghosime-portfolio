@@ -1,4 +1,4 @@
-import type {SchemaTypeDefinition} from 'sanity'
+import {accessibleImage} from './objects/accessibleImage'
+import {project} from './project'
 
-export const schemaTypes: SchemaTypeDefinition[] = []
-
+export const schemaTypes = [accessibleImage, project]
