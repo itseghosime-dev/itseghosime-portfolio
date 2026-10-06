@@ -2,17 +2,37 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
+import {structure} from './structure'
+import {studioTheme} from './studioTheme'
+
+const singletonTypes = new Set(['profile', 'siteSettings'])
 
 export default defineConfig({
   name: 'default',
-  title: 'itseghosime-portfolio',
+  title: 'ITSEGHOSIME',
 
   projectId: 's3e4rrk9',
   dataset: 'production',
 
-  plugins: [structureTool(), visionTool()],
+  theme: studioTheme,
+
+  plugins: [structureTool({structure}), visionTool()],
 
   schema: {
     types: schemaTypes,
+    templates: (templates) =>
+      templates.filter((template) => !singletonTypes.has(template.schemaType)),
+  },
+
+  document: {
+    actions: (previousActions, context) => {
+      if (!singletonTypes.has(context.schemaType)) {
+        return previousActions
+      }
+
+      return previousActions.filter(
+        (action) => action.action !== 'duplicate' && action.action !== 'delete',
+      )
+    },
   },
 })
