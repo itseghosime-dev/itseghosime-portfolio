@@ -15,6 +15,7 @@ import {project} from './project'
 import {technology} from './technology'
 import {note} from './note'
 import {labExperiment} from './labExperiment'
+import {careerMilestone} from './careerMilestone'
 
 export const schemaTypes = [
   accessibleImage,
@@ -34,4 +35,5 @@ export const schemaTypes = [
   technology,
   note,
   labExperiment,
+  careerMilestone,
 ]
