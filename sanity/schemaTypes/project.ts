@@ -162,28 +162,6 @@ export const project = defineType({
     }),
 
     defineField({
-      name: 'technologies',
-      title: 'Legacy technology tags',
-      description: 'Preserved temporarily so existing project data is not lost.',
-      type: 'array',
-      group: 'classification',
-      of: [
-        defineArrayMember({
-          type: 'string',
-        }),
-      ],
-      options: {
-        layout: 'tags',
-      },
-      deprecated: {
-        reason: 'Use the Technology stack reference field instead.',
-      },
-      readOnly: true,
-      hidden: ({value}) => value === undefined,
-      initialValue: undefined,
-    }),
-
-    defineField({
       name: 'coverImage',
       title: 'Cover image',
       description: 'The primary image used on project cards and social previews.',
