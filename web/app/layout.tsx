@@ -36,7 +36,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${hankenGrotesk.variable} ${newsreader.variable}`}>
       <body>
-        <a className="skip-link" href="#main-content">
+        <a
+          className="fixed top-3 left-3 z-[1000] -translate-y-[200%] rounded bg-ink px-4 py-2.5 text-sm font-semibold text-background transition-transform duration-150 focus:translate-y-0 motion-reduce:transition-none"
+          href="#main-content"
+        >
           Skip to main content
         </a>
         {children}

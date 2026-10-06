@@ -22,6 +22,7 @@ export const navigationItem = defineType({
         list: [
           {title: 'Home', value: 'home'},
           {title: 'Projects', value: 'projects'},
+          {title: 'Capabilities', value: 'capabilities'},
           {title: 'Lab', value: 'lab'},
           {title: 'Notes', value: 'notes'},
           {title: 'Experience', value: 'experience'},

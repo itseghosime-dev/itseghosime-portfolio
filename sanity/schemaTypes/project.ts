@@ -171,6 +171,15 @@ export const project = defineType({
     }),
 
     defineField({
+      name: 'supportingImage',
+      title: 'Supporting image',
+      description:
+        'An optional second project view, such as a mobile screen, detail view or alternate interface state.',
+      type: 'accessibleImage',
+      group: 'identity',
+    }),
+
+    defineField({
       name: 'sections',
       title: 'Project page sections',
       description: 'Build the case study by adding and reordering reusable sections.',

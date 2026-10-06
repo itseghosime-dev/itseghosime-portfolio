@@ -52,7 +52,7 @@ export const HOME_PAGE_QUERY = defineQuery(`{
     _type == "project" &&
     featured == true &&
     defined(slug.current)
-  ] | order(displayOrder asc, year desc){
+  ] | order(displayOrder asc, year desc)[0...3]{
     _id,
     title,
     "slug": slug.current,
@@ -67,6 +67,7 @@ export const HOME_PAGE_QUERY = defineQuery(`{
     liveUrl,
     repositoryUrl,
     "coverImage": coverImage ${IMAGE_PROJECTION},
+    "supportingImage": supportingImage ${IMAGE_PROJECTION},
     "technologies": technologyStack[]->{name, "slug": slug.current}
   },
   "technologies": *[
@@ -78,6 +79,17 @@ export const HOME_PAGE_QUERY = defineQuery(`{
     summary,
     relationship,
     firstUsedYear
+  },
+  "labExperiments": *[
+    _type == "labExperiment" &&
+    featured == true &&
+    defined(slug.current)
+  ] | order(displayOrder asc, _createdAt desc)[0...3]{
+    _id,
+    title,
+    "slug": slug.current,
+    summary,
+    status
   }
 }`)
 
