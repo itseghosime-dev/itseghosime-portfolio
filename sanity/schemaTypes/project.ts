@@ -14,6 +14,10 @@ export const project = defineType({
       default: true,
     },
     {
+      name: 'content',
+      title: 'Page sections',
+    },
+    {
       name: 'classification',
       title: 'Classification',
     },
@@ -161,6 +165,14 @@ export const project = defineType({
       type: 'accessibleImage',
       group: 'identity',
       validation: (rule) => rule.required(),
+    }),
+
+    defineField({
+      name: 'sections',
+      title: 'Project page sections',
+      description: 'Build the case study by adding and reordering reusable sections.',
+      type: 'projectSections',
+      group: 'content',
     }),
 
     defineField({
