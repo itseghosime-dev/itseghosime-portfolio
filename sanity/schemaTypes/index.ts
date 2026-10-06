@@ -1,6 +1,8 @@
 import {accessibleImage} from './objects/accessibleImage'
 import {codeBlock} from './objects/codeBlock'
 import {richText} from './objects/richText'
+import {socialLink} from './objects/socialLink'
+import {navigationItem} from './objects/navigationItem'
 import {seoMetadata} from './objects/seoMetadata'
 import {heroSection} from './blocks/heroSection'
 import {narrativeSection} from './blocks/narrativeSection'
@@ -16,11 +18,15 @@ import {technology} from './technology'
 import {note} from './note'
 import {labExperiment} from './labExperiment'
 import {careerMilestone} from './careerMilestone'
+import {profile} from './profile'
+import {siteSettings} from './siteSettings'
 
 export const schemaTypes = [
   accessibleImage,
   codeBlock,
   richText,
+  socialLink,
+  navigationItem,
   seoMetadata,
   heroSection,
   narrativeSection,
@@ -36,4 +42,6 @@ export const schemaTypes = [
   note,
   labExperiment,
   careerMilestone,
+  profile,
+  siteSettings,
 ]
