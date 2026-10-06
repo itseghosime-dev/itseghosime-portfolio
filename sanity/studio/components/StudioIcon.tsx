@@ -1,7 +1,7 @@
 export function StudioIcon() {
   return (
     <img
-      src="/studio-mark.svg"
+      src="/static/studio-mark.svg"
       alt=""
       width={28}
       height={28}
