@@ -13,10 +13,9 @@
     "build:web": "npm run build --workspace portfolio-web",
     "build:studio": "npm run build --workspace sanity-studio",
     "lint": "npm run lint --workspace portfolio-web",
-    "typecheck:studio": "tsc --noEmit -p sanity/tsconfig.json"
+    "typecheck:studio": "npm run typecheck --workspace sanity-studio"
   },
   "engines": {
     "node": ">=20"
   }
 }
-
