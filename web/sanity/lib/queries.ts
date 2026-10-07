@@ -114,6 +114,100 @@ export const HOME_METADATA_QUERY = defineQuery(`{
   }
 }`)
 
+export const ABOUT_PROFILE_QUERY = defineQuery(`{
+  "aboutPage": *[_id == "aboutPage"][0]{
+    heroEyebrow,
+    heroHeading,
+    heroIntroduction,
+    identityFacts[]{_key, label, value},
+    primaryAction{label, href},
+    secondaryAction{label, href},
+    storyEyebrow,
+    quickFacts,
+    focusHeading,
+    focusLabel,
+    focusItems[]{_key, title, description},
+    toolsHeading,
+    toolsLabel,
+    technologyGroups[]{
+      _key,
+      label,
+      technologies[]->{_id, name}
+    },
+    experienceHeading,
+    experienceLabel,
+    experienceMilestones[]->{
+      _id,
+      title,
+      milestoneType,
+      organisation,
+      engagementType,
+      location,
+      status,
+      startDate,
+      endDate,
+      expectedEndDate,
+      summary,
+      highlights,
+      credentialTitle,
+      credentialUrl
+    },
+    educationHeading,
+    learningHeading,
+    educationMilestones[]->{
+      _id,
+      title,
+      milestoneType,
+      organisation,
+      location,
+      status,
+      startDate,
+      endDate,
+      expectedEndDate,
+      summary,
+      highlights,
+      credentialTitle,
+      credentialUrl
+    },
+    learningMilestones[]->{
+      _id,
+      title,
+      milestoneType,
+      organisation,
+      location,
+      status,
+      startDate,
+      endDate,
+      expectedEndDate,
+      summary,
+      highlights,
+      credentialTitle,
+      credentialUrl
+    },
+    principlesHeading,
+    principlesLabel,
+    ctaEyebrow,
+    ctaHeading,
+    ctaMessage,
+    ctaLabel
+  },
+  "profile": *[_id == "profile"][0]{
+    fullName,
+    professionalTitle,
+    location,
+    availability,
+    email,
+    workingPrinciples,
+    "biography": biography[]{
+      _key,
+      _type,
+      style,
+      children[]{_key, _type, text, marks}
+    },
+    "portrait": portrait ${IMAGE_PROJECTION}
+  }
+}`)
+
 export const WORK_ARCHIVE_QUERY = defineQuery(`{
   "projects": *[
     _type == "project" &&

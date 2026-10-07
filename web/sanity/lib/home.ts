@@ -290,6 +290,7 @@ export async function getHomePage(): Promise<HomePageModel | null> {
     labExperiments: toLabExperiments(data.labExperiments),
     projects: toProjects(data.projects),
     siteName: settings.siteName,
+    targetRoles: profile.targetRoles?.filter(Boolean) ?? [],
     technologies: toTechnologies(data.technologies),
   }
 }

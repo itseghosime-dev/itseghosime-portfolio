@@ -86,5 +86,6 @@ export type HomePageModel = {
   labExperiments: LabExperimentSummary[];
   projects: ProjectSummary[];
   siteName: string;
+  targetRoles: string[];
   technologies: TechnologySummary[];
 };

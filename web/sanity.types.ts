@@ -15,6 +15,92 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type TechnologyReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "technology";
+};
+
+export type CareerMilestoneReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "careerMilestone";
+};
+
+export type AboutPage = {
+  _id: string;
+  _type: "aboutPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  heroEyebrow?: string;
+  heroHeading?: string;
+  heroIntroduction?: string;
+  identityFacts?: Array<{
+    label?: string;
+    value?: string;
+    _type: "identityFact";
+    _key: string;
+  }>;
+  primaryAction?: {
+    label?: string;
+    href?: string;
+  };
+  secondaryAction?: {
+    label?: string;
+    href?: string;
+  };
+  storyEyebrow?: string;
+  quickFacts?: Array<string>;
+  focusHeading?: string;
+  focusLabel?: string;
+  focusItems?: Array<{
+    title?: string;
+    description?: string;
+    _type: "focusItem";
+    _key: string;
+  }>;
+  toolsHeading?: string;
+  toolsLabel?: string;
+  technologyGroups?: Array<{
+    label?: string;
+    technologies?: Array<
+      {
+        _key: string;
+      } & TechnologyReference
+    >;
+    _type: "technologyGroup";
+    _key: string;
+  }>;
+  experienceHeading?: string;
+  experienceLabel?: string;
+  experienceMilestones?: Array<
+    {
+      _key: string;
+    } & CareerMilestoneReference
+  >;
+  educationHeading?: string;
+  learningHeading?: string;
+  educationMilestones?: Array<
+    {
+      _key: string;
+    } & CareerMilestoneReference
+  >;
+  learningMilestones?: Array<
+    {
+      _key: string;
+    } & CareerMilestoneReference
+  >;
+  principlesHeading?: string;
+  principlesLabel?: string;
+  ctaEyebrow?: string;
+  ctaHeading?: string;
+  ctaMessage?: string;
+  ctaLabel?: string;
+};
+
 export type SiteSettings = {
   _id: string;
   _type: "siteSettings";
@@ -138,13 +224,6 @@ export type ProjectReference = {
   [internalGroqTypeReferenceTo]?: "project";
 };
 
-export type TechnologyReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "technology";
-};
-
 export type CareerMilestone = {
   _id: string;
   _type: "careerMilestone";
@@ -172,6 +251,7 @@ export type CareerMilestone = {
   status?: "completed" | "inProgress" | "upcoming";
   startDate?: string;
   endDate?: string;
+  expectedEndDate?: string;
   summary?: string;
   highlights?: Array<string>;
   credentialTitle?: string;
@@ -656,6 +736,9 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | TechnologyReference
+  | CareerMilestoneReference
+  | AboutPage
   | SiteSettings
   | SeoMetadata
   | SanityFileAssetReference
@@ -664,7 +747,6 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | AccessibleImage
   | ProjectReference
-  | TechnologyReference
   | CareerMilestone
   | LabExperiment
   | Slug
@@ -947,6 +1029,230 @@ export type HOME_METADATA_QUERY_RESULT = {
 };
 
 // Source: ../web/sanity/lib/queries.ts
+// Variable: ABOUT_PROFILE_QUERY
+// Query: {  "aboutPage": *[_id == "aboutPage"][0]{    heroEyebrow,    heroHeading,    heroIntroduction,    identityFacts[]{_key, label, value},    primaryAction{label, href},    secondaryAction{label, href},    storyEyebrow,    quickFacts,    focusHeading,    focusLabel,    focusItems[]{_key, title, description},    toolsHeading,    toolsLabel,    technologyGroups[]{      _key,      label,      technologies[]->{_id, name}    },    experienceHeading,    experienceLabel,    experienceMilestones[]->{      _id,      title,      milestoneType,      organisation,      engagementType,      location,      status,      startDate,      endDate,      expectedEndDate,      summary,      highlights,      credentialTitle,      credentialUrl    },    educationHeading,    learningHeading,    educationMilestones[]->{      _id,      title,      milestoneType,      organisation,      location,      status,      startDate,      endDate,      expectedEndDate,      summary,      highlights,      credentialTitle,      credentialUrl    },    learningMilestones[]->{      _id,      title,      milestoneType,      organisation,      location,      status,      startDate,      endDate,      expectedEndDate,      summary,      highlights,      credentialTitle,      credentialUrl    },    principlesHeading,    principlesLabel,    ctaEyebrow,    ctaHeading,    ctaMessage,    ctaLabel  },  "profile": *[_id == "profile"][0]{    fullName,    professionalTitle,    location,    availability,    email,    workingPrinciples,    "biography": biography[]{      _key,      _type,      style,      children[]{_key, _type, text, marks}    },    "portrait": portrait {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}  }}
+export type ABOUT_PROFILE_QUERY_RESULT = {
+  aboutPage:
+    | {
+        heroEyebrow: null;
+        heroHeading: null;
+        heroIntroduction: null;
+        identityFacts: null;
+        primaryAction: null;
+        secondaryAction: null;
+        storyEyebrow: null;
+        quickFacts: null;
+        focusHeading: null;
+        focusLabel: null;
+        focusItems: null;
+        toolsHeading: null;
+        toolsLabel: null;
+        technologyGroups: null;
+        experienceHeading: null;
+        experienceLabel: null;
+        experienceMilestones: null;
+        educationHeading: null;
+        learningHeading: null;
+        educationMilestones: null;
+        learningMilestones: null;
+        principlesHeading: null;
+        principlesLabel: null;
+        ctaEyebrow: null;
+        ctaHeading: null;
+        ctaMessage: null;
+        ctaLabel: null;
+      }
+    | {
+        heroEyebrow: string | null;
+        heroHeading: string | null;
+        heroIntroduction: string | null;
+        identityFacts: Array<{
+          _key: string;
+          label: string | null;
+          value: string | null;
+        }> | null;
+        primaryAction: {
+          label: string | null;
+          href: string | null;
+        } | null;
+        secondaryAction: {
+          label: string | null;
+          href: string | null;
+        } | null;
+        storyEyebrow: string | null;
+        quickFacts: Array<string> | null;
+        focusHeading: string | null;
+        focusLabel: string | null;
+        focusItems: Array<{
+          _key: string;
+          title: string | null;
+          description: string | null;
+        }> | null;
+        toolsHeading: string | null;
+        toolsLabel: string | null;
+        technologyGroups: Array<{
+          _key: string;
+          label: string | null;
+          technologies: Array<{
+            _id: string;
+            name: string | null;
+          }> | null;
+        }> | null;
+        experienceHeading: string | null;
+        experienceLabel: string | null;
+        experienceMilestones: Array<{
+          _id: string;
+          title: string | null;
+          milestoneType:
+            | "award"
+            | "certification"
+            | "community"
+            | "education"
+            | "employment"
+            | "freelance"
+            | "training"
+            | null;
+          organisation: string | null;
+          engagementType:
+            | "contract"
+            | "freelance"
+            | "fullTime"
+            | "internship"
+            | "partTime"
+            | "volunteer"
+            | null;
+          location: string | null;
+          status: "completed" | "inProgress" | "upcoming" | null;
+          startDate: string | null;
+          endDate: string | null;
+          expectedEndDate: string | null;
+          summary: string | null;
+          highlights: Array<string> | null;
+          credentialTitle: string | null;
+          credentialUrl: string | null;
+        }> | null;
+        educationHeading: string | null;
+        learningHeading: string | null;
+        educationMilestones: Array<{
+          _id: string;
+          title: string | null;
+          milestoneType:
+            | "award"
+            | "certification"
+            | "community"
+            | "education"
+            | "employment"
+            | "freelance"
+            | "training"
+            | null;
+          organisation: string | null;
+          location: string | null;
+          status: "completed" | "inProgress" | "upcoming" | null;
+          startDate: string | null;
+          endDate: string | null;
+          expectedEndDate: string | null;
+          summary: string | null;
+          highlights: Array<string> | null;
+          credentialTitle: string | null;
+          credentialUrl: string | null;
+        }> | null;
+        learningMilestones: Array<{
+          _id: string;
+          title: string | null;
+          milestoneType:
+            | "award"
+            | "certification"
+            | "community"
+            | "education"
+            | "employment"
+            | "freelance"
+            | "training"
+            | null;
+          organisation: string | null;
+          location: string | null;
+          status: "completed" | "inProgress" | "upcoming" | null;
+          startDate: string | null;
+          endDate: string | null;
+          expectedEndDate: string | null;
+          summary: string | null;
+          highlights: Array<string> | null;
+          credentialTitle: string | null;
+          credentialUrl: string | null;
+        }> | null;
+        principlesHeading: string | null;
+        principlesLabel: string | null;
+        ctaEyebrow: string | null;
+        ctaHeading: string | null;
+        ctaMessage: string | null;
+        ctaLabel: string | null;
+      }
+    | null;
+  profile:
+    | {
+        fullName: null;
+        professionalTitle: null;
+        location: null;
+        availability: null;
+        email: null;
+        workingPrinciples: null;
+        biography: null;
+        portrait: null;
+      }
+    | {
+        fullName: null;
+        professionalTitle: null;
+        location: string | null;
+        availability: null;
+        email: null;
+        workingPrinciples: null;
+        biography: null;
+        portrait: null;
+      }
+    | {
+        fullName: string | null;
+        professionalTitle: string | null;
+        location: string | null;
+        availability: "freelance" | "open" | "selective" | "unavailable" | null;
+        email: string | null;
+        workingPrinciples: Array<string> | null;
+        biography: Array<
+          | {
+              _key: string;
+              _type: "accessibleImage";
+              style: null;
+              children: null;
+            }
+          | {
+              _key: string;
+              _type: "block";
+              style: "blockquote" | "h2" | "h3" | "normal" | null;
+              children: Array<{
+                _key: string;
+                _type: "span";
+                text: string | null;
+                marks: Array<string> | null;
+              }> | null;
+            }
+          | {
+              _key: string;
+              _type: "codeBlock";
+              style: null;
+              children: null;
+            }
+        > | null;
+        portrait: {
+          alt: string | null;
+          caption: string | null;
+          url: string | null;
+          width: number | null;
+          height: number | null;
+          lqip: string | null;
+        } | null;
+      }
+    | null;
+};
+
+// Source: ../web/sanity/lib/queries.ts
 // Variable: WORK_ARCHIVE_QUERY
 // Query: {  "projects": *[    _type == "project" &&    defined(slug.current)  ] | order(displayOrder asc, year desc)[0...8]{    _id,    title,    "slug": slug.current,    subtitle,    summary,    role,    client,    year,    timeline,    projectType,    status,    liveUrl,    repositoryUrl,    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    "supportingImage": supportingImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    "technologies": technologyStack[]->{name}  },  "labExperiments": *[    _type == "labExperiment" &&    defined(slug.current)  ] | order(displayOrder asc, _createdAt asc)[0...8]{    _id,    title,    "slug": slug.current,    summary,    status,    startedAt,    completedAt,    demoUrl,    repositoryUrl,    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    "technologies": technologies[]->{name}  }}
 export type WORK_ARCHIVE_QUERY_RESULT = {
@@ -1021,6 +1327,7 @@ declare global {
   interface SanityQueries {
     '{\n  "profile": *[_id == "profile"][0]{\n    fullName,\n    professionalTitle,\n    introduction,\n    location,\n    availability,\n    availabilityNote,\n    targetRoles,\n    professionalStrengths,\n    workingPrinciples,\n    email,\n    socialLinks[]{platform, label, url},\n    "resume": resume{\n      label,\n      "url": asset->url\n    },\n    "biography": biography[]{\n      _key,\n      _type,\n      style,\n      children[]{_key, _type, text, marks}\n    },\n    "portrait": portrait {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  },\n  "settings": *[_id == "siteSettings"][0]{\n    siteName,\n    siteDescription,\n    canonicalUrl,\n    navigation[]{label, destination, externalUrl},\n    contactHeading,\n    contactMessage,\n    contactButtonLabel,\n    footerText,\n    indexing,\n    googleSiteVerification,\n    defaultSeo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "projects": *[\n    _type == "project" &&\n    featured == true &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc)[0...3]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologyStack[]->{name, "slug": slug.current}\n  },\n  "technologies": *[\n    _type == "technology" &&\n    name in ["JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS", "Node.js", "Sanity", "Git"]\n  ] | order(displayOrder asc, name asc){\n    _id,\n    name,\n    summary,\n    relationship,\n    firstUsedYear\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    featured == true &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt desc)[0...3]{\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    status\n  }\n}': HOME_PAGE_QUERY_RESULT;
     '{\n  "profile": *[_id == "profile"][0]{fullName, professionalTitle},\n  "settings": *[_id == "siteSettings"][0]{\n    siteName,\n    siteDescription,\n    canonicalUrl,\n    indexing,\n    googleSiteVerification,\n    defaultSeo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  }\n}': HOME_METADATA_QUERY_RESULT;
+    '{\n  "aboutPage": *[_id == "aboutPage"][0]{\n    heroEyebrow,\n    heroHeading,\n    heroIntroduction,\n    identityFacts[]{_key, label, value},\n    primaryAction{label, href},\n    secondaryAction{label, href},\n    storyEyebrow,\n    quickFacts,\n    focusHeading,\n    focusLabel,\n    focusItems[]{_key, title, description},\n    toolsHeading,\n    toolsLabel,\n    technologyGroups[]{\n      _key,\n      label,\n      technologies[]->{_id, name}\n    },\n    experienceHeading,\n    experienceLabel,\n    experienceMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      engagementType,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    educationHeading,\n    learningHeading,\n    educationMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    learningMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    principlesHeading,\n    principlesLabel,\n    ctaEyebrow,\n    ctaHeading,\n    ctaMessage,\n    ctaLabel\n  },\n  "profile": *[_id == "profile"][0]{\n    fullName,\n    professionalTitle,\n    location,\n    availability,\n    email,\n    workingPrinciples,\n    "biography": biography[]{\n      _key,\n      _type,\n      style,\n      children[]{_key, _type, text, marks}\n    },\n    "portrait": portrait {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n}': ABOUT_PROFILE_QUERY_RESULT;
     '{\n  "projects": *[\n    _type == "project" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc)[0...8]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologyStack[]->{name}\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt asc)[0...8]{\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    status,\n    startedAt,\n    completedAt,\n    demoUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologies[]->{name}\n  }\n}': WORK_ARCHIVE_QUERY_RESULT;
   }
 }
