@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUpRight, Check, Download, Sparkles, X } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 import type { HomePageModel } from "@/types/home";
@@ -107,9 +108,12 @@ export function RecruiterBriefDrawer({
       >
         <div className="relative flex min-h-24 items-center border-b border-black/[0.08] px-6 py-6 pr-24 sm:py-8 sm:pr-32 sm:pl-10">
           <div className="flex min-w-0 items-center gap-3">
-            <span className="text-accent" aria-hidden="true">
-              ✦
-            </span>
+            <Sparkles
+              aria-hidden="true"
+              className="text-accent"
+              size={16}
+              strokeWidth={1.8}
+            />
             <h2 className="font-serif text-2xl" id="recruiter-brief-title">
               Recruiter web summary
             </h2>
@@ -121,7 +125,7 @@ export function RecruiterBriefDrawer({
             aria-label="Close recruiter summary"
             onClick={onClose}
           >
-            ×
+            <X aria-hidden="true" size={21} strokeWidth={1.7} />
           </button>
         </div>
 
@@ -182,9 +186,12 @@ export function RecruiterBriefDrawer({
                   className="grid grid-cols-[1rem_1fr] gap-4 text-sm leading-7"
                   key={capability.title}
                 >
-                  <span className="text-accent" aria-hidden="true">
-                    ✓
-                  </span>
+                  <Check
+                    aria-hidden="true"
+                    className="mt-1 text-accent"
+                    size={15}
+                    strokeWidth={2}
+                  />
                   <span>
                     <strong className="block font-semibold text-ink">
                       {capability.title}
@@ -207,14 +214,16 @@ export function RecruiterBriefDrawer({
               rel="noreferrer"
               target="_blank"
             >
-              <span aria-hidden="true">↓</span> {resume.label}
+              <Download aria-hidden="true" size={15} strokeWidth={1.8} />
+              {resume.label}
             </a>
           ) : null}
           <a
             className="inline-flex min-h-12 items-center justify-center bg-accent px-5 py-3 text-sm font-semibold text-white no-underline transition-colors hover:bg-[var(--accent-hover)]"
             href={`mailto:${email}?subject=Opportunity%20for%20Abdulrahman%20Itseghosime%20Bello`}
           >
-            Fast-track an email conversation ↗
+            Fast-track an email conversation
+            <ArrowUpRight aria-hidden="true" size={15} strokeWidth={1.8} />
           </a>
           <button
             className="min-h-12 cursor-pointer border border-black/15 bg-transparent px-5 py-3 text-sm font-semibold hover:bg-surface-layer"

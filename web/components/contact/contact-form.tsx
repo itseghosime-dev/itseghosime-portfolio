@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  CircleAlert,
+  ShieldCheck,
+} from "lucide-react";
 import { useId, useState, type FormEvent } from "react";
 
 type FormState = "default" | "error" | "submitting" | "success" | "validation";
@@ -67,7 +74,11 @@ function ContactOutcome({ email, onReset, state }: ContactOutcomeProps) {
             }`}
             aria-hidden="true"
           >
-            {isSuccess ? "✓" : "!"}
+            {isSuccess ? (
+              <Check aria-hidden="true" size={20} strokeWidth={2} />
+            ) : (
+              <CircleAlert aria-hidden="true" size={20} strokeWidth={1.8} />
+            )}
           </span>
           <h3 className="font-serif text-3xl leading-tight">
             {isSuccess ? "Message sent." : "That didn’t go through."}
@@ -85,9 +96,12 @@ function ContactOutcome({ email, onReset, state }: ContactOutcomeProps) {
               href="/work"
             >
               Back to work{" "}
-              <span className="ml-2" aria-hidden="true">
-                →
-              </span>
+              <ArrowRight
+                aria-hidden="true"
+                className="ml-2"
+                size={16}
+                strokeWidth={1.8}
+              />
             </a>
           ) : (
             <button
@@ -112,9 +126,12 @@ function ContactOutcome({ email, onReset, state }: ContactOutcomeProps) {
               href={`mailto:${email}`}
             >
               Send email{" "}
-              <span className="ml-2" aria-hidden="true">
-                ↗
-              </span>
+              <ArrowUpRight
+                aria-hidden="true"
+                className="ml-2"
+                size={16}
+                strokeWidth={1.8}
+              />
             </a>
           )}
         </div>
@@ -390,14 +407,18 @@ export function ContactForm({ email }: ContactFormProps) {
                 </>
               ) : (
                 <>
-                  Send dispatch <span aria-hidden="true">→</span>
+                  Send dispatch
+                  <ArrowRight aria-hidden="true" size={16} strokeWidth={1.8} />
                 </>
               )}
             </button>
             <p className="flex items-start gap-2 text-xs leading-5 text-ink-muted">
-              <span className="text-accent" aria-hidden="true">
-                ◇
-              </span>
+              <ShieldCheck
+                aria-hidden="true"
+                className="mt-0.5 shrink-0 text-accent"
+                size={14}
+                strokeWidth={1.8}
+              />
               Protected with a hidden anti-spam field and server-side
               validation.
             </p>

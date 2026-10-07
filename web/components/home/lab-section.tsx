@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import {ArrowRight} from 'lucide-react'
 
 import type {LabExperimentSummary} from '@/types/home'
 
@@ -30,9 +31,12 @@ export function LabSection({experiments}: LabSectionProps) {
           </div>
           <Link className="group inline-flex min-h-11 items-center gap-2 font-semibold no-underline" href="/lab">
             <span>Explore the lab</span>
-            <span className="transition-transform group-hover:translate-x-1" aria-hidden="true">
-              →
-            </span>
+            <ArrowRight
+              aria-hidden="true"
+              className="transition-transform group-hover:translate-x-1"
+              size={16}
+              strokeWidth={1.8}
+            />
           </Link>
         </div>
 

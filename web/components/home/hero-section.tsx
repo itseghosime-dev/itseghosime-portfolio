@@ -1,3 +1,5 @@
+import {ArrowDown} from "lucide-react";
+
 import { Container } from "@/components/ui/container";
 import { StatusBadge } from "@/components/ui/status-badge";
 
@@ -78,12 +80,12 @@ export function HeroSection() {
             data-hero-reveal
           >
             <span>View work</span>
-            <span
-              className="transition-transform duration-150 group-hover:translate-y-1 motion-reduce:transition-none"
+            <ArrowDown
               aria-hidden="true"
-            >
-              ↓
-            </span>
+              className="transition-transform duration-150 group-hover:translate-y-1 motion-reduce:transition-none"
+              size={17}
+              strokeWidth={1.8}
+            />
           </a>
         </div>
 

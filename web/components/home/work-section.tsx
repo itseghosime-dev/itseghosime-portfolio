@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import {ArrowUpRight} from "lucide-react";
 
 import type { ImageAsset, ProjectSummary } from "@/types/home";
 
@@ -22,12 +23,12 @@ function ProjectLink({ project }: { project: ProjectSummary }) {
       href={href}
     >
       <span>View case study</span>
-      <span
-        className="transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+      <ArrowUpRight
         aria-hidden="true"
-      >
-        ↗
-      </span>
+        className="transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+        size={16}
+        strokeWidth={1.8}
+      />
     </Link>
   );
 }

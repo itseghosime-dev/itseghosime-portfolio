@@ -8,7 +8,8 @@ const baseClasses =
 
 const variantClasses = {
   accent: "border border-transparent bg-accent text-white hover:bg-[#3457c4]",
-  ghost: "border border-transparent bg-transparent text-ink-muted hover:bg-black/[0.04] hover:text-ink",
+  ghost:
+    "border border-transparent bg-transparent text-ink-muted hover:bg-black/[0.04] hover:text-ink",
   primary: "border border-transparent bg-ink text-white hover:bg-accent",
   secondary:
     "border border-black/20 bg-transparent text-ink hover:border-ink hover:bg-surface-layer",
@@ -26,7 +27,9 @@ export function ButtonLink({
   variant = "primary",
   ...props
 }: ButtonLinkProps) {
-  const classes = [baseClasses, variantClasses[variant], className].filter(Boolean).join(" ");
+  const classes = [baseClasses, variantClasses[variant], className]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <Link className={classes} {...props}>

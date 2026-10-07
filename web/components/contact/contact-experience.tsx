@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Circle,
+  Download,
+  Eye,
+  Sparkles,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 import type { HomePageModel } from "@/types/home";
@@ -64,8 +72,13 @@ export function ContactExperience({
 
           <div className="grid border border-black/[0.1] bg-surface sm:grid-cols-[1fr_auto] sm:items-stretch">
             <div className="grid gap-1 px-5 py-4 sm:px-6">
-              <p className="font-mono text-sm font-semibold text-ink">
-                ● {contact.email}
+              <p className="flex items-center gap-2 font-mono text-sm font-semibold text-ink">
+                <Circle
+                  aria-hidden="true"
+                  className="fill-accent text-accent"
+                  size={7}
+                />
+                {contact.email}
               </p>
               <p className="text-xs leading-5 text-ink-muted">
                 {hero.location
@@ -94,7 +107,7 @@ export function ContactExperience({
                 href={`mailto:${contact.email}`}
                 aria-label="Open email application"
               >
-                ↗
+                <ArrowUpRight aria-hidden="true" size={17} strokeWidth={1.8} />
               </a>
             </div>
           </div>
@@ -104,17 +117,23 @@ export function ContactExperience({
             type="button"
             onClick={() => setIsBriefOpen(true)}
           >
-            <span>
-              <span className="mr-2 text-accent" aria-hidden="true">
-                ✦
-              </span>
+            <span className="inline-flex items-center">
+              <Sparkles
+                aria-hidden="true"
+                className="mr-2 text-accent"
+                size={15}
+                strokeWidth={1.8}
+              />
               Hiring or evaluating quickly? Open the recruiter web summary.
             </span>
             <span
               className="font-mono text-[0.625rem] uppercase tracking-[0.1em] text-ink-muted transition-transform group-hover:translate-x-1"
               aria-hidden="true"
             >
-              Open slide-over →
+              <span className="inline-flex items-center gap-2">
+                Open slide-over
+                <ArrowRight aria-hidden="true" size={14} strokeWidth={1.8} />
+              </span>
             </span>
           </button>
         </Container>
@@ -149,12 +168,12 @@ export function ContactExperience({
                           {link.label}
                         </span>
                       </span>
-                      <span
-                        className="text-ink-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      <ArrowUpRight
                         aria-hidden="true"
-                      >
-                        ↗
-                      </span>
+                        className="text-ink-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        size={15}
+                        strokeWidth={1.8}
+                      />
                     </a>
                   </li>
                 ))}
@@ -197,7 +216,12 @@ export function ContactExperience({
                       rel="noreferrer"
                       target="_blank"
                     >
-                      <span aria-hidden="true">↓</span> {contact.resume.label}
+                      <Download
+                        aria-hidden="true"
+                        size={15}
+                        strokeWidth={1.8}
+                      />
+                      {contact.resume.label}
                     </a>
                   ) : null}
                   <button
@@ -205,7 +229,8 @@ export function ContactExperience({
                     type="button"
                     onClick={() => setIsBriefOpen(true)}
                   >
-                    <span aria-hidden="true">◉</span> View web summary
+                    <Eye aria-hidden="true" size={15} strokeWidth={1.8} />
+                    View web summary
                   </button>
                 </div>
               </div>

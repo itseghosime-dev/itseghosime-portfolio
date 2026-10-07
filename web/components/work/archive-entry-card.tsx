@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import {ArrowRight, ArrowUpRight} from 'lucide-react'
 
 import type {ArchiveEntry} from '@/types/work'
 
@@ -44,12 +45,12 @@ function EntryLinks({entry}: {entry: ArchiveEntry}) {
           href={entry.href}
         >
           View full case study
-          <span
-            className="transition-transform duration-200 group-hover/case-study:translate-x-1 motion-reduce:transition-none"
+          <ArrowRight
             aria-hidden="true"
-          >
-            →
-          </span>
+            className="transition-transform duration-200 group-hover/case-study:translate-x-1 motion-reduce:transition-none"
+            size={15}
+            strokeWidth={1.8}
+          />
         </Link>
       ) : null}
       {entry.liveUrl ? (
@@ -59,7 +60,7 @@ function EntryLinks({entry}: {entry: ArchiveEntry}) {
           rel="noreferrer"
           target="_blank"
         >
-          {liveLabel} <span aria-hidden="true">↗</span>
+          {liveLabel} <ArrowUpRight aria-hidden="true" size={14} strokeWidth={1.8} />
         </a>
       ) : (
         <span className="text-ink-muted">{entry.status}</span>
@@ -71,7 +72,7 @@ function EntryLinks({entry}: {entry: ArchiveEntry}) {
           rel="noreferrer"
           target="_blank"
         >
-          Source <span aria-hidden="true">↗</span>
+          Source <ArrowUpRight aria-hidden="true" size={14} strokeWidth={1.8} />
         </a>
       ) : null}
     </div>

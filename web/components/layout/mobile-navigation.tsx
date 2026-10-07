@@ -1,6 +1,7 @@
 "use client";
 
 import gsap from "gsap";
+import {ArrowRight, ArrowUpRight, Menu, X} from "lucide-react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -182,8 +183,7 @@ export function MobileNavigation({
           aria-label="Close navigation menu"
           onClick={closeMenu}
         >
-          <span className="absolute top-1/2 left-1/2 block h-px w-5 -translate-x-1/2 rotate-45 bg-current" />
-          <span className="absolute top-1/2 left-1/2 block h-px w-5 -translate-x-1/2 -rotate-45 bg-current" />
+          <X aria-hidden="true" size={22} strokeWidth={1.6} />
         </button>
       </div>
 
@@ -214,9 +214,11 @@ export function MobileNavigation({
                   <span className="font-serif text-4xl leading-none tracking-tight">
                     {item.label}
                   </span>
-                  <span className="text-ink-muted" aria-hidden="true">
-                    {isExternal ? "↗" : "→"}
-                  </span>
+                  {isExternal ? (
+                    <ArrowUpRight aria-hidden="true" className="text-ink-muted" size={20} strokeWidth={1.5} />
+                  ) : (
+                    <ArrowRight aria-hidden="true" className="text-ink-muted" size={20} strokeWidth={1.5} />
+                  )}
                 </a>
               </li>
             );
@@ -234,7 +236,10 @@ export function MobileNavigation({
           href="/contact"
           onClick={closeMenu}
         >
-          Start a conversation ↗
+          <span className="inline-flex items-center gap-2">
+            Start a conversation
+            <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.7} />
+          </span>
         </Link>
       </div>
     </div>
@@ -251,8 +256,7 @@ export function MobileNavigation({
         aria-label="Open navigation menu"
         onClick={() => setIsOpen(true)}
       >
-        <span className="block h-px w-4 bg-current" />
-        <span className="block h-px w-4 bg-current" />
+        <Menu aria-hidden="true" size={21} strokeWidth={1.7} />
       </button>
       {typeof document === "undefined"
         ? null

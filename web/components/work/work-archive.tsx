@@ -1,6 +1,7 @@
 'use client'
 
 import gsap from 'gsap'
+import {ArrowRight} from 'lucide-react'
 import Link from 'next/link'
 import {useEffect, useMemo, useRef, useState} from 'react'
 
@@ -90,7 +91,8 @@ function IndexCollection({entries}: {entries: ArchiveEntry[]}) {
               className="inline-flex min-h-10 items-center gap-2 border border-black/15 px-3 py-2 text-xs font-semibold no-underline transition-colors hover:border-ink hover:bg-ink hover:text-background"
               href={entry.href}
             >
-              Full case study <span aria-hidden="true">→</span>
+              Full case study
+              <ArrowRight aria-hidden="true" size={14} strokeWidth={1.8} />
             </Link>
           ) : (
             <span className="font-mono text-[0.6875rem] uppercase tracking-[0.06em] text-ink-muted">

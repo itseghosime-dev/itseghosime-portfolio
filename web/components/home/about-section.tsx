@@ -1,4 +1,5 @@
 import Link from "next/link";
+import {ArrowRight} from "lucide-react";
 
 import { Container } from "@/components/ui/container";
 
@@ -26,12 +27,12 @@ export function AboutSection() {
             href="/about"
           >
             <span>More about me</span>
-            <span
-              className="transition-transform group-hover:translate-x-1"
+            <ArrowRight
               aria-hidden="true"
-            >
-              →
-            </span>
+              className="transition-transform group-hover:translate-x-1"
+              size={16}
+              strokeWidth={1.8}
+            />
           </Link>
         </div>
       </Container>

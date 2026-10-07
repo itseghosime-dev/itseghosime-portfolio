@@ -1,60 +1,65 @@
-import type {Metadata} from 'next'
-import {notFound} from 'next/navigation'
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-import {AboutSection} from '@/components/home/about-section'
-import {CapabilitiesSection} from '@/components/home/capabilities-section'
-import {ContactSection} from '@/components/home/contact-section'
-import {HeroSection} from '@/components/home/hero-section'
-import {HomeMotion} from '@/components/home/home-motion'
-import {LabSection} from '@/components/home/lab-section'
-import {TechnologiesSection} from '@/components/home/technologies-section'
-import {WorkSection} from '@/components/home/work-section'
-import {SiteFooter} from '@/components/layout/site-footer'
-import {SiteHeader} from '@/components/layout/site-header'
-import {getHomePage} from '@/sanity/lib/home'
-import {sanityFetch} from '@/sanity/lib/live'
-import {HOME_METADATA_QUERY} from '@/sanity/lib/queries'
+import { AboutSection } from "@/components/home/about-section";
+import { CapabilitiesSection } from "@/components/home/capabilities-section";
+import { ContactSection } from "@/components/home/contact-section";
+import { HeroSection } from "@/components/home/hero-section";
+import { HomeMotion } from "@/components/home/home-motion";
+import { LabSection } from "@/components/home/lab-section";
+import { TechnologiesSection } from "@/components/home/technologies-section";
+import { WorkSection } from "@/components/home/work-section";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SiteHeader } from "@/components/layout/site-header";
+import { getHomePage } from "@/sanity/lib/home";
+import { sanityFetch } from "@/sanity/lib/live";
+import { HOME_METADATA_QUERY } from "@/sanity/lib/queries";
 
 function safeUrl(value: string | null | undefined): URL | undefined {
   if (!value) {
-    return undefined
+    return undefined;
   }
 
   try {
-    return new URL(value)
+    return new URL(value);
   } catch {
-    return undefined
+    return undefined;
   }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const {data} = await sanityFetch({
+  const { data } = await sanityFetch({
     query: HOME_METADATA_QUERY,
-    perspective: 'published',
+    perspective: "published",
     stega: false,
-  })
+  });
 
-  const {profile, settings} = data
+  const { profile, settings } = data;
   const title =
     settings?.defaultSeo?.title ??
     (profile?.professionalTitle && settings?.siteName
       ? `${settings.siteName} | ${profile.professionalTitle}`
-      : settings?.siteName)
-  const description = settings?.defaultSeo?.description ?? settings?.siteDescription
-  const metadataBase = safeUrl(settings?.canonicalUrl)
-  const shouldIndex = settings?.indexing === 'allow' && settings.defaultSeo?.noIndex !== true
-  const socialImage = settings?.defaultSeo?.image
+      : settings?.siteName);
+  const description =
+    settings?.defaultSeo?.description ?? settings?.siteDescription;
+  const metadataBase = safeUrl(settings?.canonicalUrl);
+  const shouldIndex =
+    settings?.indexing === "allow" && settings.defaultSeo?.noIndex !== true;
+  const socialImage = settings?.defaultSeo?.image;
   const hasSocialImage = Boolean(
-    socialImage?.url && socialImage.alt && socialImage.width && socialImage.height,
-  )
+    socialImage?.url &&
+    socialImage.alt &&
+    socialImage.width &&
+    socialImage.height,
+  );
 
   return {
     metadataBase,
-    title: title ? {absolute: title} : undefined,
+    title: title ? { absolute: title } : undefined,
     description: description ?? undefined,
-    alternates: metadataBase ? {canonical: '/'} : undefined,
+    alternates: metadataBase ? { canonical: "/" } : undefined,
     openGraph: {
-      type: 'website',
+      type: "website",
       title: title ?? undefined,
       description: description ?? undefined,
       siteName: settings?.siteName ?? undefined,
@@ -62,9 +67,9 @@ export async function generateMetadata(): Promise<Metadata> {
       images: hasSocialImage
         ? [
             {
-              alt: socialImage?.alt ?? '',
+              alt: socialImage?.alt ?? "",
               height: socialImage?.height ?? undefined,
-              url: socialImage?.url ?? '',
+              url: socialImage?.url ?? "",
               width: socialImage?.width ?? undefined,
             },
           ]
@@ -79,22 +84,23 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     twitter: {
-      card: hasSocialImage ? 'summary_large_image' : 'summary',
+      card: hasSocialImage ? "summary_large_image" : "summary",
       title: title ?? undefined,
       description: description ?? undefined,
-      images: hasSocialImage && socialImage?.url ? [socialImage.url] : undefined,
+      images:
+        hasSocialImage && socialImage?.url ? [socialImage.url] : undefined,
     },
     verification: settings?.googleSiteVerification
-      ? {google: settings.googleSiteVerification}
+      ? { google: settings.googleSiteVerification }
       : undefined,
-  }
+  };
 }
 
 export default async function Home() {
-  const page = await getHomePage()
+  const page = await getHomePage();
 
   if (!page) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -112,5 +118,5 @@ export default async function Home() {
       <SiteFooter footerText={page.footerText} siteName={page.siteName} />
       <HomeMotion />
     </>
-  )
+  );
 }

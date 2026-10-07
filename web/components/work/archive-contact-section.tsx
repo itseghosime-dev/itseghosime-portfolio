@@ -1,4 +1,5 @@
 import Link from "next/link";
+import {ArrowUpRight} from "lucide-react";
 
 import type { HomePageModel } from "@/types/home";
 
@@ -51,7 +52,8 @@ export function ArchiveContactSection({ contact }: ArchiveContactSectionProps) {
                   className="min-h-14 rounded-lg py-2 text-base"
                   href={`mailto:${contact.email}`}
                 >
-                  {contact.buttonLabel} <span aria-hidden="true">↗</span>
+                  {contact.buttonLabel}
+                  <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.8} />
                 </ButtonLink>
               </div>
             </div>
@@ -71,7 +73,8 @@ export function ArchiveContactSection({ contact }: ArchiveContactSectionProps) {
                       rel="noreferrer"
                       target="_blank"
                     >
-                      {link.platform} <span aria-hidden="true">↗</span>
+                      {link.platform}
+                      <ArrowUpRight aria-hidden="true" size={13} strokeWidth={1.8} />
                       <span className="sr-only"> (opens in a new tab)</span>
                     </a>
                   </li>
@@ -90,7 +93,8 @@ export function ArchiveContactSection({ contact }: ArchiveContactSectionProps) {
                       className="inline-flex min-h-7 items-center gap-1 font-mono text-[0.6875rem] no-underline transition-colors hover:text-accent"
                       href={link.href}
                     >
-                      {link.label} <span aria-hidden="true">↗</span>
+                      {link.label}
+                      <ArrowUpRight aria-hidden="true" size={13} strokeWidth={1.8} />
                     </Link>
                   </li>
                 ))}

@@ -1,4 +1,5 @@
 import type { HomePageModel } from "@/types/home";
+import {ArrowUpRight} from "lucide-react";
 
 import { ButtonLink } from "@/components/ui/button-link";
 import { Container } from "@/components/ui/container";
@@ -31,7 +32,8 @@ export function ContactSection({ contact }: ContactSectionProps) {
             className="min-h-14 text-base rounded-lg py-2"
             href={`mailto:${contact.email}`}
           >
-            {contact.buttonLabel} ↗
+            {contact.buttonLabel}
+            <ArrowUpRight aria-hidden="true" size={16} strokeWidth={1.8} />
           </ButtonLink>
         </div>
 
@@ -50,7 +52,7 @@ export function ContactSection({ contact }: ContactSectionProps) {
                   aria-label={link.label}
                 >
                   {link.platform}
-                  <span aria-hidden="true">↗</span>
+                  <ArrowUpRight aria-hidden="true" size={15} strokeWidth={1.8} />
                 </a>
               </li>
             ))}
