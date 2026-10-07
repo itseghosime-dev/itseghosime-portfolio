@@ -22,6 +22,10 @@ export const HOME_PAGE_QUERY = defineQuery(`{
     workingPrinciples,
     email,
     socialLinks[]{platform, label, url},
+    "resume": resume{
+      label,
+      "url": asset->url
+    },
     "biography": biography[]{
       _key,
       _type,

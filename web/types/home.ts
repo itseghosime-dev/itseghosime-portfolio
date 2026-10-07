@@ -66,6 +66,10 @@ export type HomePageModel = {
     email: string;
     heading: string;
     message: string;
+    resume?: {
+      label: string;
+      url: string;
+    };
     socialLinks: SocialLink[];
   };
   footerText?: string;

@@ -49,7 +49,7 @@ const technologyRelationshipLabels = {
 
 const destinationHrefs = {
   capabilities: '/#capabilities',
-  contact: '/#contact',
+  contact: '/contact',
   home: '/',
   lab: '/work?filter=experimental',
   profile: '/about',
@@ -268,6 +268,12 @@ export async function getHomePage(): Promise<HomePageModel | null> {
       email: profile.email,
       heading: settings.contactHeading,
       message: settings.contactMessage,
+      resume: profile.resume?.url
+        ? {
+            label: profile.resume.label ?? 'Download résumé',
+            url: profile.resume.url,
+          }
+        : undefined,
       socialLinks: toSocialLinks(profile.socialLinks),
     },
     footerText: settings.footerText ?? undefined,
