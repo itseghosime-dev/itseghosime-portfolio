@@ -15,7 +15,7 @@ type SiteHeaderProps = {
 };
 
 export function SiteHeader({
-  contactHref = "/#contact",
+  contactHref = "/contact",
   navigation,
   siteName,
 }: SiteHeaderProps) {

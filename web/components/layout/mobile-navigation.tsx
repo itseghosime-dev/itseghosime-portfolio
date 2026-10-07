@@ -231,7 +231,7 @@ export function MobileNavigation({
         <p className="label-sm text-accent">Open to software roles.</p>
         <Link
           className="min-h-11 text-sm font-semibold"
-          href="/#contact"
+          href="/contact"
           onClick={closeMenu}
         >
           Start a conversation ↗
