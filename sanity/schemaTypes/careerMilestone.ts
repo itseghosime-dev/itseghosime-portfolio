@@ -116,6 +116,22 @@ export const careerMilestone = defineType({
         }),
     }),
     defineField({
+      name: 'expectedEndDate',
+      title: 'Expected end date',
+      description: 'Use this for an in-progress programme with a known expected completion date.',
+      type: 'date',
+      group: 'identity',
+      hidden: ({parent}) => parent?.status !== 'inProgress',
+      validation: (rule) =>
+        rule.custom((expectedEndDate, context) => {
+          const startDate = context.document?.startDate
+          if (startDate && expectedEndDate && expectedEndDate < startDate) {
+            return 'Expected end date must be after the start date.'
+          }
+          return true
+        }),
+    }),
+    defineField({
       name: 'summary',
       title: 'Summary',
       description: 'Explain the role, programme or achievement without unsupported claims.',

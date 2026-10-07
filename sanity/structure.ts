@@ -29,6 +29,11 @@ export const structure: StructureResolver = (S) =>
           S.document().schemaType('profile').documentId('profile').title('Profile and dossier'),
         ),
       S.listItem()
+        .id('aboutPage')
+        .title('About Page')
+        .icon(DocumentIcon)
+        .child(S.document().schemaType('aboutPage').documentId('aboutPage').title('About page')),
+      S.listItem()
         .id('siteSettings')
         .title('Site Settings')
         .icon(CogIcon)
