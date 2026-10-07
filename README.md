@@ -44,6 +44,19 @@ npm run dev:studio
 
 Local environment files are intentionally excluded from version control. Create the required `.env.local` files locally and never commit authentication tokens or API secrets.
 
+### Contact delivery
+
+The contact form posts to a server-only Next.js route and uses Resend's batch endpoint to send the
+portfolio notification and a fixed acknowledgement email to the visitor together. Copy
+`web/.env.example` to `web/.env.local`, then provide:
+
+- `RESEND_API_KEY`
+- `CONTACT_FROM_EMAIL` using a sender on a domain verified in Resend
+- `CONTACT_TO_EMAIL` for the private inbox that should receive submissions
+
+Without these values, the form remains visible, but real submissions return a
+service-unavailable response instead of displaying a false success.
+
 ## Copyright and permitted access
 
 This repository is public so recruiters and other developers can inspect the author's work and technical approach. It is not an open-source template and does not grant permission to reproduce, redistribute, sell, deploy, or publish a substantially similar portfolio.
