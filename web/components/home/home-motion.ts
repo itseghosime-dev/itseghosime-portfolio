@@ -1,6 +1,7 @@
 'use client'
 
 import gsap from 'gsap'
+import {ScrollTrigger} from 'gsap/ScrollTrigger'
 import {useEffect} from 'react'
 
 function formatLocalDateTime() {
@@ -36,7 +37,7 @@ export function HomeMotion() {
       return
     }
 
-    let observer: IntersectionObserver | undefined
+    gsap.registerPlugin(ScrollTrigger)
     const heroSurface = document.querySelector<HTMLElement>('[data-hero-surface]')
     const pointerGlow = document.querySelector<HTMLElement>('[data-hero-pointer-glow]')
     const impactRing = document.querySelector<HTMLElement>('[data-hero-impact-ring]')
@@ -189,31 +190,47 @@ export function HomeMotion() {
         yoyo: true,
       })
 
+      const heroContent = document.querySelector<HTMLElement>('[data-hero-content]')
+      if (heroSurface && heroContent) {
+        gsap.to(heroContent, {
+          ease: 'none',
+          opacity: 0.28,
+          scrollTrigger: {
+            end: 'bottom 22%',
+            scrub: 0.55,
+            start: 'top top',
+            trigger: heroSurface,
+          },
+          y: -72,
+        })
+      }
+
       const revealItems = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
-      gsap.set(revealItems, {opacity: 0, y: 22})
+      revealItems.forEach((item, index) => {
+        const variant = index % 3
+        const from =
+          variant === 0
+            ? {clipPath: 'inset(0 0 14% 0)', opacity: 0, y: 52}
+            : variant === 1
+              ? {clipPath: 'inset(0 8% 0 0)', opacity: 0, x: -38}
+              : {opacity: 0, scale: 0.965, y: 28}
 
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) {
-              return
-            }
-
-            gsap.to(entry.target, {
-              duration: 0.58,
-              ease: 'power3.out',
-              opacity: 1,
-              overwrite: true,
-              y: 0,
-            })
-            revealObserver.unobserve(entry.target)
-          })
-        },
-        {rootMargin: '0px 0px -10% 0px', threshold: 0.12},
-      )
-
-      observer = revealObserver
-      revealItems.forEach((item) => revealObserver.observe(item))
+        gsap.fromTo(item, from, {
+          clearProps: 'clipPath,opacity,transform',
+          clipPath: 'inset(0 0 0% 0)',
+          duration: 0.95,
+          ease: 'power3.out',
+          opacity: 1,
+          scale: 1,
+          scrollTrigger: {
+            once: true,
+            start: 'top 86%',
+            trigger: item,
+          },
+          x: 0,
+          y: 0,
+        })
+      })
     })
 
     updateCursorTime()
@@ -230,7 +247,6 @@ export function HomeMotion() {
       heroSurface?.removeEventListener('pointermove', handlePointerMove)
       heroSurface?.removeEventListener('pointerdown', handlePointerDown)
       heroSurface?.removeEventListener('pointerleave', handlePointerLeave)
-      observer?.disconnect()
       context.revert()
     }
   }, [])

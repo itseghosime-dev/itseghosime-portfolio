@@ -31,13 +31,21 @@ export function AboutMotion({children}: AboutMotionProps) {
 
       reveals.forEach((element, index) => {
         const isAboveFold = index < 3
+        const entersFromSide = !isAboveFold && index % 3 === 0
         gsap.fromTo(
           element,
-          {opacity: 0, y: isAboveFold ? 18 : 30},
           {
-            duration: 0.78,
+            opacity: 0,
+            scale: isAboveFold ? 1 : 0.985,
+            x: entersFromSide ? (index % 2 === 0 ? -32 : 32) : 0,
+            y: isAboveFold ? 18 : 34,
+          },
+          {
+            clearProps: 'opacity,transform',
+            duration: 0.9,
             ease: 'power3.out',
             opacity: 1,
+            scale: 1,
             scrollTrigger: isAboveFold
               ? undefined
               : {
@@ -45,6 +53,7 @@ export function AboutMotion({children}: AboutMotionProps) {
                   start: 'top 88%',
                   trigger: element,
                 },
+            x: 0,
             y: 0,
           },
         )
@@ -63,6 +72,17 @@ export function AboutMotion({children}: AboutMotionProps) {
             yPercent: 0,
           },
         )
+
+        gsap.to(portrait, {
+          ease: 'none',
+          scale: 1.035,
+          scrollTrigger: {
+            end: 'bottom top',
+            scrub: 0.65,
+            start: 'top bottom',
+            trigger: portrait,
+          },
+        })
       }
     }, root)
 

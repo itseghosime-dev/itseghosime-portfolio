@@ -30,13 +30,23 @@ export function LabMotion({ children }: LabMotionProps) {
 
       reveals.forEach((element, index) => {
         const isAboveFold = index < 2;
+        const isCard = element.hasAttribute("data-lab-card");
         gsap.fromTo(
           element,
-          { opacity: 0, y: isAboveFold ? 16 : 28 },
           {
-            duration: 0.8,
+            opacity: 0,
+            rotate: isCard ? (index % 2 === 0 ? -1.2 : 1.2) : 0,
+            scale: isCard ? 0.96 : 1,
+            x: !isAboveFold && !isCard ? (index % 2 === 0 ? -28 : 28) : 0,
+            y: isAboveFold ? 16 : isCard ? 52 : 32,
+          },
+          {
+            clearProps: "opacity,transform",
+            duration: isCard ? 0.95 : 0.82,
             ease: "power3.out",
             opacity: 1,
+            rotate: 0,
+            scale: 1,
             scrollTrigger: isAboveFold
               ? undefined
               : {
@@ -44,6 +54,7 @@ export function LabMotion({ children }: LabMotionProps) {
                   start: "top 88%",
                   trigger: element,
                 },
+            x: 0,
             y: 0,
           },
         );

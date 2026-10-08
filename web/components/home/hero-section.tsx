@@ -47,7 +47,7 @@ export function HeroSection() {
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background/70 to-transparent" />
       </div>
 
-      <Container className="relative z-10 grid min-h-[calc(100svh-5rem)] content-center py-20 md:min-h-217.5 md:py-24 lg:grid-cols-[minmax(0,7fr)_minmax(20rem,5fr)]">
+      <Container className="relative z-10 grid min-h-[calc(100svh-5rem)] content-center py-20 md:min-h-217.5 md:py-24 lg:grid-cols-[minmax(0,7fr)_minmax(20rem,5fr)]" data-hero-content>
         <p className="absolute top-7 left-6 hidden text-[0.5625rem] font-semibold uppercase tracking-[0.16em] text-ink-muted/55 md:left-12 md:block">
           LAT: 09°04&apos;N · LON: 07°24&apos;E · UTC+1
         </p>

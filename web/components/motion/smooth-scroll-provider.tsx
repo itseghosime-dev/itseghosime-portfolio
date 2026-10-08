@@ -23,9 +23,11 @@ type SmoothScrollContextValue = {
   ) => void;
 };
 
-const SmoothScrollContext = createContext<SmoothScrollContextValue | null>(null);
+const SmoothScrollContext = createContext<SmoothScrollContextValue | null>(
+  null,
+);
 
-const easeOutQuart = (progress: number) => 1 - Math.pow(1 - progress, 4);
+const cinematicEase = (progress: number) => 1 - Math.pow(1 - progress, 3.2);
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -41,7 +43,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       if (lenis) {
         lenis.scrollTo(target, {
           duration: 1.05,
-          easing: easeOutQuart,
+          easing: cinematicEase,
           immediate: options?.immediate,
           offset: options?.offset ?? -96,
         });
@@ -65,29 +67,40 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
 
     const lenis = new Lenis({
       anchors: {
-        duration: 1.05,
-        easing: easeOutQuart,
+        duration: 1.3,
+        easing: cinematicEase,
         offset: -96,
       },
       autoRaf: false,
       autoResize: true,
-      autoToggle: true,
-      lerp: 0.085,
+      autoToggle: false,
+      duration: 1.25,
+      easing: cinematicEase,
       overscroll: true,
       respectReducedMotion: true,
       smoothWheel: true,
       stopInertiaOnNavigate: true,
       syncTouch: false,
-      touchMultiplier: 1,
-      wheelMultiplier: 0.88,
+      touchMultiplier: 1.05,
+      wheelMultiplier: 0.92,
     });
 
     lenisRef.current = lenis;
 
-    const updateScrollTrigger = () => ScrollTrigger.update();
+    let previousScroll = lenis.scroll;
+    const updateScroll = (instance: Lenis) => {
+      ScrollTrigger.update();
+
+      const delta = instance.scroll - previousScroll;
+      if (Math.abs(delta) > 0.5) {
+        document.documentElement.dataset.scrollDirection =
+          delta > 0 ? "forward" : "backward";
+      }
+      previousScroll = instance.scroll;
+    };
     const tick = (time: number) => lenis.raf(time * 1000);
 
-    lenis.on("scroll", updateScrollTrigger);
+    lenis.on("scroll", updateScroll);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
 
@@ -102,7 +115,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     return () => {
       window.removeEventListener("load", refresh);
       gsap.ticker.remove(tick);
-      lenis.off("scroll", updateScrollTrigger);
+      lenis.off("scroll", updateScroll);
       lenis.destroy();
       lenisRef.current = null;
     };
