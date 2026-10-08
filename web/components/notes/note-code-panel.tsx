@@ -64,7 +64,7 @@ export function NoteCodePanel({
         theme={themes.nightOwl}
       >
         {({ getLineProps, getTokenProps, tokens }) => (
-          <pre className="m-0 max-h-[38rem] overflow-auto py-6 font-mono text-xs leading-6 [tab-size:2]">
+          <pre className="m-0 max-h-[38rem] overflow-auto py-6 font-mono text-xs leading-6 [tab-size:2]" data-lenis-prevent>
             <code className="grid min-w-max">
               {tokens.map((line, lineIndex) => {
                 const lineProps = getLineProps({ line });

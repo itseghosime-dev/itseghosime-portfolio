@@ -101,6 +101,7 @@ export function RecruiterBriefDrawer({
         className={`absolute top-0 right-0 flex h-full w-full max-w-2xl flex-col overflow-y-auto border-l border-black/[0.1] bg-background shadow-[-20px_0_60px_rgba(22,23,25,0.12)] transition-transform duration-500 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
+        data-lenis-prevent
         aria-labelledby="recruiter-brief-title"
         aria-modal="true"
         ref={drawerRef}

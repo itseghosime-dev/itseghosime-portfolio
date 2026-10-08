@@ -10,6 +10,7 @@ import type {
   LabPageModel,
 } from "@/types/lab";
 
+import { useSmoothScroll } from "@/components/motion/smooth-scroll-provider";
 import { LabExperimentCard } from "./lab-experiment-card";
 import { LabMotion } from "./lab-motion";
 
@@ -27,6 +28,7 @@ const categoryLabels: Record<LabCategory, string> = {
 const categories = Object.keys(categoryLabels) as LabCategory[];
 
 export function LabView({ experiments, page }: LabViewProps) {
+  const { scrollTo } = useSmoothScroll();
   const [activeCategory, setActiveCategory] = useState<LabCategory>("all");
   const counts = useMemo(
     () =>
@@ -62,7 +64,7 @@ export function LabView({ experiments, page }: LabViewProps) {
     const cards = document.querySelectorAll<HTMLElement>("[data-lab-card]");
     if (!cards.length) return;
     const randomCard = cards[Math.floor(Math.random() * cards.length)];
-    randomCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    scrollTo(randomCard, { offset: -160 });
     randomCard.animate(
       [
         { boxShadow: "0 0 0 0 rgb(65 105 225 / 0)" },

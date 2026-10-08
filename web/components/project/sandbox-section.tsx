@@ -15,6 +15,7 @@ import {
 
 import type { ProjectSectionOf } from "@/types/project";
 
+import { useSmoothScroll } from "@/components/motion/smooth-scroll-provider";
 import { Container } from "@/components/ui/container";
 import { ProjectImage } from "./project-image";
 import { SectionHeading } from "./section-heading";
@@ -74,6 +75,7 @@ export function SandboxSection({
 }: {
   section: ProjectSectionOf<"interactiveSandboxSection">;
 }) {
+  const { scrollTo } = useSmoothScroll();
   const available = useMemo(
     () =>
       (section.availableViewports ?? ["desktop"]).filter(
@@ -157,9 +159,8 @@ export function SandboxSection({
   }
 
   function viewProjectMedia() {
-    document
-      .querySelector<HTMLElement>("[data-project-media]")
-      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    const media = document.querySelector<HTMLElement>("[data-project-media]");
+    if (media) scrollTo(media, { offset: -144 });
   }
 
   const heightClass =

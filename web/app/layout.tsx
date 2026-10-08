@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
 
+import { SmoothScrollProvider } from "@/components/motion/smooth-scroll-provider";
 import { ConnectivityStatus } from "@/components/system/connectivity-status";
 import { SanityLive } from "@/sanity/lib/live";
 import { SITE_URL } from "@/lib/site";
@@ -50,8 +51,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to main content
         </a>
-        {children}
-        <SanityLive includeDrafts={false} />
+        <SmoothScrollProvider>
+          {children}
+          <SanityLive includeDrafts={false} />
+        </SmoothScrollProvider>
       </body>
     </html>
   );

@@ -1,5 +1,7 @@
 "use client";
 
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -8,7 +10,7 @@ import {
   Eye,
   Sparkles,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type { HomePageModel } from "@/types/home";
 
@@ -31,6 +33,7 @@ export function ContactExperience({
   hero,
   technologies,
 }: ContactExperienceProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const [isBriefOpen, setIsBriefOpen] = useState(false);
   const [copyStatus, setCopyStatus] = useState<"copied" | "idle">("idle");
 
@@ -43,6 +46,55 @@ export function ContactExperience({
     return () => window.clearTimeout(timeout);
   }, [copyStatus]);
 
+  useEffect(() => {
+    const root = rootRef.current;
+    if (
+      !root ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const context = gsap.context(() => {
+      gsap.fromTo(
+        root.querySelectorAll("[data-contact-intro]"),
+        { clipPath: "inset(0 0 100% 0)", opacity: 0, y: 18 },
+        {
+          clipPath: "inset(0 0 0% 0)",
+          duration: 0.82,
+          ease: "power3.out",
+          opacity: 1,
+          stagger: 0.09,
+          y: 0,
+        },
+      );
+
+      root
+        .querySelectorAll<HTMLElement>("[data-contact-panel]")
+        .forEach((panel, index) => {
+          gsap.fromTo(
+            panel,
+            { opacity: 0, x: index % 2 === 0 ? -34 : 34 },
+            {
+              duration: 0.86,
+              ease: "power3.out",
+              opacity: 1,
+              scrollTrigger: {
+                once: true,
+                start: "top 86%",
+                trigger: panel,
+              },
+              x: 0,
+            },
+          );
+        });
+    }, root);
+
+    return () => context.revert();
+  }, []);
+
   async function copyEmail() {
     try {
       await navigator.clipboard.writeText(contact.email);
@@ -53,10 +105,10 @@ export function ContactExperience({
   }
 
   return (
-    <>
-      <section className="border-b border-black/[0.08] py-12 sm:py-16 lg:py-20">
+    <div ref={rootRef}>
+      <section className="border-b border-black/[0.08] py-12 sm:py-16 lg:py-20" data-contact-section>
         <Container className="grid gap-8">
-          <header className="grid max-w-3xl gap-5">
+          <header className="grid max-w-3xl gap-5" data-contact-intro>
             <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
               Contact <span aria-hidden="true">{"//"}</span> 2026 engagements
             </p>
@@ -70,7 +122,7 @@ export function ContactExperience({
             </p>
           </header>
 
-          <div className="grid border border-black/[0.1] bg-surface sm:grid-cols-[1fr_auto] sm:items-stretch">
+          <div className="grid border border-black/[0.1] bg-surface sm:grid-cols-[1fr_auto] sm:items-stretch" data-contact-intro>
             <div className="grid gap-1 px-5 py-4 sm:px-6">
               <p className="flex items-center gap-2 font-mono text-sm font-semibold text-ink">
                 <Circle
@@ -116,6 +168,7 @@ export function ContactExperience({
             className="group flex min-h-12 cursor-pointer items-center justify-between gap-5 border-y border-black/[0.08] bg-transparent px-1 py-3 text-left text-sm transition-colors hover:text-accent"
             type="button"
             onClick={() => setIsBriefOpen(true)}
+            data-contact-intro
           >
             <span className="inline-flex items-center">
               <Sparkles
@@ -139,11 +192,13 @@ export function ContactExperience({
         </Container>
       </section>
 
-      <section className="py-12 sm:py-16 lg:py-20" aria-label="Contact options">
+      <section className="py-12 sm:py-16 lg:py-20" aria-label="Contact options" data-contact-section>
         <Container className="grid gap-14 lg:grid-cols-[minmax(0,7fr)_minmax(18rem,5fr)] lg:gap-16">
-          <ContactForm email={contact.email} />
+          <div data-contact-panel>
+            <ContactForm email={contact.email} />
+          </div>
 
-          <aside className="grid content-start gap-12 lg:border-l lg:border-black/[0.08] lg:pl-14">
+          <aside className="grid content-start gap-12 lg:border-l lg:border-black/[0.08] lg:pl-14" data-contact-panel>
             <section aria-labelledby="verified-channels-title">
               <h2
                 className="mb-5 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink-muted"
@@ -250,6 +305,6 @@ export function ContactExperience({
         technologies={technologies}
         onClose={() => setIsBriefOpen(false)}
       />
-    </>
+    </div>
   );
 }

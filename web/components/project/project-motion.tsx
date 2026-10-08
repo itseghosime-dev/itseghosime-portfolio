@@ -2,7 +2,6 @@
 
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
 import { useEffect, useRef, type ReactNode } from "react";
 
 export function ProjectMotion({ children }: { children: ReactNode }) {
@@ -15,23 +14,7 @@ export function ProjectMotion({ children }: { children: ReactNode }) {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const lenis = new Lenis({
-      anchors: { offset: -128 },
-      autoRaf: false,
-      lerp: 0.1,
-      respectReducedMotion: true,
-      smoothWheel: true,
-      stopInertiaOnNavigate: true,
-      wheelMultiplier: 0.9,
-    });
-
     gsap.registerPlugin(ScrollTrigger);
-    const updateScrollTrigger = () => ScrollTrigger.update();
-    const tick = (time: number) => lenis.raf(time * 1000);
-
-    lenis.on("scroll", updateScrollTrigger);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
 
     const subnav = root.querySelector<HTMLElement>("[data-project-subnav]");
     const sandbox = root.querySelector<HTMLElement>("[data-project-sandbox]");
@@ -220,8 +203,6 @@ export function ProjectMotion({ children }: { children: ReactNode }) {
       sandboxObserver?.disconnect();
       chapterObserver.disconnect();
       context.revert();
-      gsap.ticker.remove(tick);
-      lenis.destroy();
     };
   }, []);
 

@@ -1,12 +1,14 @@
 "use client";
 
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Check, Copy, Search, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { NoteCategory, NoteSummary, NotesPageModel } from "@/types/notes";
 
+import { useSmoothScroll } from "@/components/motion/smooth-scroll-provider";
 import { NoteArchiveRow } from "./note-archive-row";
 
 type NoteFilter = "all" | NoteCategory;
@@ -40,6 +42,7 @@ export function NotesArchive({
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const archiveRef = useRef<HTMLElement>(null);
+  const { scrollTo } = useSmoothScroll();
   const [activeFilter, setActiveFilter] = useState<NoteFilter>("all");
   const [copied, setCopied] = useState(false);
 
@@ -96,6 +99,57 @@ export function NotesArchive({
     );
   }, [activeFilter]);
 
+  useEffect(() => {
+    const root = rootRef.current;
+    if (
+      !root ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const context = gsap.context(() => {
+      const intro = root.querySelector<HTMLElement>("[data-notes-intro]");
+      if (intro) {
+        gsap.fromTo(
+          intro.children,
+          { opacity: 0, y: 20 },
+          {
+            duration: 0.7,
+            ease: "power3.out",
+            opacity: 1,
+            stagger: 0.06,
+            y: 0,
+          },
+        );
+      }
+
+      root
+        .querySelectorAll<HTMLElement>("[data-notes-section]")
+        .forEach((section, index) => {
+          gsap.fromTo(
+            section,
+            { opacity: 0, x: index % 2 === 0 ? -20 : 20 },
+            {
+              duration: 0.78,
+              ease: "power3.out",
+              opacity: 1,
+              scrollTrigger: {
+                once: true,
+                start: "top 89%",
+                trigger: section,
+              },
+              x: 0,
+            },
+          );
+        });
+    }, root);
+
+    return () => context.revert();
+  }, []);
+
   async function copyArchiveLink() {
     await navigator.clipboard.writeText(window.location.href);
     setCopied(true);
@@ -103,12 +157,12 @@ export function NotesArchive({
   }
 
   function focusArchive() {
-    archiveRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (archiveRef.current) scrollTo(archiveRef.current);
   }
 
   return (
     <div className="mx-auto max-w-[70rem]" ref={rootRef}>
-      <header className="border-b border-black/[0.09] pb-10 pt-2 sm:pb-12 sm:pt-4 space-y-8">
+      <header className="border-b border-black/[0.09] pb-10 pt-2 sm:pb-12 sm:pt-4 space-y-8" data-notes-intro>
         <div className="flex flex-col gap-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.11em] sm:flex-row sm:items-center sm:justify-between">
           <p className="flex items-center gap-2 text-accent">
             <span
@@ -151,7 +205,7 @@ export function NotesArchive({
         </dl>
       </header>
 
-      <section className="scroll-mt-24 py-8 sm:py-10" ref={archiveRef}>
+      <section className="scroll-mt-24 py-8 sm:py-10" data-notes-section ref={archiveRef}>
         <nav
           aria-label="Note categories"
           className="overflow-x-auto border-b border-black/[0.09]"
@@ -204,7 +258,7 @@ export function NotesArchive({
         </div>
       </section>
 
-      <section className="border-t border-black/[0.09] py-16 sm:py-20">
+      <section className="border-t border-black/[0.09] py-16 sm:py-20" data-notes-section>
         <div className="max-w-2xl">
           <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
             Interaction system

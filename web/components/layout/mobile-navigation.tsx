@@ -163,6 +163,7 @@ export function MobileNavigation({
     <div
       ref={overlayRef}
       className="fixed inset-0 z-[999] flex min-h-dvh flex-col overflow-y-auto bg-background px-6 py-5 md:hidden"
+      data-lenis-prevent
       id="mobile-navigation"
       role="dialog"
       aria-label="Mobile navigation"

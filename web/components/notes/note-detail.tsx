@@ -14,6 +14,7 @@ import { Container } from "@/components/ui/container";
 import { NoteBody } from "./note-body";
 import { formatNoteDate, formatVolumeNumber } from "./note-format";
 import { NoteImage } from "./note-image";
+import { NoteDetailMotion } from "./note-detail-motion";
 import { NoteReadingProgress } from "./note-reading-progress";
 import { NoteReadingTools } from "./note-reading-tools";
 import { NoteShareActions } from "./note-share-actions";
@@ -56,7 +57,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
   const readingBodyId = "note-reading-body";
 
   return (
-    <>
+    <NoteDetailMotion>
       <NoteReadingProgress />
       <Container>
         <div className="mx-auto max-w-[73rem]">
@@ -68,7 +69,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
             {data.labels.back}
           </Link>
 
-          <div className="mt-8 grid gap-10 border-t border-black/[0.09] pt-8 lg:grid-cols-12 lg:gap-12 xl:gap-16">
+          <div className="mt-8 grid gap-10 border-t border-black/[0.09] pt-8 lg:grid-cols-12 lg:gap-12 xl:gap-16" data-note-detail-intro>
             <aside className="hidden lg:order-1 lg:col-span-3 lg:block lg:pr-2">
               <div className="lg:sticky lg:top-28">
                 <NoteTableOfContents
@@ -165,7 +166,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
             </article>
           </div>
 
-          <section className="mt-20 border-y border-black/[0.09] py-8 sm:mt-24 sm:py-10">
+          <section className="mt-20 border-y border-black/[0.09] py-8 sm:mt-24 sm:py-10" data-note-detail-section>
             <div className="grid gap-7 md:grid-cols-[1fr_auto] md:items-center">
               <div className="max-w-2xl flex flex-col gap-4">
                 <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
@@ -190,6 +191,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
           <nav
             aria-label="Adjacent notes"
             className="mt-10 grid border-l border-t border-black/[0.09] sm:grid-cols-2"
+            data-note-detail-section
           >
             {data.adjacent.previous ? (
               <Link
@@ -232,7 +234,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
           </nav>
 
           {data.related.length ? (
-            <section className="py-16 sm:py-20">
+            <section className="py-16 sm:py-20" data-note-detail-section>
               <div className="mb-8 flex items-end justify-between gap-6">
                 <div className="flex flex-col gap-3">
                   <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
@@ -258,6 +260,6 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
           ) : null}
         </div>
       </Container>
-    </>
+    </NoteDetailMotion>
   );
 }
