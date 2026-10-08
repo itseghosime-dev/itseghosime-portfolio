@@ -20,7 +20,10 @@ const singletonTypes = new Set([
 
 const isLocalStudio =
   typeof location !== 'undefined' && ['localhost', '127.0.0.1'].includes(location.hostname)
-const previewOrigin = isLocalStudio ? 'http://localhost:3000' : 'https://itseghosime.com'
+const previewOrigin = isLocalStudio ? 'http://localhost:3000' : 'https://www.itseghosime.com'
+const previewAllowOrigins = isLocalStudio
+  ? ['http://localhost:3000', 'http://127.0.0.1:3000']
+  : ['https://www.itseghosime.com', 'https://itseghosime.com']
 
 export default defineConfig({
   name: 'default',
@@ -35,6 +38,7 @@ export default defineConfig({
   plugins: [
     structureTool({structure}),
     presentationTool({
+      allowOrigins: previewAllowOrigins,
       previewUrl: {
         initial: previewOrigin,
         previewMode: {
