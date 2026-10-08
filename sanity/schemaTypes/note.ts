@@ -41,6 +41,36 @@ export const note = defineType({
       validation: (rule) => rule.required().max(220),
     }),
     defineField({
+      name: 'preview',
+      title: 'Archive preview',
+      description: 'Optional editorial preview shown when a reader explores this note in the archive.',
+      type: 'object',
+      group: 'editorial',
+      fields: [
+        defineField({
+          name: 'label',
+          title: 'Preview label',
+          type: 'string',
+          validation: (rule) => rule.required().max(60),
+        }),
+        defineField({
+          name: 'summary',
+          title: 'Preview summary',
+          type: 'text',
+          rows: 3,
+          validation: (rule) => rule.required().max(260),
+        }),
+        defineField({
+          name: 'code',
+          title: 'Optional code fragment',
+          description: 'Keep this short enough to scan inside the archive preview.',
+          type: 'text',
+          rows: 4,
+          validation: (rule) => rule.max(500),
+        }),
+      ],
+    }),
+    defineField({
       name: 'coverImage',
       title: 'Cover image',
       type: 'accessibleImage',

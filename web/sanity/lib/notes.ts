@@ -96,6 +96,14 @@ function toSummary(
     featured,
     id: note._id,
     publishedAt: note.publishedAt,
+    preview:
+      note.preview?.label && note.preview.summary
+        ? {
+            code: note.preview.code || undefined,
+            label: note.preview.label,
+            summary: note.preview.summary,
+          }
+        : undefined,
     readingTimeMinutes: note.readingTimeMinutes ?? 5,
     slug: note.slug,
     technologies:
@@ -226,7 +234,6 @@ export async function getNoteDetail(slug: string): Promise<NoteDetailData> {
   const currentIndex = summaries.findIndex((note) => note.slug === slug);
   const currentSummary = currentIndex >= 0 ? summaries[currentIndex] : undefined;
   const body = data.note?.body ?? [];
-  const category = data.note ? toCategory(data.note.category) : "architecture";
 
   const related = currentSummary
     ? summaries

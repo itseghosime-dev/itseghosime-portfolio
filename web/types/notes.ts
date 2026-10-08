@@ -20,6 +20,11 @@ export type NoteSummary = {
   featured: boolean;
   id: string;
   publishedAt: string;
+  preview?: {
+    code?: string;
+    label: string;
+    summary: string;
+  };
   readingTimeMinutes: number;
   slug: string;
   technologies: string[];

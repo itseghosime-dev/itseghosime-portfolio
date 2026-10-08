@@ -439,6 +439,7 @@ export const NOTES_ARCHIVE_QUERY = defineQuery(`{
     title,
     "slug": slug.current,
     excerpt,
+    preview{label, summary, code},
     publishedAt,
     category,
     volumeNumber,
@@ -464,6 +465,7 @@ export const NOTE_METADATA_QUERY = defineQuery(`
   *[_type == "note" && slug.current == $slug][0]{
     title,
     excerpt,
+    preview{label, summary, code},
     "seo": seo{
       title,
       description,
@@ -485,6 +487,7 @@ export const NOTE_DETAIL_QUERY = defineQuery(`{
     title,
     "slug": slug.current,
     excerpt,
+    preview{label, summary, code},
     publishedAt,
     category,
     volumeNumber,
@@ -538,6 +541,7 @@ export const NOTE_DETAIL_QUERY = defineQuery(`{
     title,
     "slug": slug.current,
     excerpt,
+    preview{label, summary, code},
     publishedAt,
     category,
     volumeNumber,
