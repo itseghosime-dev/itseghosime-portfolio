@@ -39,6 +39,13 @@ export const structure: StructureResolver = (S) =>
         .icon(CodeIcon)
         .child(S.document().schemaType('labPage').documentId('labPage').title('Lab page')),
       S.listItem()
+        .id('notesPage')
+        .title('Notes Page')
+        .icon(DocumentTextIcon)
+        .child(
+          S.document().schemaType('notesPage').documentId('notesPage').title('Notes page'),
+        ),
+      S.listItem()
         .id('siteSettings')
         .title('Site Settings')
         .icon(CogIcon)

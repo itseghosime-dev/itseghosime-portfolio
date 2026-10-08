@@ -54,6 +54,38 @@ export const note = defineType({
       validation: (rule) => rule.warning('Add a publication date before publishing.'),
     }),
     defineField({
+      name: 'category',
+      title: 'Primary category',
+      type: 'string',
+      group: 'classification',
+      options: {
+        list: [
+          {title: 'React', value: 'react'},
+          {title: 'Next.js', value: 'nextjs'},
+          {title: 'Performance', value: 'performance'},
+          {title: 'UI and state', value: 'uiState'},
+          {title: 'Architecture', value: 'architecture'},
+          {title: 'Accessibility', value: 'accessibility'},
+        ],
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'volumeNumber',
+      title: 'Archive number',
+      description: 'The editorial index number displayed in the archive, for example 1.',
+      type: 'number',
+      group: 'editorial',
+      validation: (rule) => rule.required().integer().min(1),
+    }),
+    defineField({
+      name: 'readingTimeMinutes',
+      title: 'Reading time (minutes)',
+      type: 'number',
+      group: 'editorial',
+      validation: (rule) => rule.required().integer().min(1).max(60),
+    }),
+    defineField({
       name: 'body',
       title: 'Note content',
       type: 'richText',

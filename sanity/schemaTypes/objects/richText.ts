@@ -51,5 +51,6 @@ export const richText = defineType({
     }),
     defineArrayMember({type: 'accessibleImage'}),
     defineArrayMember({type: 'codeBlock'}),
+    defineArrayMember({type: 'noteComparison'}),
   ],
 })

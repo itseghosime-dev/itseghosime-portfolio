@@ -52,6 +52,7 @@ const destinationHrefs = {
   contact: '/contact',
   home: '/',
   lab: '/lab',
+  notes: '/notes',
   profile: '/about',
   projects: '/work',
 } as const

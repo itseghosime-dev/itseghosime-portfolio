@@ -408,3 +408,141 @@ export const LAB_PAGE_QUERY = defineQuery(`{
     "technologies": technologies[]->{name}
   }
 }`);
+
+export const NOTES_ARCHIVE_QUERY = defineQuery(`{
+  "notesPage": *[_id == "notesPage"][0]{
+    eyebrow,
+    heading,
+    introduction,
+    archiveNote,
+    libraryEyebrow,
+    libraryHeading,
+    backLabel,
+    contentsLabel,
+    relatedHeading,
+    feedbackHeading,
+    feedbackMessage,
+    seo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    }
+  },
+  "notes": *[
+    _type == "note" &&
+    defined(slug.current) &&
+    defined(publishedAt) &&
+    publishedAt <= now()
+  ] | order(displayOrder asc, publishedAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    category,
+    volumeNumber,
+    readingTimeMinutes,
+    topics,
+    featured,
+    displayOrder,
+    "coverImage": coverImage ${IMAGE_PROJECTION},
+    "technologies": technologies[]->{_id, name}
+  }
+}`);
+
+export const NOTE_SLUGS_QUERY = defineQuery(`
+  *[
+    _type == "note" &&
+    defined(slug.current) &&
+    defined(publishedAt) &&
+    publishedAt <= now()
+  ]{"slug": slug.current}
+`);
+
+export const NOTE_METADATA_QUERY = defineQuery(`
+  *[_type == "note" && slug.current == $slug][0]{
+    title,
+    excerpt,
+    "seo": seo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    },
+    "coverImage": coverImage ${IMAGE_PROJECTION}
+  }
+`);
+
+export const NOTE_DETAIL_QUERY = defineQuery(`{
+  "note": *[
+    _type == "note" &&
+    slug.current == $slug &&
+    defined(publishedAt) &&
+    publishedAt <= now()
+  ][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    category,
+    volumeNumber,
+    readingTimeMinutes,
+    topics,
+    "technologies": technologies[]->{_id, name},
+    "coverImage": coverImage ${IMAGE_PROJECTION},
+    body[]{
+      _key,
+      _type,
+      style,
+      listItem,
+      level,
+      children[]{_key, _type, text, marks},
+      markDefs[]{_key, _type, href, openInNewTab},
+      filename,
+      language,
+      code,
+      caption,
+      eyebrow,
+      title,
+      items[]{_key, _type, label, title, description},
+      alt,
+      "url": asset->url,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height,
+      "lqip": asset->metadata.lqip
+    },
+    seo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    }
+  },
+  "profile": *[_id == "profile"][0]{fullName, email},
+  "notesPage": *[_id == "notesPage"][0]{
+    backLabel,
+    contentsLabel,
+    relatedHeading,
+    feedbackHeading,
+    feedbackMessage
+  },
+  "noteNavigation": *[
+    _type == "note" &&
+    defined(slug.current) &&
+    defined(publishedAt) &&
+    publishedAt <= now()
+  ] | order(displayOrder asc, publishedAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    category,
+    volumeNumber,
+    readingTimeMinutes,
+    topics,
+    "technologies": technologies[]->{_id, name}
+  }
+}`);

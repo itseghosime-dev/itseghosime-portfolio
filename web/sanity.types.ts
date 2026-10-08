@@ -15,6 +15,34 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type NotesPage = {
+  _id: string;
+  _type: "notesPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  eyebrow?: string;
+  heading?: string;
+  introduction?: string;
+  archiveNote?: string;
+  libraryEyebrow?: string;
+  libraryHeading?: string;
+  backLabel?: string;
+  contentsLabel?: string;
+  relatedHeading?: string;
+  feedbackHeading?: string;
+  feedbackMessage?: string;
+  seo?: SeoMetadata;
+};
+
+export type SeoMetadata = {
+  _type: "seoMetadata";
+  title?: string;
+  description?: string;
+  image?: AccessibleImage;
+  noIndex?: boolean;
+};
+
 export type LabPage = {
   _id: string;
   _type: "labPage";
@@ -36,14 +64,6 @@ export type LabPage = {
   githubLinkLabel?: string;
   contactLinkLabel?: string;
   seo?: SeoMetadata;
-};
-
-export type SeoMetadata = {
-  _type: "seoMetadata";
-  title?: string;
-  description?: string;
-  image?: AccessibleImage;
-  noIndex?: boolean;
 };
 
 export type TechnologyReference = {
@@ -221,6 +241,9 @@ export type RichText = Array<
   | ({
       _key: string;
     } & CodeBlock)
+  | ({
+      _key: string;
+    } & NoteComparison)
 >;
 
 export type SanityImageAssetReference = {
@@ -356,6 +379,15 @@ export type Note = {
   excerpt?: string;
   coverImage?: AccessibleImage;
   publishedAt?: string;
+  category?:
+    | "react"
+    | "nextjs"
+    | "performance"
+    | "uiState"
+    | "architecture"
+    | "accessibility";
+  volumeNumber?: number;
+  readingTimeMinutes?: number;
   body?: RichText;
   technologies?: Array<
     {
@@ -613,6 +645,19 @@ export type HeroSection = {
   presentation?: "editorial" | "split" | "immersive";
 };
 
+export type NoteComparison = {
+  _type: "noteComparison";
+  eyebrow?: string;
+  title?: string;
+  items?: Array<{
+    label?: string;
+    title?: string;
+    description?: string;
+    _type: "comparisonItem";
+    _key: string;
+  }>;
+};
+
 export type NavigationItem = {
   _type: "navigationItem";
   label?: string;
@@ -770,8 +815,9 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
-  | LabPage
+  | NotesPage
   | SeoMetadata
+  | LabPage
   | TechnologyReference
   | CareerMilestoneReference
   | AboutPage
@@ -797,6 +843,7 @@ export type AllSanitySchemaTypes =
   | ContributionGridSection
   | NarrativeSection
   | HeroSection
+  | NoteComparison
   | NavigationItem
   | SocialLink
   | CodeBlock
@@ -905,6 +952,12 @@ export type HOME_PAGE_QUERY_RESULT = {
           | {
               _key: string;
               _type: "codeBlock";
+              style: null;
+              children: null;
+            }
+          | {
+              _key: string;
+              _type: "noteComparison";
               style: null;
               children: null;
             }
@@ -1287,6 +1340,12 @@ export type ABOUT_PROFILE_QUERY_RESULT = {
           | {
               _key: string;
               _type: "codeBlock";
+              style: null;
+              children: null;
+            }
+          | {
+              _key: string;
+              _type: "noteComparison";
               style: null;
               children: null;
             }
@@ -1886,6 +1945,35 @@ export type LAB_PAGE_QUERY_RESULT = {
         eyebrow: string | null;
         heading: string | null;
         introduction: string | null;
+        activeStudiesLabel: null;
+        surpriseLabel: null;
+        archiveEyebrow: null;
+        archiveHeading: null;
+        archiveNote: string | null;
+        closingEyebrow: null;
+        closingHeading: null;
+        closingMessage: null;
+        workLinkLabel: null;
+        githubLinkLabel: null;
+        contactLinkLabel: null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | {
+        eyebrow: string | null;
+        heading: string | null;
+        introduction: string | null;
         activeStudiesLabel: string | null;
         surpriseLabel: string | null;
         archiveEyebrow: string | null;
@@ -1953,6 +2041,412 @@ export type LAB_PAGE_QUERY_RESULT = {
   }>;
 };
 
+// Source: ../web/sanity/lib/queries.ts
+// Variable: NOTES_ARCHIVE_QUERY
+// Query: {  "notesPage": *[_id == "notesPage"][0]{    eyebrow,    heading,    introduction,    archiveNote,    libraryEyebrow,    libraryHeading,    backLabel,    contentsLabel,    relatedHeading,    feedbackHeading,    feedbackMessage,    seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    }  },  "notes": *[    _type == "note" &&    defined(slug.current) &&    defined(publishedAt) &&    publishedAt <= now()  ] | order(displayOrder asc, publishedAt desc){    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    category,    volumeNumber,    readingTimeMinutes,    topics,    featured,    displayOrder,    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    "technologies": technologies[]->{_id, name}  }}
+export type NOTES_ARCHIVE_QUERY_RESULT = {
+  notesPage:
+    | {
+        eyebrow: null;
+        heading: null;
+        introduction: null;
+        archiveNote: null;
+        libraryEyebrow: null;
+        libraryHeading: null;
+        backLabel: null;
+        contentsLabel: null;
+        relatedHeading: null;
+        feedbackHeading: null;
+        feedbackMessage: null;
+        seo: null;
+      }
+    | {
+        eyebrow: null;
+        heading: null;
+        introduction: null;
+        archiveNote: null;
+        libraryEyebrow: null;
+        libraryHeading: null;
+        backLabel: null;
+        contentsLabel: null;
+        relatedHeading: null;
+        feedbackHeading: null;
+        feedbackMessage: null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | {
+        eyebrow: null;
+        heading: null;
+        introduction: string | null;
+        archiveNote: null;
+        libraryEyebrow: null;
+        libraryHeading: null;
+        backLabel: null;
+        contentsLabel: null;
+        relatedHeading: null;
+        feedbackHeading: null;
+        feedbackMessage: null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | {
+        eyebrow: string | null;
+        heading: string | null;
+        introduction: string | null;
+        archiveNote: string | null;
+        libraryEyebrow: null;
+        libraryHeading: null;
+        backLabel: null;
+        contentsLabel: null;
+        relatedHeading: null;
+        feedbackHeading: null;
+        feedbackMessage: null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | {
+        eyebrow: string | null;
+        heading: string | null;
+        introduction: string | null;
+        archiveNote: string | null;
+        libraryEyebrow: string | null;
+        libraryHeading: string | null;
+        backLabel: string | null;
+        contentsLabel: string | null;
+        relatedHeading: string | null;
+        feedbackHeading: string | null;
+        feedbackMessage: string | null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | null;
+  notes: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    excerpt: string | null;
+    publishedAt: string | null;
+    category:
+      | "accessibility"
+      | "architecture"
+      | "nextjs"
+      | "performance"
+      | "react"
+      | "uiState"
+      | null;
+    volumeNumber: number | null;
+    readingTimeMinutes: number | null;
+    topics: Array<string> | null;
+    featured: boolean | null;
+    displayOrder: number | null;
+    coverImage: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+    technologies: Array<{
+      _id: string;
+      name: string | null;
+    }> | null;
+  }>;
+};
+
+// Source: ../web/sanity/lib/queries.ts
+// Variable: NOTE_SLUGS_QUERY
+// Query: *[    _type == "note" &&    defined(slug.current) &&    defined(publishedAt) &&    publishedAt <= now()  ]{"slug": slug.current}
+export type NOTE_SLUGS_QUERY_RESULT = Array<{
+  slug: string | null;
+}>;
+
+// Source: ../web/sanity/lib/queries.ts
+// Variable: NOTE_METADATA_QUERY
+// Query: *[_type == "note" && slug.current == $slug][0]{    title,    excerpt,    "seo": seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    },    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}  }
+export type NOTE_METADATA_QUERY_RESULT = {
+  title: string | null;
+  excerpt: string | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    noIndex: boolean | null;
+    image: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+  } | null;
+  coverImage: {
+    alt: string | null;
+    caption: string | null;
+    url: string | null;
+    width: number | null;
+    height: number | null;
+    lqip: string | null;
+  } | null;
+} | null;
+
+// Source: ../web/sanity/lib/queries.ts
+// Variable: NOTE_DETAIL_QUERY
+// Query: {  "note": *[    _type == "note" &&    slug.current == $slug &&    defined(publishedAt) &&    publishedAt <= now()  ][0]{    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    category,    volumeNumber,    readingTimeMinutes,    topics,    "technologies": technologies[]->{_id, name},    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    body[]{      _key,      _type,      style,      listItem,      level,      children[]{_key, _type, text, marks},      markDefs[]{_key, _type, href, openInNewTab},      filename,      language,      code,      caption,      eyebrow,      title,      items[]{_key, _type, label, title, description},      alt,      "url": asset->url,      "width": asset->metadata.dimensions.width,      "height": asset->metadata.dimensions.height,      "lqip": asset->metadata.lqip    },    seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    }  },  "profile": *[_id == "profile"][0]{fullName, email},  "notesPage": *[_id == "notesPage"][0]{    backLabel,    contentsLabel,    relatedHeading,    feedbackHeading,    feedbackMessage  },  "noteNavigation": *[    _type == "note" &&    defined(slug.current) &&    defined(publishedAt) &&    publishedAt <= now()  ] | order(displayOrder asc, publishedAt desc){    _id,    title,    "slug": slug.current,    excerpt,    publishedAt,    category,    volumeNumber,    readingTimeMinutes,    topics,    "technologies": technologies[]->{_id, name}  }}
+export type NOTE_DETAIL_QUERY_RESULT = {
+  note: {
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    excerpt: string | null;
+    publishedAt: string | null;
+    category:
+      | "accessibility"
+      | "architecture"
+      | "nextjs"
+      | "performance"
+      | "react"
+      | "uiState"
+      | null;
+    volumeNumber: number | null;
+    readingTimeMinutes: number | null;
+    topics: Array<string> | null;
+    technologies: Array<{
+      _id: string;
+      name: string | null;
+    }> | null;
+    coverImage: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+    body: Array<
+      | {
+          _key: string;
+          _type: "accessibleImage";
+          style: null;
+          listItem: null;
+          level: null;
+          children: null;
+          markDefs: null;
+          filename: null;
+          language: null;
+          code: null;
+          caption: string | null;
+          eyebrow: null;
+          title: null;
+          items: null;
+          alt: string | null;
+          url: string | null;
+          width: number | null;
+          height: number | null;
+          lqip: string | null;
+        }
+      | {
+          _key: string;
+          _type: "block";
+          style: "blockquote" | "h2" | "h3" | "normal" | null;
+          listItem: "bullet" | "number" | null;
+          level: number | null;
+          children: Array<{
+            _key: string;
+            _type: "span";
+            text: string | null;
+            marks: Array<string> | null;
+          }> | null;
+          markDefs: Array<{
+            _key: string;
+            _type: "link";
+            href: string | null;
+            openInNewTab: boolean | null;
+          }> | null;
+          filename: null;
+          language: null;
+          code: null;
+          caption: null;
+          eyebrow: null;
+          title: null;
+          items: null;
+          alt: null;
+          url: null;
+          width: null;
+          height: null;
+          lqip: null;
+        }
+      | {
+          _key: string;
+          _type: "codeBlock";
+          style: null;
+          listItem: null;
+          level: null;
+          children: null;
+          markDefs: null;
+          filename: string | null;
+          language:
+            | "css"
+            | "groq"
+            | "html"
+            | "javascript"
+            | "json"
+            | "jsx"
+            | "markdown"
+            | "python"
+            | "shell"
+            | "text"
+            | "tsx"
+            | "typescript"
+            | null;
+          code: string | null;
+          caption: string | null;
+          eyebrow: null;
+          title: null;
+          items: null;
+          alt: null;
+          url: null;
+          width: null;
+          height: null;
+          lqip: null;
+        }
+      | {
+          _key: string;
+          _type: "noteComparison";
+          style: null;
+          listItem: null;
+          level: null;
+          children: null;
+          markDefs: null;
+          filename: null;
+          language: null;
+          code: null;
+          caption: null;
+          eyebrow: string | null;
+          title: string | null;
+          items: Array<{
+            _key: string;
+            _type: "comparisonItem";
+            label: string | null;
+            title: string | null;
+            description: string | null;
+          }> | null;
+          alt: null;
+          url: null;
+          width: null;
+          height: null;
+          lqip: null;
+        }
+    > | null;
+    seo: {
+      title: string | null;
+      description: string | null;
+      noIndex: boolean | null;
+      image: {
+        alt: string | null;
+        caption: string | null;
+        url: string | null;
+        width: number | null;
+        height: number | null;
+        lqip: string | null;
+      } | null;
+    } | null;
+  } | null;
+  profile:
+    | {
+        fullName: null;
+        email: null;
+      }
+    | {
+        fullName: string | null;
+        email: string | null;
+      }
+    | null;
+  notesPage:
+    | {
+        backLabel: null;
+        contentsLabel: null;
+        relatedHeading: null;
+        feedbackHeading: null;
+        feedbackMessage: null;
+      }
+    | {
+        backLabel: string | null;
+        contentsLabel: string | null;
+        relatedHeading: string | null;
+        feedbackHeading: string | null;
+        feedbackMessage: string | null;
+      }
+    | null;
+  noteNavigation: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    excerpt: string | null;
+    publishedAt: string | null;
+    category:
+      | "accessibility"
+      | "architecture"
+      | "nextjs"
+      | "performance"
+      | "react"
+      | "uiState"
+      | null;
+    volumeNumber: number | null;
+    readingTimeMinutes: number | null;
+    topics: Array<string> | null;
+    technologies: Array<{
+      _id: string;
+      name: string | null;
+    }> | null;
+  }>;
+};
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
@@ -1964,6 +2458,10 @@ declare global {
     '\n  *[_type == "project" && slug.current == $slug][0]{\n    title,\n    subtitle,\n    summary,\n    "seo": seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    },\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n': PROJECT_METADATA_QUERY_RESULT;
     '{\n  "project": *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "technologyStack": technologyStack[]->{_id, name},\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    sections[]{\n      _key,\n      _type,\n      eyebrow,\n      heading,\n      headline,\n      introduction,\n      presentation,\n      body[]{\n        _key,\n        _type,\n        style,\n        listItem,\n        level,\n        children[]{_key, _type, text, marks},\n        markDefs[]{_key, _type, href, openInNewTab}\n      },\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n      items[]{\n        _key,\n        _type,\n        label,\n        title,\n        description,\n        kind,\n        value,\n        mediaType,\n        videoUrl,\n        caption,\n        displayContext,\n        "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n        "posterImage": posterImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n      },\n      steps[]{\n        _key,\n        _type,\n        phase,\n        title,\n        description,\n        deliverables,\n        "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n      },\n      snippets[]{\n        _key,\n        _type,\n        title,\n        filename,\n        language,\n        code,\n        explanation,\n        sourceUrl\n      },\n      embedUrl,\n      "fallbackImage": fallbackImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n      fallbackMessage,\n      instructions[]{_key, _type, title, description},\n      availableViewports,\n      initialViewport,\n      frameHeight,\n      summary,\n      closingNote\n    }\n  },\n  "projectNavigation": *[\n    _type == "project" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc){\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    projectType,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n}': PROJECT_PAGE_QUERY_RESULT;
     '{\n  "labPage": *[_id == "labPage"][0]{\n    eyebrow,\n    heading,\n    introduction,\n    activeStudiesLabel,\n    surpriseLabel,\n    archiveEyebrow,\n    archiveHeading,\n    archiveNote,\n    closingEyebrow,\n    closingHeading,\n    closingMessage,\n    workLinkLabel,\n    githubLinkLabel,\n    contactLinkLabel,\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    question,\n    status,\n    startedAt,\n    completedAt,\n    demoUrl,\n    repositoryUrl,\n    featured,\n    displayOrder,\n    experimentNumber,\n    category,\n    version,\n    presentation,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologies[]->{name}\n  }\n}': LAB_PAGE_QUERY_RESULT;
+    '{\n  "notesPage": *[_id == "notesPage"][0]{\n    eyebrow,\n    heading,\n    introduction,\n    archiveNote,\n    libraryEyebrow,\n    libraryHeading,\n    backLabel,\n    contentsLabel,\n    relatedHeading,\n    feedbackHeading,\n    feedbackMessage,\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "notes": *[\n    _type == "note" &&\n    defined(slug.current) &&\n    defined(publishedAt) &&\n    publishedAt <= now()\n  ] | order(displayOrder asc, publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    category,\n    volumeNumber,\n    readingTimeMinutes,\n    topics,\n    featured,\n    displayOrder,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologies[]->{_id, name}\n  }\n}': NOTES_ARCHIVE_QUERY_RESULT;
+    '\n  *[\n    _type == "note" &&\n    defined(slug.current) &&\n    defined(publishedAt) &&\n    publishedAt <= now()\n  ]{"slug": slug.current}\n': NOTE_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "note" && slug.current == $slug][0]{\n    title,\n    excerpt,\n    "seo": seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    },\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n': NOTE_METADATA_QUERY_RESULT;
+    '{\n  "note": *[\n    _type == "note" &&\n    slug.current == $slug &&\n    defined(publishedAt) &&\n    publishedAt <= now()\n  ][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    category,\n    volumeNumber,\n    readingTimeMinutes,\n    topics,\n    "technologies": technologies[]->{_id, name},\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    body[]{\n      _key,\n      _type,\n      style,\n      listItem,\n      level,\n      children[]{_key, _type, text, marks},\n      markDefs[]{_key, _type, href, openInNewTab},\n      filename,\n      language,\n      code,\n      caption,\n      eyebrow,\n      title,\n      items[]{_key, _type, label, title, description},\n      alt,\n      "url": asset->url,\n      "width": asset->metadata.dimensions.width,\n      "height": asset->metadata.dimensions.height,\n      "lqip": asset->metadata.lqip\n    },\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "profile": *[_id == "profile"][0]{fullName, email},\n  "notesPage": *[_id == "notesPage"][0]{\n    backLabel,\n    contentsLabel,\n    relatedHeading,\n    feedbackHeading,\n    feedbackMessage\n  },\n  "noteNavigation": *[\n    _type == "note" &&\n    defined(slug.current) &&\n    defined(publishedAt) &&\n    publishedAt <= now()\n  ] | order(displayOrder asc, publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt,\n    category,\n    volumeNumber,\n    readingTimeMinutes,\n    topics,\n    "technologies": technologies[]->{_id, name}\n  }\n}': NOTE_DETAIL_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
