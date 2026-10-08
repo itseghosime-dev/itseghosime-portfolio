@@ -52,8 +52,8 @@
   --radius-full: 9999px;
 
   /* Depth */
-  --shadow-raised: 0 8px 32px -4px rgb(22 23 25 / 5%),
-    0 2px 8px -2px rgb(22 23 25 / 3%);
+  --shadow-raised:
+    0 8px 32px -4px rgb(22 23 25 / 5%), 0 2px 8px -2px rgb(22 23 25 / 3%);
   --shadow-hover: 0 6px 24px -4px rgb(22 23 25 / 6%);
   --shadow-active: 0 16px 40px -8px rgb(22 23 25 / 8%);
 
@@ -97,6 +97,14 @@ html {
   scroll-padding-top: calc(var(--header-height) + var(--space-4));
   background: var(--canvas);
   -webkit-text-size-adjust: 100%;
+}
+
+html.lenis {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth iframe[data-sandbox-active="true"] {
+  pointer-events: auto;
 }
 
 body {
