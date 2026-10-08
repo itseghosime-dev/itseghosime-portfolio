@@ -67,7 +67,10 @@ export function NotFoundExperience() {
         <Container className="py-10 sm:py-14 lg:py-20">
           <div className="flex flex-col gap-4 border-b border-black/10 pb-6 font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-ink-muted sm:flex-row sm:items-center sm:justify-between">
             <p className="flex items-center gap-2">
-              <span aria-hidden="true" className="size-1.5 animate-pulse rounded-full bg-accent motion-reduce:animate-none" />
+              <span
+                aria-hidden="true"
+                className="size-1.5 animate-pulse rounded-full bg-accent motion-reduce:animate-none"
+              />
               <span className="font-semibold text-ink">System</span>
               <span>/</span>
               <span className="text-accent">404 not found</span>
@@ -81,22 +84,30 @@ export function NotFoundExperience() {
                 onClick={copyPath}
                 type="button"
               >
-                {copied ? <Check aria-hidden="true" size={14} /> : <Copy aria-hidden="true" size={14} />}
+                {copied ? (
+                  <Check aria-hidden="true" size={14} />
+                ) : (
+                  <Copy aria-hidden="true" size={14} />
+                )}
               </button>
             </div>
           </div>
 
           <section className="grid items-center gap-12 py-14 lg:grid-cols-12 lg:gap-16 lg:py-20">
             <div className="lg:col-span-7 lg:pr-8">
-              <p className="inline-flex border border-black/10 bg-surface-container px-3 py-1.5 font-mono text-[0.625rem] font-semibold uppercase tracking-[0.1em] text-ink-muted">
-                <span className="mr-2 text-[var(--error)]">404</span> Coordinate offset
-              </p>
-              <h1 className="mt-7 max-w-3xl font-serif text-[clamp(3.5rem,8vw,5.25rem)] leading-[0.95] tracking-[-0.04em]">
-                Nothing lives here.
-              </h1>
+              <div className="flex flex-col gap-4">
+                <p className="inline-flex border w-fit border-black/10 bg-surface-container px-3 py-1.5 font-mono text-[0.625rem] font-semibold uppercase tracking-[0.1em] text-ink-muted">
+                  <span className="mr-2 text-[var(--error)]">404</span>{" "}
+                  Coordinate offset
+                </p>
+                <h1 className="mt-7 max-w-3xl font-serif text-[clamp(3.5rem,8vw,5.25rem)] leading-[0.95] tracking-[-0.04em]">
+                  Nothing lives here.
+                </h1>
+              </div>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-ink-soft sm:text-xl sm:leading-9">
-                This address may have moved, been renamed during a content update,
-                or never existed. The rest of the archive is still available.
+                This address may have moved, been renamed during a content
+                update, or never existed. The rest of the archive is still
+                available.
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <Link
@@ -141,7 +152,9 @@ export function NotFoundExperience() {
                 <div className="absolute inset-0 grid place-items-center">
                   <div
                     className="relative size-44 transition-transform duration-150 ease-out motion-reduce:transform-none"
-                    style={{ transform: `translate(${offset.x * 0.08}px, ${offset.y * 0.08}px) rotate(${offset.x * 0.01}deg)` }}
+                    style={{
+                      transform: `translate(${offset.x * 0.08}px, ${offset.y * 0.08}px) rotate(${offset.x * 0.01}deg)`,
+                    }}
                   >
                     <span className="absolute inset-0 rotate-12 border border-accent/35" />
                     <span className="absolute inset-8 -rotate-12 border border-black/20" />
@@ -156,13 +169,19 @@ export function NotFoundExperience() {
             </div>
           </section>
 
-          <section className="border-t border-black/10 py-14 sm:py-16" aria-labelledby="destinations-title">
+          <section
+            className="border-t border-black/10 py-14 sm:py-16"
+            aria-labelledby="destinations-title"
+          >
             <div className="flex items-end justify-between gap-6">
               <div>
                 <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
                   Recovery routes
                 </p>
-                <h2 className="mt-3 font-serif text-3xl tracking-[-0.03em]" id="destinations-title">
+                <h2
+                  className="mt-3 font-serif text-3xl tracking-[-0.03em]"
+                  id="destinations-title"
+                >
                   Common destinations
                 </h2>
               </div>
@@ -179,10 +198,19 @@ export function NotFoundExperience() {
                     href={destination.href}
                     key={destination.href}
                   >
-                    <Icon aria-hidden="true" className="text-accent" size={20} strokeWidth={1.6} />
+                    <Icon
+                      aria-hidden="true"
+                      className="text-accent"
+                      size={20}
+                      strokeWidth={1.6}
+                    />
                     <div>
-                      <h3 className="text-lg font-semibold group-hover:text-accent">{destination.label}</h3>
-                      <p className="mt-2 text-sm leading-6 text-ink-muted">{destination.description}</p>
+                      <h3 className="text-lg font-semibold group-hover:text-accent">
+                        {destination.label}
+                      </h3>
+                      <p className="mt-2 text-sm leading-6 text-ink-muted">
+                        {destination.description}
+                      </p>
                     </div>
                   </Link>
                 );
