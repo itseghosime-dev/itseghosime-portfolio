@@ -7,6 +7,7 @@ import {
   CircleAlert,
   ShieldCheck,
 } from "lucide-react";
+import Link from "next/link";
 import { useId, useState, type FormEvent } from "react";
 
 type FormState = "default" | "error" | "submitting" | "success" | "validation";
@@ -91,7 +92,7 @@ function ContactOutcome({ email, onReset, state }: ContactOutcomeProps) {
         </p>
         <div className="mt-7 flex flex-col gap-3 sm:flex-row">
           {isSuccess ? (
-            <a
+            <Link
               className="inline-flex min-h-11 items-center justify-center bg-ink px-5 py-2.5 text-sm font-semibold text-white no-underline transition-colors hover:bg-accent"
               href="/work"
             >
@@ -102,7 +103,7 @@ function ContactOutcome({ email, onReset, state }: ContactOutcomeProps) {
                 size={16}
                 strokeWidth={1.8}
               />
-            </a>
+            </Link>
           ) : (
             <button
               className="min-h-11 cursor-pointer bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"

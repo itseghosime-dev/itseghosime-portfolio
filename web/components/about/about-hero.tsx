@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight, Download, Sparkles } from "lucide-react";
+import { ArrowUpRight, Download, Sparkles } from "lucide-react";
 
 import type { AboutProfileModel } from "@/types/about";
 import type { HomePageModel } from "@/types/home";
