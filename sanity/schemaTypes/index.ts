@@ -21,6 +21,7 @@ import {careerMilestone} from './careerMilestone'
 import {profile} from './profile'
 import {siteSettings} from './siteSettings'
 import {aboutPage} from './aboutPage'
+import {labPage} from './labPage'
 
 export const schemaTypes = [
   accessibleImage,
@@ -46,4 +47,5 @@ export const schemaTypes = [
   profile,
   siteSettings,
   aboutPage,
+  labPage,
 ]

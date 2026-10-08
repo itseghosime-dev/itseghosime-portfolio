@@ -15,6 +15,37 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type LabPage = {
+  _id: string;
+  _type: "labPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  eyebrow?: string;
+  heading?: string;
+  introduction?: string;
+  activeStudiesLabel?: string;
+  surpriseLabel?: string;
+  archiveEyebrow?: string;
+  archiveHeading?: string;
+  archiveNote?: string;
+  closingEyebrow?: string;
+  closingHeading?: string;
+  closingMessage?: string;
+  workLinkLabel?: string;
+  githubLinkLabel?: string;
+  contactLinkLabel?: string;
+  seo?: SeoMetadata;
+};
+
+export type SeoMetadata = {
+  _type: "seoMetadata";
+  title?: string;
+  description?: string;
+  image?: AccessibleImage;
+  noIndex?: boolean;
+};
+
 export type TechnologyReference = {
   _ref: string;
   _type: "reference";
@@ -122,14 +153,6 @@ export type SiteSettings = {
   defaultSeo?: SeoMetadata;
   indexing?: "allow" | "block";
   googleSiteVerification?: string;
-};
-
-export type SeoMetadata = {
-  _type: "seoMetadata";
-  title?: string;
-  description?: string;
-  image?: AccessibleImage;
-  noIndex?: boolean;
 };
 
 export type SanityFileAssetReference = {
@@ -279,9 +302,20 @@ export type LabExperiment = {
   _rev: string;
   title?: string;
   slug?: Slug;
+  experimentNumber?: number;
   summary?: string;
   question?: string;
   status?: "planned" | "exploring" | "completed" | "paused" | "archived";
+  version?: string;
+  category?: "interaction" | "uiForms" | "dataViz" | "threeDShaders" | "motion";
+  presentation?:
+    | "none"
+    | "spatialDepth"
+    | "magneticNavigation"
+    | "kineticTypography"
+    | "autonomousMicroForm"
+    | "streamingData"
+    | "springCarousel";
   startedAt?: string;
   completedAt?: string;
   coverImage?: AccessibleImage;
@@ -736,11 +770,12 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | LabPage
+  | SeoMetadata
   | TechnologyReference
   | CareerMilestoneReference
   | AboutPage
   | SiteSettings
-  | SeoMetadata
   | SanityFileAssetReference
   | Profile
   | RichText
@@ -802,6 +837,22 @@ export type HOME_PAGE_QUERY_RESULT = {
         professionalTitle: null;
         introduction: null;
         location: string | null;
+        availability: null;
+        availabilityNote: null;
+        targetRoles: null;
+        professionalStrengths: null;
+        workingPrinciples: null;
+        email: null;
+        socialLinks: null;
+        resume: null;
+        biography: null;
+        portrait: null;
+      }
+    | {
+        fullName: null;
+        professionalTitle: null;
+        introduction: string | null;
+        location: null;
         availability: null;
         availabilityNote: null;
         targetRoles: null;
@@ -1751,6 +1802,157 @@ export type PROJECT_PAGE_QUERY_RESULT = {
   }>;
 };
 
+// Source: ../web/sanity/lib/queries.ts
+// Variable: LAB_PAGE_QUERY
+// Query: {  "labPage": *[_id == "labPage"][0]{    eyebrow,    heading,    introduction,    activeStudiesLabel,    surpriseLabel,    archiveEyebrow,    archiveHeading,    archiveNote,    closingEyebrow,    closingHeading,    closingMessage,    workLinkLabel,    githubLinkLabel,    contactLinkLabel,    seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    }  },  "labExperiments": *[    _type == "labExperiment" &&    defined(slug.current)  ] | order(displayOrder asc, _createdAt desc){    _id,    title,    "slug": slug.current,    summary,    question,    status,    startedAt,    completedAt,    demoUrl,    repositoryUrl,    featured,    displayOrder,    experimentNumber,    category,    version,    presentation,    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    "technologies": technologies[]->{name}  }}
+export type LAB_PAGE_QUERY_RESULT = {
+  labPage:
+    | {
+        eyebrow: null;
+        heading: null;
+        introduction: null;
+        activeStudiesLabel: null;
+        surpriseLabel: null;
+        archiveEyebrow: null;
+        archiveHeading: null;
+        archiveNote: null;
+        closingEyebrow: null;
+        closingHeading: null;
+        closingMessage: null;
+        workLinkLabel: null;
+        githubLinkLabel: null;
+        contactLinkLabel: null;
+        seo: null;
+      }
+    | {
+        eyebrow: null;
+        heading: null;
+        introduction: null;
+        activeStudiesLabel: null;
+        surpriseLabel: null;
+        archiveEyebrow: null;
+        archiveHeading: null;
+        archiveNote: null;
+        closingEyebrow: null;
+        closingHeading: null;
+        closingMessage: null;
+        workLinkLabel: null;
+        githubLinkLabel: null;
+        contactLinkLabel: null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | {
+        eyebrow: null;
+        heading: null;
+        introduction: string | null;
+        activeStudiesLabel: null;
+        surpriseLabel: null;
+        archiveEyebrow: null;
+        archiveHeading: null;
+        archiveNote: null;
+        closingEyebrow: null;
+        closingHeading: null;
+        closingMessage: null;
+        workLinkLabel: null;
+        githubLinkLabel: null;
+        contactLinkLabel: null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | {
+        eyebrow: string | null;
+        heading: string | null;
+        introduction: string | null;
+        activeStudiesLabel: string | null;
+        surpriseLabel: string | null;
+        archiveEyebrow: string | null;
+        archiveHeading: string | null;
+        archiveNote: string | null;
+        closingEyebrow: string | null;
+        closingHeading: string | null;
+        closingMessage: string | null;
+        workLinkLabel: string | null;
+        githubLinkLabel: string | null;
+        contactLinkLabel: string | null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | null;
+  labExperiments: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    summary: string | null;
+    question: string | null;
+    status:
+      "archived" | "completed" | "exploring" | "paused" | "planned" | null;
+    startedAt: string | null;
+    completedAt: string | null;
+    demoUrl: string | null;
+    repositoryUrl: string | null;
+    featured: boolean | null;
+    displayOrder: number | null;
+    experimentNumber: number | null;
+    category:
+      "dataViz" | "interaction" | "motion" | "threeDShaders" | "uiForms" | null;
+    version: string | null;
+    presentation:
+      | "autonomousMicroForm"
+      | "kineticTypography"
+      | "magneticNavigation"
+      | "none"
+      | "spatialDepth"
+      | "springCarousel"
+      | "streamingData"
+      | null;
+    coverImage: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+    technologies: Array<{
+      name: string | null;
+    }> | null;
+  }>;
+};
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
@@ -1761,6 +1963,7 @@ declare global {
     '\n  *[_type == "project" && defined(slug.current)]{"slug": slug.current}\n': PROJECT_SLUGS_QUERY_RESULT;
     '\n  *[_type == "project" && slug.current == $slug][0]{\n    title,\n    subtitle,\n    summary,\n    "seo": seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    },\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n': PROJECT_METADATA_QUERY_RESULT;
     '{\n  "project": *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "technologyStack": technologyStack[]->{_id, name},\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    sections[]{\n      _key,\n      _type,\n      eyebrow,\n      heading,\n      headline,\n      introduction,\n      presentation,\n      body[]{\n        _key,\n        _type,\n        style,\n        listItem,\n        level,\n        children[]{_key, _type, text, marks},\n        markDefs[]{_key, _type, href, openInNewTab}\n      },\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n      items[]{\n        _key,\n        _type,\n        label,\n        title,\n        description,\n        kind,\n        value,\n        mediaType,\n        videoUrl,\n        caption,\n        displayContext,\n        "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n        "posterImage": posterImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n      },\n      steps[]{\n        _key,\n        _type,\n        phase,\n        title,\n        description,\n        deliverables,\n        "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n      },\n      snippets[]{\n        _key,\n        _type,\n        title,\n        filename,\n        language,\n        code,\n        explanation,\n        sourceUrl\n      },\n      embedUrl,\n      "fallbackImage": fallbackImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n      fallbackMessage,\n      instructions[]{_key, _type, title, description},\n      availableViewports,\n      initialViewport,\n      frameHeight,\n      summary,\n      closingNote\n    }\n  },\n  "projectNavigation": *[\n    _type == "project" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc){\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    projectType,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n}': PROJECT_PAGE_QUERY_RESULT;
+    '{\n  "labPage": *[_id == "labPage"][0]{\n    eyebrow,\n    heading,\n    introduction,\n    activeStudiesLabel,\n    surpriseLabel,\n    archiveEyebrow,\n    archiveHeading,\n    archiveNote,\n    closingEyebrow,\n    closingHeading,\n    closingMessage,\n    workLinkLabel,\n    githubLinkLabel,\n    contactLinkLabel,\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    question,\n    status,\n    startedAt,\n    completedAt,\n    demoUrl,\n    repositoryUrl,\n    featured,\n    displayOrder,\n    experimentNumber,\n    category,\n    version,\n    presentation,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologies[]->{name}\n  }\n}': LAB_PAGE_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

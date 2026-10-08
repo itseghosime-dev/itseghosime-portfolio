@@ -360,3 +360,51 @@ export const PROJECT_PAGE_QUERY = defineQuery(`{
     "coverImage": coverImage ${IMAGE_PROJECTION}
   }
 }`);
+
+export const LAB_PAGE_QUERY = defineQuery(`{
+  "labPage": *[_id == "labPage"][0]{
+    eyebrow,
+    heading,
+    introduction,
+    activeStudiesLabel,
+    surpriseLabel,
+    archiveEyebrow,
+    archiveHeading,
+    archiveNote,
+    closingEyebrow,
+    closingHeading,
+    closingMessage,
+    workLinkLabel,
+    githubLinkLabel,
+    contactLinkLabel,
+    seo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    }
+  },
+  "labExperiments": *[
+    _type == "labExperiment" &&
+    defined(slug.current)
+  ] | order(displayOrder asc, _createdAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    summary,
+    question,
+    status,
+    startedAt,
+    completedAt,
+    demoUrl,
+    repositoryUrl,
+    featured,
+    displayOrder,
+    experimentNumber,
+    category,
+    version,
+    presentation,
+    "coverImage": coverImage ${IMAGE_PROJECTION},
+    "technologies": technologies[]->{name}
+  }
+}`);

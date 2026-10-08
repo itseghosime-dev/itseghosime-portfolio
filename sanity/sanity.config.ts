@@ -6,7 +6,7 @@ import {structure} from './structure'
 import {studioTheme} from './studioTheme'
 import {StudioIcon} from './studio/components/StudioIcon'
 
-const singletonTypes = new Set(['profile', 'aboutPage', 'siteSettings'])
+const singletonTypes = new Set(['profile', 'aboutPage', 'labPage', 'siteSettings'])
 
 export default defineConfig({
   name: 'default',
