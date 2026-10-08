@@ -5,7 +5,9 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { NoteDetail } from "@/components/notes/note-detail";
 import { absoluteUrl, SITE_NAME, SITE_URL } from "@/lib/site";
+import { resolveSocialImage } from "@/lib/seo";
 import { getHomePage } from "@/sanity/lib/home";
+import { getStaticPageSeo } from "@/sanity/lib/seo";
 import {
   getNoteDetail,
   getNoteMetadata,
@@ -25,14 +27,21 @@ export async function generateMetadata({
   params,
 }: NotePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const note = await getNoteMetadata(slug);
+  const [note, siteSeo] = await Promise.all([
+    getNoteMetadata(slug),
+    getStaticPageSeo(),
+  ]);
   if (!note) return {};
 
   const title = note.seo?.title || note.title || "Technical note";
   const description = note.seo?.description || note.excerpt || undefined;
-  const image = note.seo?.image || note.coverImage;
+  const image = resolveSocialImage(
+    note.seo?.image || note.coverImage,
+    siteSeo.settings?.defaultSeo?.image,
+  );
   const canonicalPath = `/notes/${slug}`;
-  const shouldIndex = note.seo?.noIndex !== true;
+  const shouldIndex =
+    siteSeo.settings?.indexing === "allow" && note.seo?.noIndex !== true;
 
   return {
     title,
@@ -52,22 +61,20 @@ export async function generateMetadata({
       publishedTime: note.publishedAt ?? undefined,
       modifiedTime: note._updatedAt,
       authors: ["Abdulrahman Itseghosime Bello"],
-      images: image?.url
-        ? [
-            {
-              alt: image.alt || title,
-              height: image.height ?? undefined,
-              url: image.url,
-              width: image.width ?? undefined,
-            },
-          ]
-        : undefined,
+      images: [
+        {
+          alt: image.alt || title,
+          height: image.height,
+          url: image.url,
+          width: image.width,
+        },
+      ],
     },
     twitter: {
-      card: image?.url ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title,
       description,
-      images: image?.url ? [image.url] : undefined,
+      images: [image.url],
     },
   };
 }

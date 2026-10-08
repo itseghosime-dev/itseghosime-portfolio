@@ -7,13 +7,26 @@ import { ArchiveContactSection } from "@/components/work/archive-contact-section
 import { WorkArchive } from "@/components/work/work-archive";
 import { getHomePage } from "@/sanity/lib/home";
 import { getWorkArchive } from "@/sanity/lib/work";
+import { getStaticPageSeo } from "@/sanity/lib/seo";
+import { createPageMetadata } from "@/lib/seo";
+import { absoluteUrl, SITE_URL } from "@/lib/site";
 import type { ArchiveFilter } from "@/types/work";
 
-export const metadata: Metadata = {
-  title: "Work Archive",
-  description:
-    "Selected frontend projects, product work and technical experiments by Abdulrahman Itseghosime Bello.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await getStaticPageSeo();
+  const seo = data.workPage?.seo;
+
+  return createPageMetadata({
+    defaultImage: data.settings?.defaultSeo?.image,
+    description:
+      seo?.description ||
+      "Selected frontend projects, product work and technical experiments by Abdulrahman Itseghosime Bello.",
+    image: seo?.image,
+    noIndex: data.settings?.indexing !== "allow" || seo?.noIndex === true,
+    path: "/work",
+    title: seo?.title || "Work Archive",
+  });
+}
 
 export default async function WorkPage({
   searchParams,
@@ -34,6 +47,24 @@ export default async function WorkPage({
   const navigation = page.navigation.map((item) =>
     item.href === "/#contact" ? { ...item, href: "#contact" } : item,
   );
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "ITSEGHOSIME Work Archive",
+    description:
+      "Selected frontend projects, product work and technical experiments by Abdulrahman Itseghosime Bello.",
+    isPartOf: { "@type": "WebSite", name: "ITSEGHOSIME", url: SITE_URL },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: entries.map((entry, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: entry.title,
+        url: entry.href ? absoluteUrl(entry.href) : undefined,
+      })),
+    },
+    url: absoluteUrl("/work"),
+  };
 
   return (
     <>
@@ -43,6 +74,12 @@ export default async function WorkPage({
         siteName={page.siteName}
       />
       <main id="main-content">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+          }}
+          type="application/ld+json"
+        />
         <WorkArchive entries={entries} initialFilter={initialFilter} />
         <ArchiveContactSection contact={page.contact} />
       </main>

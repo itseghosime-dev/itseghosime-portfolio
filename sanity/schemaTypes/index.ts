@@ -24,6 +24,8 @@ import {siteSettings} from './siteSettings'
 import {aboutPage} from './aboutPage'
 import {labPage} from './labPage'
 import {notesPage} from './notesPage'
+import {workPage} from './workPage'
+import {contactPage} from './contactPage'
 
 export const schemaTypes = [
   accessibleImage,
@@ -52,4 +54,6 @@ export const schemaTypes = [
   aboutPage,
   labPage,
   notesPage,
+  workPage,
+  contactPage,
 ]

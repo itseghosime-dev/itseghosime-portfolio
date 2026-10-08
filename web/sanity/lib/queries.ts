@@ -114,6 +114,53 @@ export const HOME_METADATA_QUERY = defineQuery(`{
   }
 }`);
 
+export const STATIC_PAGE_SEO_QUERY = defineQuery(`{
+  "settings": *[_id == "siteSettings"][0]{
+    siteName,
+    siteDescription,
+    indexing,
+    defaultSeo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    }
+  },
+  "workPage": *[_id == "workPage"][0]{
+    seo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    }
+  },
+  "aboutPage": *[_id == "aboutPage"][0]{
+    seo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    }
+  },
+  "contactPage": *[_id == "contactPage"][0]{
+    seo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    }
+  },
+  "profile": *[_id == "profile"][0]{
+    fullName,
+    professionalTitle,
+    location,
+    email,
+    socialLinks[]{platform, label, url}
+  },
+  "technologies": *[_type == "technology" && relationship in ["core", "working", "learning"]]
+    | order(displayOrder asc, name asc)[0...12]{name}
+}`);
+
 export const ABOUT_PROFILE_QUERY = defineQuery(`{
   "aboutPage": *[_id == "aboutPage"][0]{
     heroEyebrow,
@@ -189,7 +236,13 @@ export const ABOUT_PROFILE_QUERY = defineQuery(`{
     ctaEyebrow,
     ctaHeading,
     ctaMessage,
-    ctaLabel
+    ctaLabel,
+    seo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    }
   },
   "profile": *[_id == "profile"][0]{
     fullName,
@@ -469,6 +522,23 @@ export const NOTE_SLUGS_QUERY = defineQuery(`
   ]{"slug": slug.current}
 `);
 
+export const RSS_NOTES_QUERY = defineQuery(`
+  *[
+    _type == "note" &&
+    defined(slug.current) &&
+    defined(publishedAt) &&
+    publishedAt <= now() &&
+    seo.noIndex != true
+  ] | order(publishedAt desc){
+    _id,
+    _updatedAt,
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt
+  }
+`);
+
 export const NOTE_METADATA_QUERY = defineQuery(`
   *[_type == "note" && slug.current == $slug][0]{
     _updatedAt,
@@ -581,6 +651,21 @@ export const NOTE_DETAIL_QUERY = defineQuery(`{
 }`);
 
 export const SITEMAP_QUERY = defineQuery(`{
+  "staticPages": [
+    {
+      "path": "/",
+      "_updatedAt": *[_id in ["profile", "siteSettings"]] | order(_updatedAt desc)[0]._updatedAt
+    },
+    {"path": "/about", "_updatedAt": *[_id == "aboutPage"][0]._updatedAt},
+    {"path": "/work", "_updatedAt": *[_id == "workPage"][0]._updatedAt},
+    {"path": "/lab", "_updatedAt": *[_id == "labPage"][0]._updatedAt},
+    {"path": "/notes", "_updatedAt": *[_id == "notesPage"][0]._updatedAt},
+    {
+      "path": "/contact",
+      "_updatedAt": *[_id in ["contactPage", "profile", "siteSettings"]]
+        | order(_updatedAt desc)[0]._updatedAt
+    }
+  ],
   "projects": *[
     _type == "project" &&
     defined(slug.current) &&

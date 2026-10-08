@@ -7,9 +7,14 @@ import { LabView } from "@/components/lab/lab-view";
 import { Container } from "@/components/ui/container";
 import { getHomePage } from "@/sanity/lib/home";
 import { getLabPage } from "@/sanity/lib/lab";
+import { getStaticPageSeo } from "@/sanity/lib/seo";
+import { createPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { seo } = await getLabPage();
+  const [{ seo }, siteSeo] = await Promise.all([
+    getLabPage(),
+    getStaticPageSeo(),
+  ]);
   const title =
     seo?.title ||
     "ITSEGHOSIME / LAB — Experiments in Interaction & Creative Code";
@@ -17,18 +22,15 @@ export async function generateMetadata(): Promise<Metadata> {
     seo?.description ||
     "Small experiments in interaction, interfaces, tactile physics, and creative frontend development by Osi Itseghosime.";
 
-  return {
-    title,
+  return createPageMetadata({
+    defaultImage: siteSeo.settings?.defaultSeo?.image,
     description,
-    robots: seo?.noIndex ? { follow: false, index: false } : undefined,
-    openGraph: {
-      title,
-      description,
-      images: seo?.image?.url
-        ? [{ alt: seo.image.alt, url: seo.image.url }]
-        : undefined,
-    },
-  };
+    image: seo?.image,
+    noIndex:
+      siteSeo.settings?.indexing !== "allow" || seo?.noIndex === true,
+    path: "/lab",
+    title,
+  });
 }
 
 export default async function LabPage() {

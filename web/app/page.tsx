@@ -14,6 +14,8 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { getHomePage } from "@/sanity/lib/home";
 import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_METADATA_QUERY } from "@/sanity/lib/queries";
+import { resolveSocialImage } from "@/lib/seo";
+import { SITE_URL } from "@/lib/site";
 
 function safeUrl(value: string | null | undefined): URL | undefined {
   if (!value) {
@@ -42,16 +44,10 @@ export async function generateMetadata(): Promise<Metadata> {
       : settings?.siteName);
   const description =
     settings?.defaultSeo?.description ?? settings?.siteDescription;
-  const metadataBase = safeUrl(settings?.canonicalUrl);
+  const metadataBase = safeUrl(settings?.canonicalUrl) ?? new URL(SITE_URL);
   const shouldIndex =
     settings?.indexing === "allow" && settings.defaultSeo?.noIndex !== true;
-  const socialImage = settings?.defaultSeo?.image;
-  const hasSocialImage = Boolean(
-    socialImage?.url &&
-    socialImage.alt &&
-    socialImage.width &&
-    socialImage.height,
-  );
+  const socialImage = resolveSocialImage(settings?.defaultSeo?.image);
 
   return {
     metadataBase,
@@ -64,16 +60,14 @@ export async function generateMetadata(): Promise<Metadata> {
       description: description ?? undefined,
       siteName: settings?.siteName ?? undefined,
       url: metadataBase,
-      images: hasSocialImage
-        ? [
-            {
-              alt: socialImage?.alt ?? "",
-              height: socialImage?.height ?? undefined,
-              url: socialImage?.url ?? "",
-              width: socialImage?.width ?? undefined,
-            },
-          ]
-        : undefined,
+      images: [
+        {
+          alt: socialImage.alt,
+          height: socialImage.height,
+          url: socialImage.url,
+          width: socialImage.width,
+        },
+      ],
     },
     robots: {
       index: shouldIndex,
@@ -84,11 +78,10 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     twitter: {
-      card: hasSocialImage ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: title ?? undefined,
       description: description ?? undefined,
-      images:
-        hasSocialImage && socialImage?.url ? [socialImage.url] : undefined,
+      images: [socialImage.url],
     },
     verification: settings?.googleSiteVerification
       ? { google: settings.googleSiteVerification }

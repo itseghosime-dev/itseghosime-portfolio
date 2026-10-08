@@ -15,6 +15,32 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type ContactPage = {
+  _id: string;
+  _type: "contactPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  seo?: SeoMetadata;
+};
+
+export type SeoMetadata = {
+  _type: "seoMetadata";
+  title?: string;
+  description?: string;
+  image?: AccessibleImage;
+  noIndex?: boolean;
+};
+
+export type WorkPage = {
+  _id: string;
+  _type: "workPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  seo?: SeoMetadata;
+};
+
 export type NotesPage = {
   _id: string;
   _type: "notesPage";
@@ -41,14 +67,6 @@ export type NotesPage = {
   feedbackHeading?: string;
   feedbackMessage?: string;
   seo?: SeoMetadata;
-};
-
-export type SeoMetadata = {
-  _type: "seoMetadata";
-  title?: string;
-  description?: string;
-  image?: AccessibleImage;
-  noIndex?: boolean;
 };
 
 export type LabPage = {
@@ -158,6 +176,7 @@ export type AboutPage = {
   ctaHeading?: string;
   ctaMessage?: string;
   ctaLabel?: string;
+  seo?: SeoMetadata;
 };
 
 export type SiteSettings = {
@@ -832,8 +851,10 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
-  | NotesPage
+  | ContactPage
   | SeoMetadata
+  | WorkPage
+  | NotesPage
   | LabPage
   | TechnologyReference
   | CareerMilestoneReference
@@ -1150,8 +1171,130 @@ export type HOME_METADATA_QUERY_RESULT = {
 };
 
 // Source: ../web/sanity/lib/queries.ts
+// Variable: STATIC_PAGE_SEO_QUERY
+// Query: {  "settings": *[_id == "siteSettings"][0]{    siteName,    siteDescription,    indexing,    defaultSeo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    }  },  "workPage": *[_id == "workPage"][0]{    seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    }  },  "aboutPage": *[_id == "aboutPage"][0]{    seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    }  },  "contactPage": *[_id == "contactPage"][0]{    seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    }  },  "profile": *[_id == "profile"][0]{    fullName,    professionalTitle,    location,    email,    socialLinks[]{platform, label, url}  },  "technologies": *[_type == "technology" && relationship in ["core", "working", "learning"]]    | order(displayOrder asc, name asc)[0...12]{name}}
+export type STATIC_PAGE_SEO_QUERY_RESULT = {
+  settings:
+    | {
+        siteName: null;
+        siteDescription: null;
+        indexing: null;
+        defaultSeo: null;
+      }
+    | {
+        siteName: string | null;
+        siteDescription: string | null;
+        indexing: "allow" | "block" | null;
+        defaultSeo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | null;
+  workPage:
+    | {
+        seo: null;
+      }
+    | {
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | null;
+  aboutPage:
+    | {
+        seo: null;
+      }
+    | {
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | null;
+  contactPage:
+    | {
+        seo: null;
+      }
+    | {
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
+      }
+    | null;
+  profile:
+    | {
+        fullName: null;
+        professionalTitle: null;
+        location: null;
+        email: null;
+        socialLinks: null;
+      }
+    | {
+        fullName: null;
+        professionalTitle: null;
+        location: string | null;
+        email: null;
+        socialLinks: null;
+      }
+    | {
+        fullName: string | null;
+        professionalTitle: string | null;
+        location: string | null;
+        email: string | null;
+        socialLinks: Array<{
+          platform: "github" | "linkedin" | "other" | "x" | "youtube" | null;
+          label: string | null;
+          url: string | null;
+        }> | null;
+      }
+    | null;
+  technologies: Array<{
+    name: string | null;
+  }>;
+};
+
+// Source: ../web/sanity/lib/queries.ts
 // Variable: ABOUT_PROFILE_QUERY
-// Query: {  "aboutPage": *[_id == "aboutPage"][0]{    heroEyebrow,    heroHeading,    heroIntroduction,    identityFacts[]{_key, label, value},    primaryAction{label, href},    secondaryAction{label, href},    storyEyebrow,    quickFacts,    focusHeading,    focusLabel,    focusItems[]{_key, title, description},    toolsHeading,    toolsLabel,    technologyGroups[]{      _key,      label,      technologies[]->{_id, name}    },    experienceHeading,    experienceLabel,    experienceMilestones[]->{      _id,      title,      milestoneType,      organisation,      engagementType,      location,      status,      startDate,      endDate,      expectedEndDate,      summary,      highlights,      credentialTitle,      credentialUrl    },    educationHeading,    learningHeading,    educationMilestones[]->{      _id,      title,      milestoneType,      organisation,      location,      status,      startDate,      endDate,      expectedEndDate,      summary,      highlights,      credentialTitle,      credentialUrl    },    learningMilestones[]->{      _id,      title,      milestoneType,      organisation,      location,      status,      startDate,      endDate,      expectedEndDate,      summary,      highlights,      credentialTitle,      credentialUrl    },    principlesHeading,    principlesLabel,    ctaEyebrow,    ctaHeading,    ctaMessage,    ctaLabel  },  "profile": *[_id == "profile"][0]{    fullName,    professionalTitle,    location,    availability,    email,    workingPrinciples,    "biography": biography[]{      _key,      _type,      style,      children[]{_key, _type, text, marks}    },    "portrait": portrait {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}  }}
+// Query: {  "aboutPage": *[_id == "aboutPage"][0]{    heroEyebrow,    heroHeading,    heroIntroduction,    identityFacts[]{_key, label, value},    primaryAction{label, href},    secondaryAction{label, href},    storyEyebrow,    quickFacts,    focusHeading,    focusLabel,    focusItems[]{_key, title, description},    toolsHeading,    toolsLabel,    technologyGroups[]{      _key,      label,      technologies[]->{_id, name}    },    experienceHeading,    experienceLabel,    experienceMilestones[]->{      _id,      title,      milestoneType,      organisation,      engagementType,      location,      status,      startDate,      endDate,      expectedEndDate,      summary,      highlights,      credentialTitle,      credentialUrl    },    educationHeading,    learningHeading,    educationMilestones[]->{      _id,      title,      milestoneType,      organisation,      location,      status,      startDate,      endDate,      expectedEndDate,      summary,      highlights,      credentialTitle,      credentialUrl    },    learningMilestones[]->{      _id,      title,      milestoneType,      organisation,      location,      status,      startDate,      endDate,      expectedEndDate,      summary,      highlights,      credentialTitle,      credentialUrl    },    principlesHeading,    principlesLabel,    ctaEyebrow,    ctaHeading,    ctaMessage,    ctaLabel,    seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    }  },  "profile": *[_id == "profile"][0]{    fullName,    professionalTitle,    location,    availability,    email,    workingPrinciples,    "biography": biography[]{      _key,      _type,      style,      children[]{_key, _type, text, marks}    },    "portrait": portrait {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}  }}
 export type ABOUT_PROFILE_QUERY_RESULT = {
   aboutPage:
     | {
@@ -1182,6 +1325,49 @@ export type ABOUT_PROFILE_QUERY_RESULT = {
         ctaHeading: null;
         ctaMessage: null;
         ctaLabel: null;
+        seo: null;
+      }
+    | {
+        heroEyebrow: null;
+        heroHeading: null;
+        heroIntroduction: null;
+        identityFacts: null;
+        primaryAction: null;
+        secondaryAction: null;
+        storyEyebrow: null;
+        quickFacts: null;
+        focusHeading: null;
+        focusLabel: null;
+        focusItems: null;
+        toolsHeading: null;
+        toolsLabel: null;
+        technologyGroups: null;
+        experienceHeading: null;
+        experienceLabel: null;
+        experienceMilestones: null;
+        educationHeading: null;
+        learningHeading: null;
+        educationMilestones: null;
+        learningMilestones: null;
+        principlesHeading: null;
+        principlesLabel: null;
+        ctaEyebrow: null;
+        ctaHeading: null;
+        ctaMessage: null;
+        ctaLabel: null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
       }
     | {
         heroEyebrow: string | null;
@@ -1306,6 +1492,19 @@ export type ABOUT_PROFILE_QUERY_RESULT = {
         ctaHeading: string | null;
         ctaMessage: string | null;
         ctaLabel: string | null;
+        seo: {
+          title: string | null;
+          description: string | null;
+          noIndex: boolean | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+        } | null;
       }
     | null;
   profile:
@@ -2233,6 +2432,18 @@ export type NOTE_SLUGS_QUERY_RESULT = Array<{
 }>;
 
 // Source: ../web/sanity/lib/queries.ts
+// Variable: RSS_NOTES_QUERY
+// Query: *[    _type == "note" &&    defined(slug.current) &&    defined(publishedAt) &&    publishedAt <= now() &&    seo.noIndex != true  ] | order(publishedAt desc){    _id,    _updatedAt,    title,    "slug": slug.current,    excerpt,    publishedAt  }
+export type RSS_NOTES_QUERY_RESULT = Array<{
+  _id: string;
+  _updatedAt: string;
+  title: string | null;
+  slug: string | null;
+  excerpt: string | null;
+  publishedAt: string | null;
+}>;
+
+// Source: ../web/sanity/lib/queries.ts
 // Variable: NOTE_METADATA_QUERY
 // Query: *[_type == "note" && slug.current == $slug][0]{    _updatedAt,    title,    excerpt,    publishedAt,    preview{label, summary, code},    editorialContext{      sectionLabel,      seriesLabel    },    "seo": seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    },    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}  }
 export type NOTE_METADATA_QUERY_RESULT = {
@@ -2512,8 +2723,34 @@ export type NOTE_DETAIL_QUERY_RESULT = {
 
 // Source: ../web/sanity/lib/queries.ts
 // Variable: SITEMAP_QUERY
-// Query: {  "projects": *[    _type == "project" &&    defined(slug.current) &&    seo.noIndex != true  ]{    "path": "/work/" + slug.current,    _updatedAt  },  "notes": *[    _type == "note" &&    defined(slug.current) &&    defined(publishedAt) &&    publishedAt <= now() &&    seo.noIndex != true  ]{    "path": "/notes/" + slug.current,    _updatedAt  }}
+// Query: {  "staticPages": [    {      "path": "/",      "_updatedAt": *[_id in ["profile", "siteSettings"]] | order(_updatedAt desc)[0]._updatedAt    },    {"path": "/about", "_updatedAt": *[_id == "aboutPage"][0]._updatedAt},    {"path": "/work", "_updatedAt": *[_id == "workPage"][0]._updatedAt},    {"path": "/lab", "_updatedAt": *[_id == "labPage"][0]._updatedAt},    {"path": "/notes", "_updatedAt": *[_id == "notesPage"][0]._updatedAt},    {      "path": "/contact",      "_updatedAt": *[_id in ["contactPage", "profile", "siteSettings"]]        | order(_updatedAt desc)[0]._updatedAt    }  ],  "projects": *[    _type == "project" &&    defined(slug.current) &&    seo.noIndex != true  ]{    "path": "/work/" + slug.current,    _updatedAt  },  "notes": *[    _type == "note" &&    defined(slug.current) &&    defined(publishedAt) &&    publishedAt <= now() &&    seo.noIndex != true  ]{    "path": "/notes/" + slug.current,    _updatedAt  }}
 export type SITEMAP_QUERY_RESULT = {
+  staticPages: Array<
+    | {
+        path: "/";
+        _updatedAt: string | null;
+      }
+    | {
+        path: "/about";
+        _updatedAt: string | null;
+      }
+    | {
+        path: "/contact";
+        _updatedAt: string | null;
+      }
+    | {
+        path: "/lab";
+        _updatedAt: string | null;
+      }
+    | {
+        path: "/notes";
+        _updatedAt: string | null;
+      }
+    | {
+        path: "/work";
+        _updatedAt: string | null;
+      }
+  >;
   projects: Array<{
     path: string | null;
     _updatedAt: string;
@@ -2529,7 +2766,8 @@ declare global {
   interface SanityQueries {
     '{\n  "profile": *[_id == "profile"][0]{\n    fullName,\n    professionalTitle,\n    introduction,\n    location,\n    availability,\n    availabilityNote,\n    targetRoles,\n    professionalStrengths,\n    workingPrinciples,\n    email,\n    socialLinks[]{platform, label, url},\n    "resume": resume{\n      label,\n      "url": asset->url\n    },\n    "biography": biography[]{\n      _key,\n      _type,\n      style,\n      children[]{_key, _type, text, marks}\n    },\n    "portrait": portrait {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  },\n  "settings": *[_id == "siteSettings"][0]{\n    siteName,\n    siteDescription,\n    canonicalUrl,\n    navigation[]{label, destination, externalUrl},\n    contactHeading,\n    contactMessage,\n    contactButtonLabel,\n    footerText,\n    indexing,\n    googleSiteVerification,\n    defaultSeo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "projects": *[\n    _type == "project" &&\n    featured == true &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc)[0...3]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologyStack[]->{name, "slug": slug.current}\n  },\n  "technologies": *[\n    _type == "technology" &&\n    name in ["JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS", "Node.js", "Sanity", "Git"]\n  ] | order(displayOrder asc, name asc){\n    _id,\n    name,\n    summary,\n    relationship,\n    firstUsedYear\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    featured == true &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt desc)[0...3]{\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    status\n  }\n}': HOME_PAGE_QUERY_RESULT;
     '{\n  "profile": *[_id == "profile"][0]{fullName, professionalTitle},\n  "settings": *[_id == "siteSettings"][0]{\n    siteName,\n    siteDescription,\n    canonicalUrl,\n    indexing,\n    googleSiteVerification,\n    defaultSeo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  }\n}': HOME_METADATA_QUERY_RESULT;
-    '{\n  "aboutPage": *[_id == "aboutPage"][0]{\n    heroEyebrow,\n    heroHeading,\n    heroIntroduction,\n    identityFacts[]{_key, label, value},\n    primaryAction{label, href},\n    secondaryAction{label, href},\n    storyEyebrow,\n    quickFacts,\n    focusHeading,\n    focusLabel,\n    focusItems[]{_key, title, description},\n    toolsHeading,\n    toolsLabel,\n    technologyGroups[]{\n      _key,\n      label,\n      technologies[]->{_id, name}\n    },\n    experienceHeading,\n    experienceLabel,\n    experienceMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      engagementType,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    educationHeading,\n    learningHeading,\n    educationMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    learningMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    principlesHeading,\n    principlesLabel,\n    ctaEyebrow,\n    ctaHeading,\n    ctaMessage,\n    ctaLabel\n  },\n  "profile": *[_id == "profile"][0]{\n    fullName,\n    professionalTitle,\n    location,\n    availability,\n    email,\n    workingPrinciples,\n    "biography": biography[]{\n      _key,\n      _type,\n      style,\n      children[]{_key, _type, text, marks}\n    },\n    "portrait": portrait {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n}': ABOUT_PROFILE_QUERY_RESULT;
+    '{\n  "settings": *[_id == "siteSettings"][0]{\n    siteName,\n    siteDescription,\n    indexing,\n    defaultSeo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "workPage": *[_id == "workPage"][0]{\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "aboutPage": *[_id == "aboutPage"][0]{\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "contactPage": *[_id == "contactPage"][0]{\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "profile": *[_id == "profile"][0]{\n    fullName,\n    professionalTitle,\n    location,\n    email,\n    socialLinks[]{platform, label, url}\n  },\n  "technologies": *[_type == "technology" && relationship in ["core", "working", "learning"]]\n    | order(displayOrder asc, name asc)[0...12]{name}\n}': STATIC_PAGE_SEO_QUERY_RESULT;
+    '{\n  "aboutPage": *[_id == "aboutPage"][0]{\n    heroEyebrow,\n    heroHeading,\n    heroIntroduction,\n    identityFacts[]{_key, label, value},\n    primaryAction{label, href},\n    secondaryAction{label, href},\n    storyEyebrow,\n    quickFacts,\n    focusHeading,\n    focusLabel,\n    focusItems[]{_key, title, description},\n    toolsHeading,\n    toolsLabel,\n    technologyGroups[]{\n      _key,\n      label,\n      technologies[]->{_id, name}\n    },\n    experienceHeading,\n    experienceLabel,\n    experienceMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      engagementType,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    educationHeading,\n    learningHeading,\n    educationMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    learningMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    principlesHeading,\n    principlesLabel,\n    ctaEyebrow,\n    ctaHeading,\n    ctaMessage,\n    ctaLabel,\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "profile": *[_id == "profile"][0]{\n    fullName,\n    professionalTitle,\n    location,\n    availability,\n    email,\n    workingPrinciples,\n    "biography": biography[]{\n      _key,\n      _type,\n      style,\n      children[]{_key, _type, text, marks}\n    },\n    "portrait": portrait {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n}': ABOUT_PROFILE_QUERY_RESULT;
     '{\n  "projects": *[\n    _type == "project" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc)[0...8]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologyStack[]->{name}\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt asc)[0...8]{\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    status,\n    startedAt,\n    completedAt,\n    demoUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologies[]->{name}\n  }\n}': WORK_ARCHIVE_QUERY_RESULT;
     '\n  *[_type == "project" && defined(slug.current)]{"slug": slug.current}\n': PROJECT_SLUGS_QUERY_RESULT;
     '\n  *[_type == "project" && slug.current == $slug][0]{\n    title,\n    subtitle,\n    summary,\n    "seo": seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    },\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n': PROJECT_METADATA_QUERY_RESULT;
@@ -2537,9 +2775,10 @@ declare global {
     '{\n  "labPage": *[_id == "labPage"][0]{\n    eyebrow,\n    heading,\n    introduction,\n    activeStudiesLabel,\n    surpriseLabel,\n    archiveEyebrow,\n    archiveHeading,\n    archiveNote,\n    closingEyebrow,\n    closingHeading,\n    closingMessage,\n    workLinkLabel,\n    githubLinkLabel,\n    contactLinkLabel,\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    question,\n    status,\n    startedAt,\n    completedAt,\n    demoUrl,\n    repositoryUrl,\n    featured,\n    displayOrder,\n    experimentNumber,\n    category,\n    version,\n    presentation,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologies[]->{name}\n  }\n}': LAB_PAGE_QUERY_RESULT;
     '{\n  "notesPage": *[_id == "notesPage"][0]{\n    eyebrow,\n    heading,\n    introduction,\n    archiveNote,\n    backLabel,\n    contentsLabel,\n    readerLabels{\n      sectionCount,\n      toolsHeading,\n      toolsBadge,\n      share,\n      copy,\n      copied,\n      typeface,\n      feedback\n    },\n    relatedHeading,\n    feedbackHeading,\n    feedbackMessage,\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "notes": *[\n    _type == "note" &&\n    defined(slug.current) &&\n    defined(publishedAt) &&\n    publishedAt <= now()\n  ] | order(displayOrder asc, publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    preview{label, summary, code},\n    publishedAt,\n    category,\n    volumeNumber,\n    readingTimeMinutes,\n    topics,\n    featured,\n    displayOrder,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologies[]->{_id, name}\n  }\n}': NOTES_ARCHIVE_QUERY_RESULT;
     '\n  *[\n    _type == "note" &&\n    defined(slug.current) &&\n    defined(publishedAt) &&\n    publishedAt <= now()\n  ]{"slug": slug.current}\n': NOTE_SLUGS_QUERY_RESULT;
+    '\n  *[\n    _type == "note" &&\n    defined(slug.current) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    seo.noIndex != true\n  ] | order(publishedAt desc){\n    _id,\n    _updatedAt,\n    title,\n    "slug": slug.current,\n    excerpt,\n    publishedAt\n  }\n': RSS_NOTES_QUERY_RESULT;
     '\n  *[_type == "note" && slug.current == $slug][0]{\n    _updatedAt,\n    title,\n    excerpt,\n    publishedAt,\n    preview{label, summary, code},\n    editorialContext{\n      sectionLabel,\n      seriesLabel\n    },\n    "seo": seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    },\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n': NOTE_METADATA_QUERY_RESULT;
     '{\n  "note": *[\n    _type == "note" &&\n    slug.current == $slug &&\n    defined(publishedAt) &&\n    publishedAt <= now()\n  ][0]{\n    _id,\n    _updatedAt,\n    title,\n    "slug": slug.current,\n    excerpt,\n    preview{label, summary, code},\n    editorialContext{\n      sectionLabel,\n      seriesLabel\n    },\n    publishedAt,\n    category,\n    volumeNumber,\n    readingTimeMinutes,\n    topics,\n    "technologies": technologies[]->{_id, name},\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    body[]{\n      _key,\n      _type,\n      style,\n      listItem,\n      level,\n      children[]{_key, _type, text, marks},\n      markDefs[]{_key, _type, href, openInNewTab},\n      filename,\n      language,\n      code,\n      caption,\n      eyebrow,\n      title,\n      items[]{_key, _type, label, title, description},\n      alt,\n      "url": asset->url,\n      "width": asset->metadata.dimensions.width,\n      "height": asset->metadata.dimensions.height,\n      "lqip": asset->metadata.lqip\n    },\n    seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  },\n  "profile": *[_id == "profile"][0]{fullName, email},\n  "notesPage": *[_id == "notesPage"][0]{\n    backLabel,\n    contentsLabel,\n    readerLabels{\n      sectionCount,\n      toolsHeading,\n      toolsBadge,\n      share,\n      copy,\n      copied,\n      typeface,\n      feedback\n    },\n    relatedHeading,\n    feedbackHeading,\n    feedbackMessage\n  },\n  "noteNavigation": *[\n    _type == "note" &&\n    defined(slug.current) &&\n    defined(publishedAt) &&\n    publishedAt <= now()\n  ] | order(displayOrder asc, publishedAt desc){\n    _id,\n    title,\n    "slug": slug.current,\n    excerpt,\n    preview{label, summary, code},\n    publishedAt,\n    category,\n    volumeNumber,\n    readingTimeMinutes,\n    topics,\n    "technologies": technologies[]->{_id, name}\n  }\n}': NOTE_DETAIL_QUERY_RESULT;
-    '{\n  "projects": *[\n    _type == "project" &&\n    defined(slug.current) &&\n    seo.noIndex != true\n  ]{\n    "path": "/work/" + slug.current,\n    _updatedAt\n  },\n  "notes": *[\n    _type == "note" &&\n    defined(slug.current) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    seo.noIndex != true\n  ]{\n    "path": "/notes/" + slug.current,\n    _updatedAt\n  }\n}': SITEMAP_QUERY_RESULT;
+    '{\n  "staticPages": [\n    {\n      "path": "/",\n      "_updatedAt": *[_id in ["profile", "siteSettings"]] | order(_updatedAt desc)[0]._updatedAt\n    },\n    {"path": "/about", "_updatedAt": *[_id == "aboutPage"][0]._updatedAt},\n    {"path": "/work", "_updatedAt": *[_id == "workPage"][0]._updatedAt},\n    {"path": "/lab", "_updatedAt": *[_id == "labPage"][0]._updatedAt},\n    {"path": "/notes", "_updatedAt": *[_id == "notesPage"][0]._updatedAt},\n    {\n      "path": "/contact",\n      "_updatedAt": *[_id in ["contactPage", "profile", "siteSettings"]]\n        | order(_updatedAt desc)[0]._updatedAt\n    }\n  ],\n  "projects": *[\n    _type == "project" &&\n    defined(slug.current) &&\n    seo.noIndex != true\n  ]{\n    "path": "/work/" + slug.current,\n    _updatedAt\n  },\n  "notes": *[\n    _type == "note" &&\n    defined(slug.current) &&\n    defined(publishedAt) &&\n    publishedAt <= now() &&\n    seo.noIndex != true\n  ]{\n    "path": "/notes/" + slug.current,\n    _updatedAt\n  }\n}': SITEMAP_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

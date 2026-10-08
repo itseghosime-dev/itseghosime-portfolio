@@ -3,8 +3,10 @@ import { Hanken_Grotesk, Newsreader } from "next/font/google";
 
 import { SmoothScrollProvider } from "@/components/motion/smooth-scroll-provider";
 import { ConnectivityStatus } from "@/components/system/connectivity-status";
-import { SanityLive } from "@/sanity/lib/live";
+import { SanityLive, sanityFetch } from "@/sanity/lib/live";
 import { SITE_URL } from "@/lib/site";
+import { resolveSocialImage } from "@/lib/seo";
+import { HOME_METADATA_QUERY } from "@/sanity/lib/queries";
 
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -23,19 +25,57 @@ const newsreader = Newsreader({
   axes: ["opsz"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "ITSEGHOSIME | Frontend Developer Portfolio",
-    template: "%s | ITSEGHOSIME",
-  },
-  description:
-    "The portfolio of Abdulrahman Itseghosime Bello, a frontend developer and software engineer building thoughtful digital experiences.",
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { data } = await sanityFetch({
+    perspective: "published",
+    query: HOME_METADATA_QUERY,
+    stega: false,
+  });
+  const { settings } = data;
+  const title =
+    settings?.defaultSeo?.title ||
+    "ITSEGHOSIME | Frontend Developer Portfolio";
+  const description =
+    settings?.defaultSeo?.description ||
+    settings?.siteDescription ||
+    "The portfolio of Abdulrahman Itseghosime Bello, a frontend developer and software engineer building thoughtful digital experiences.";
+  const image = resolveSocialImage(settings?.defaultSeo?.image);
+  const shouldIndex =
+    settings?.indexing === "allow" && settings.defaultSeo?.noIndex !== true;
+  const googleVerification =
+    settings?.googleSiteVerification ||
+    process.env.GOOGLE_SITE_VERIFICATION ||
+    process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: { default: title, template: "%s | ITSEGHOSIME" },
+    description,
+    alternates: {
+      types: { "application/rss+xml": [{ title: "ITSEGHOSIME Notes", url: "/feed.xml" }] },
+    },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      images: [{ alt: image.alt, height: image.height, url: image.url, width: image.width }],
+      siteName: settings?.siteName || "ITSEGHOSIME",
+      url: "/",
+    },
+    robots: {
+      follow: shouldIndex,
+      index: shouldIndex,
+      googleBot: { follow: shouldIndex, index: shouldIndex },
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image.url],
+    },
+    verification: googleVerification ? { google: googleVerification } : undefined,
+  };
+}
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

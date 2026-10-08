@@ -29,6 +29,11 @@ export const structure: StructureResolver = (S) =>
           S.document().schemaType('profile').documentId('profile').title('Profile and dossier'),
         ),
       S.listItem()
+        .id('workPage')
+        .title('Work Page')
+        .icon(DocumentIcon)
+        .child(S.document().schemaType('workPage').documentId('workPage').title('Work page')),
+      S.listItem()
         .id('aboutPage')
         .title('About Page')
         .icon(DocumentIcon)
@@ -44,6 +49,13 @@ export const structure: StructureResolver = (S) =>
         .icon(DocumentTextIcon)
         .child(
           S.document().schemaType('notesPage').documentId('notesPage').title('Notes page'),
+        ),
+      S.listItem()
+        .id('contactPage')
+        .title('Contact Page')
+        .icon(DocumentIcon)
+        .child(
+          S.document().schemaType('contactPage').documentId('contactPage').title('Contact page'),
         ),
       S.listItem()
         .id('siteSettings')

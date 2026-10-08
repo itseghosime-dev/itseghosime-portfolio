@@ -13,6 +13,7 @@ export const aboutPage = defineType({
     {name: 'tools', title: 'Tools'},
     {name: 'journey', title: 'Experience and education'},
     {name: 'closing', title: 'Principles and call to action'},
+    {name: 'seo', title: 'SEO and sharing'},
   ],
 
   fields: [
@@ -279,6 +280,13 @@ export const aboutPage = defineType({
       type: 'string',
       group: 'closing',
       validation: (rule) => rule.required().max(50),
+    }),
+    defineField({
+      name: 'seo',
+      title: 'SEO and social sharing',
+      description: 'Optional search and sharing overrides for the About page.',
+      type: 'seoMetadata',
+      group: 'seo',
     }),
   ],
 
