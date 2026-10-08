@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
 
+import { ConnectivityStatus } from "@/components/system/connectivity-status";
 import { SanityLive } from "@/sanity/lib/live";
 import { SITE_URL } from "@/lib/site";
 
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${hankenGrotesk.variable} ${newsreader.variable}`}
     >
       <body>
+        <ConnectivityStatus />
         <a
           className="fixed top-3 left-3 z-[1000] -translate-y-[200%] rounded bg-ink px-4 py-2.5 text-sm font-semibold text-background transition-transform duration-150 focus:translate-y-0 motion-reduce:transition-none"
           href="#main-content"

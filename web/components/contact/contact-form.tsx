@@ -88,8 +88,13 @@ function ContactOutcome({ email, onReset, state }: ContactOutcomeProps) {
         <p className="mt-3 max-w-lg text-sm leading-6 text-ink-soft">
           {isSuccess
             ? "Thanks for reaching out. A confirmation is in your inbox, and I’ll review your note carefully."
-            : "The delivery service couldn’t complete your message. Try again, or reach me directly by email."}
+            : "The delivery service couldn’t complete your message. Your entries are still preserved in this form, so you can retry without retyping anything."}
         </p>
+        {!isSuccess ? (
+          <p className="mt-4 border-l-2 border-[var(--error)]/45 pl-3 font-mono text-[0.6875rem] uppercase tracking-[0.07em] text-ink-muted">
+            No work lost · form state retained
+          </p>
+        ) : null}
         <div className="mt-7 flex flex-col gap-3 sm:flex-row">
           {isSuccess ? (
             <Link

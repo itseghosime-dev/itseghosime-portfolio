@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowUpRight,
+  LoaderCircle,
   MousePointerClick,
   Monitor,
+  RefreshCw,
+  ShieldAlert,
   Smartphone,
   Tablet,
   X,
@@ -23,6 +26,7 @@ const viewportWidths = {
 } as const;
 type PreviewViewport = keyof typeof viewportWidths;
 type VisitorDevice = "desktop" | "tablet" | "mobile";
+type SandboxStatus = "loading" | "ready" | "timeout";
 
 const preferredViewport: Record<VisitorDevice, PreviewViewport> = {
   desktop: "desktop",
@@ -84,12 +88,46 @@ export function SandboxSection({
   const [viewport, setViewport] = useState<PreviewViewport>(initial);
   const [visitorDevice, setVisitorDevice] = useState<VisitorDevice | null>(null);
   const [isInteractive, setIsInteractive] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
+  const [sandboxStatus, setSandboxStatus] = useState<SandboxStatus>("loading");
+  const [canLoadSandbox, setCanLoadSandbox] = useState(false);
+  const sandboxSectionRef = useRef<HTMLElement>(null);
   const embedUrl = useMemo(
     () => safeSandboxUrl(section.embedUrl),
     [section.embedUrl],
   );
   const deviceViewports = getDeviceViewports(available, visitorDevice);
   const visibleViewports = deviceViewports.length ? deviceViewports : available;
+  const effectiveStatus: SandboxStatus = embedUrl ? sandboxStatus : "timeout";
+
+  useEffect(() => {
+    const node = sandboxSectionRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        setCanLoadSandbox(true);
+        observer.disconnect();
+      },
+      {rootMargin: "800px 0px"},
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!embedUrl || !canLoadSandbox || sandboxStatus !== "loading") return;
+
+    const timeout = window.setTimeout(() => {
+      setSandboxStatus((current) =>
+        current === "loading" ? "timeout" : current,
+      );
+    }, 12_000);
+
+    return () => window.clearTimeout(timeout);
+  }, [canLoadSandbox, embedUrl, reloadKey, sandboxStatus]);
 
   useEffect(() => {
     const updateViewportForDevice = () => {
@@ -112,6 +150,18 @@ export function SandboxSection({
 
   if (!section.heading) return null;
 
+  function retrySandbox() {
+    setIsInteractive(false);
+    setSandboxStatus("loading");
+    setReloadKey((current) => current + 1);
+  }
+
+  function viewProjectMedia() {
+    document
+      .querySelector<HTMLElement>("[data-project-media]")
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
   const heightClass =
     section.frameHeight === "viewport"
       ? "h-[min(78svh,52rem)]"
@@ -123,6 +173,7 @@ export function SandboxSection({
     <section
       className="relative isolate overflow-clip border-b border-black/[0.08] bg-[#eef0ea] py-20 sm:py-24 lg:py-32"
       data-project-sandbox
+      ref={sandboxSectionRef}
     >
       <div
         aria-hidden="true"
@@ -156,8 +207,14 @@ export function SandboxSection({
           >
             <div className="flex min-h-12 flex-wrap items-center justify-between gap-3 px-3 py-2 text-white sm:px-4">
               <p className="font-mono text-xs uppercase tracking-[0.08em] text-white/58">
-                <span className="mr-2 inline-block size-2 rounded-full bg-[#6ee7a8] shadow-[0_0_16px_rgba(110,231,168,0.72)]" />
-                Interactive checkpoint
+                <span
+                  className={`mr-2 inline-block size-2 rounded-full ${effectiveStatus === "ready" ? "bg-[#6ee7a8] shadow-[0_0_16px_rgba(110,231,168,0.72)]" : effectiveStatus === "loading" ? "animate-pulse bg-[#f2c866] motion-reduce:animate-none" : "bg-[#ff817a]"}`}
+                />
+                {effectiveStatus === "ready"
+                  ? "Interactive checkpoint"
+                  : effectiveStatus === "loading"
+                    ? "Preparing preview"
+                    : "Preview needs attention"}
               </p>
               <div className="flex flex-wrap items-center gap-2">
                 {isInteractive ? (
@@ -179,7 +236,8 @@ export function SandboxSection({
                     return (
                       <button
                         aria-pressed={viewport === item}
-                        className={`inline-flex min-h-9 items-center gap-1.5 rounded-md px-3 text-xs font-semibold capitalize ${viewport === item ? "bg-white text-[#14171c]" : "text-white/58 hover:bg-white/10 hover:text-white"}`}
+                        className={`inline-flex min-h-9 items-center gap-1.5 rounded-md px-3 text-xs font-semibold capitalize disabled:cursor-wait disabled:opacity-45 ${viewport === item ? "bg-white text-[#14171c]" : "text-white/58 hover:bg-white/10 hover:text-white"}`}
+                        disabled={effectiveStatus !== "ready"}
                         key={item}
                         onClick={() => setViewport(item)}
                         type="button"
@@ -202,17 +260,93 @@ export function SandboxSection({
               >
                 {embedUrl ? (
                   <>
-                    <iframe
-                      allow="fullscreen"
-                      className={`h-full w-full border-0 ${isInteractive ? "pointer-events-auto" : "pointer-events-none"}`}
-                      data-sandbox-active={isInteractive ? "true" : "false"}
-                      loading="lazy"
-                      referrerPolicy="strict-origin-when-cross-origin"
-                      sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
-                      src={embedUrl}
-                      title={`${section.heading} interactive preview`}
-                    />
-                    {!isInteractive ? (
+                    {canLoadSandbox ? (
+                      <iframe
+                        allow="fullscreen"
+                        className={`h-full w-full border-0 transition-opacity duration-500 ${sandboxStatus === "ready" ? "opacity-100" : "opacity-0"} ${isInteractive ? "pointer-events-auto" : "pointer-events-none"}`}
+                        data-sandbox-active={isInteractive ? "true" : "false"}
+                        key={reloadKey}
+                        onLoad={() => setSandboxStatus("ready")}
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+                        src={embedUrl}
+                        title={`${section.heading} interactive preview`}
+                      />
+                    ) : null}
+                    {sandboxStatus === "loading" ? (
+                      <div
+                        className="absolute inset-0 grid content-between overflow-hidden bg-surface p-6 sm:p-8"
+                        role="status"
+                      >
+                        <div className="flex items-start justify-between gap-6">
+                          <div className="grid gap-3">
+                            <span className="system-skeleton h-5 w-44" />
+                            <span className="system-skeleton h-3 w-64 max-w-full" />
+                          </div>
+                          <span className="system-skeleton h-9 w-28" />
+                        </div>
+                        <div className="mx-auto grid place-items-center">
+                          <div className="relative grid size-48 place-items-center sm:size-56">
+                            <span className="absolute inset-0 animate-spin rounded-full border border-dashed border-black/20 motion-reduce:animate-none" />
+                            <span className="absolute inset-6 rotate-12 border border-black/12" />
+                            <span className="grid size-20 place-items-center bg-surface-container text-accent">
+                              <LoaderCircle aria-hidden="true" className="animate-spin motion-reduce:animate-none" size={28} />
+                            </span>
+                          </div>
+                          <p className="mt-5 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-ink-muted">
+                            Loading isolated preview…
+                          </p>
+                        </div>
+                        <div className="flex gap-3">
+                          <span className="system-skeleton h-9 w-32" />
+                          <span className="system-skeleton h-9 w-24" />
+                        </div>
+                      </div>
+                    ) : null}
+                    {sandboxStatus === "timeout" ? (
+                      <div className="absolute inset-0 grid place-items-center overflow-hidden bg-surface p-6 text-center sm:p-10" role="alert">
+                        <ProjectImage
+                          className="absolute inset-0 h-full w-full object-cover opacity-[0.08]"
+                          image={section.fallbackImage}
+                        />
+                        <div className="relative z-10 max-w-lg">
+                          <span className="mx-auto grid size-12 place-items-center rounded-full border border-black/10 bg-surface-container text-[var(--error)]">
+                            <ShieldAlert aria-hidden="true" size={22} />
+                          </span>
+                          <h3 className="mt-5 font-serif text-3xl tracking-[-0.03em]">
+                            Preview unavailable in this frame.
+                          </h3>
+                          <p className="mt-3 text-sm leading-7 text-ink-muted">
+                            The live site may be blocking embedded access, or the preview took too long to respond. The production page can still be opened safely in a new tab.
+                          </p>
+                          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+                            <a
+                              className="inline-flex min-h-11 items-center justify-center gap-2 bg-accent px-5 text-sm font-semibold text-white no-underline hover:bg-accent-hover"
+                              href={embedUrl}
+                              rel="noreferrer"
+                              target="_blank"
+                            >
+                              Open live platform <ArrowUpRight aria-hidden="true" size={15} />
+                            </a>
+                            <button
+                              className="inline-flex min-h-11 items-center justify-center gap-2 border border-black/20 px-5 text-sm font-semibold hover:border-ink"
+                              onClick={retrySandbox}
+                              type="button"
+                            >
+                              <RefreshCw aria-hidden="true" size={15} /> Retry preview
+                            </button>
+                            <button
+                              className="inline-flex min-h-11 items-center justify-center px-4 text-sm font-medium text-ink-muted hover:text-accent"
+                              onClick={viewProjectMedia}
+                              type="button"
+                            >
+                              View project images
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : null}
+                    {sandboxStatus === "ready" && !isInteractive ? (
                       <button
                         className="absolute inset-0 grid cursor-pointer place-items-center bg-[#11151b]/28 p-6 text-left backdrop-blur-[1px] transition-colors hover:bg-[#11151b]/38"
                         onClick={() => setIsInteractive(true)}
@@ -236,14 +370,27 @@ export function SandboxSection({
                 ) : (
                   <div className="relative grid h-full place-items-center overflow-hidden p-6 text-center">
                     <ProjectImage
-                      className="absolute inset-0 h-full w-full object-cover opacity-20"
+                      className="absolute inset-0 h-full w-full object-cover opacity-10"
                       image={section.fallbackImage}
                     />
-                    <div className="relative z-10 max-w-md bg-background/90 p-6 backdrop-blur">
-                      <p className="text-sm leading-7 text-ink-soft">
+                    <div className="relative z-10 max-w-lg bg-background/92 p-7 backdrop-blur sm:p-9">
+                      <span className="mx-auto grid size-12 place-items-center rounded-full border border-black/10 bg-surface-container text-ink-muted">
+                        <ShieldAlert aria-hidden="true" size={22} />
+                      </span>
+                      <h3 className="mt-5 font-serif text-3xl tracking-[-0.03em]">
+                        Preview unavailable in this sandbox.
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-ink-soft">
                         {section.fallbackMessage ??
-                          "The interactive preview is unavailable."}
+                          "This project does not expose a safe embedded preview. Use the project images and implementation notes instead."}
                       </p>
+                      <button
+                        className="mt-6 min-h-11 border border-black/20 px-5 text-sm font-semibold transition-colors hover:border-ink hover:bg-surface"
+                        onClick={viewProjectMedia}
+                        type="button"
+                      >
+                        View project images
+                      </button>
                     </div>
                   </div>
                 )}

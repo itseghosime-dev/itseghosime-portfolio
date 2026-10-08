@@ -1,7 +1,7 @@
 'use client'
 
 import gsap from 'gsap'
-import {ArrowRight} from 'lucide-react'
+import {ArrowRight, FilterX} from 'lucide-react'
 import Link from 'next/link'
 import {useEffect, useMemo, useRef, useState} from 'react'
 
@@ -519,9 +519,25 @@ export function WorkArchive({entries, initialFilter = 'all'}: WorkArchiveProps) 
               </>
             )
           ) : (
-            <div className="grid min-h-64 place-content-center border-y border-black/10 text-center">
-              <p className="font-serif text-3xl">No matching work.</p>
-              <p className="mt-2 text-sm text-ink-muted">Try another search or filter.</p>
+            <div className="grid min-h-80 place-content-center border-y border-black/10 px-6 text-center">
+              <span className="mx-auto grid size-12 place-items-center rounded-full bg-surface-container text-ink-muted">
+                <FilterX aria-hidden="true" size={20} strokeWidth={1.6} />
+              </span>
+              <p className="mt-5 font-serif text-3xl">Nothing here yet.</p>
+              <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink-muted">
+                No projects match this search and filter combination. Clear the current query to
+                return to the complete archive.
+              </p>
+              <button
+                className="mx-auto mt-6 inline-flex min-h-11 items-center gap-2 border border-black/15 bg-surface px-5 text-sm font-semibold transition-colors hover:border-ink hover:bg-surface-container"
+                onClick={() => {
+                  setFilter('all')
+                  setQuery('')
+                }}
+                type="button"
+              >
+                <FilterX aria-hidden="true" size={15} /> Clear filters
+              </button>
             </div>
           )}
         </Container>
