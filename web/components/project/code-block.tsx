@@ -43,10 +43,11 @@ export function CodeBlock({
                   <span
                     aria-hidden="true"
                     className="select-none pr-4 text-right text-white/28"
+                    key="line-number"
                   >
                     {lineIndex + 1}
                   </span>
-                  <span>
+                  <span key="line-content">
                     {line.map((token, tokenIndex) => (
                       <span
                         {...getTokenProps({ token })}
