@@ -51,7 +51,7 @@ const destinationHrefs = {
   capabilities: '/#capabilities',
   contact: '/contact',
   home: '/',
-  lab: '/work?filter=experimental',
+  lab: '/lab',
   profile: '/about',
   projects: '/work',
 } as const

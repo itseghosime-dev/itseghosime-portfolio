@@ -12,7 +12,7 @@ type ArchiveContactSectionProps = {
 };
 
 const explorationLinks = [
-  { href: "/work?filter=experimental", label: "Lab experiments" },
+  { href: "/lab", label: "Lab experiments" },
   { href: "/about", label: "Profile & dossier" },
 ];
 
