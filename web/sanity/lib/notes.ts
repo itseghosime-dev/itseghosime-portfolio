@@ -33,14 +33,12 @@ const categoryLabels: Record<NoteCategory, string> = {
 };
 
 const defaultPage: NotesPageModel = {
-  eyebrow: "NOTES // TECHNICAL NOTEBOOK · INDEX 2024—2026",
+  eyebrow: "NOTES // TECHNICAL NOTEBOOK",
   heading: "Essays, architectural notes, and field observations.",
   introduction:
     "Notes on frontend engineering, systems architecture, interfaces, and the trade-offs uncovered while shipping software.",
   archiveNote:
     "Every note begins as a practical question and stays open to revision.",
-  libraryEyebrow: "Reading threads",
-  libraryHeading: "Ideas connected across the notebook.",
 };
 
 const allowedCategories = new Set<NoteCategory>(
@@ -50,15 +48,18 @@ const allowedCategories = new Set<NoteCategory>(
 type ArchiveNote = NOTES_ARCHIVE_QUERY_RESULT["notes"][number];
 type DetailNavigationNote = NOTE_DETAIL_QUERY_RESULT["noteNavigation"][number];
 
-function toImage(image: {
-  alt: string | null;
-  caption: string | null;
-  height: number | null;
-  lqip: string | null;
-  url: string | null;
-  width: number | null;
-} | null): ImageAsset | undefined {
-  if (!image?.url || !image.alt || !image.width || !image.height) return undefined;
+function toImage(
+  image: {
+    alt: string | null;
+    caption: string | null;
+    height: number | null;
+    lqip: string | null;
+    url: string | null;
+    width: number | null;
+  } | null | undefined,
+): ImageAsset | undefined {
+  if (!image?.url || !image.alt || !image.width || !image.height)
+    return undefined;
 
   return {
     alt: image.alt,
@@ -80,13 +81,20 @@ function toSummary(
   note: ArchiveNote | DetailNavigationNote,
   index = 0,
 ): NoteSummary | null {
-  if (!note._id || !note.title || !note.slug || !note.excerpt || !note.publishedAt) {
+  if (
+    !note._id ||
+    !note.title ||
+    !note.slug ||
+    !note.excerpt ||
+    !note.publishedAt
+  ) {
     return null;
   }
 
   const category = toCategory(note.category);
   const featured = "featured" in note ? Boolean(note.featured) : false;
-  const coverImage = "coverImage" in note ? toImage(note.coverImage) : undefined;
+  const coverImage =
+    "coverImage" in note ? toImage(note.coverImage) : undefined;
 
   return {
     category,
@@ -116,9 +124,7 @@ function toSummary(
   };
 }
 
-function toPage(
-  page: NOTES_ARCHIVE_QUERY_RESULT["notesPage"],
-): NotesPageModel {
+function toPage(page: NOTES_ARCHIVE_QUERY_RESULT["notesPage"]): NotesPageModel {
   if (!page) return defaultPage;
 
   return {
@@ -126,8 +132,6 @@ function toPage(
     eyebrow: page.eyebrow || defaultPage.eyebrow,
     heading: page.heading || defaultPage.heading,
     introduction: page.introduction || defaultPage.introduction,
-    libraryEyebrow: page.libraryEyebrow || defaultPage.libraryEyebrow,
-    libraryHeading: page.libraryHeading || defaultPage.libraryHeading,
     seo: page.seo
       ? {
           description: page.seo.description || undefined,
@@ -232,7 +236,8 @@ export async function getNoteDetail(slug: string): Promise<NoteDetailData> {
     return summary ? [summary] : [];
   });
   const currentIndex = summaries.findIndex((note) => note.slug === slug);
-  const currentSummary = currentIndex >= 0 ? summaries[currentIndex] : undefined;
+  const currentSummary =
+    currentIndex >= 0 ? summaries[currentIndex] : undefined;
   const body = data.note?.body ?? [];
 
   const related = currentSummary
@@ -241,7 +246,9 @@ export async function getNoteDetail(slug: string): Promise<NoteDetailData> {
           (note) =>
             note.slug !== currentSummary.slug &&
             (note.category === currentSummary.category ||
-              note.topics.some((topic) => currentSummary.topics.includes(topic))),
+              note.topics.some((topic) =>
+                currentSummary.topics.includes(topic),
+              )),
         )
         .slice(0, 4)
     : [];
@@ -259,6 +266,17 @@ export async function getNoteDetail(slug: string): Promise<NoteDetailData> {
       feedbackMessage:
         data.notesPage?.feedbackMessage ||
         "I write these notes to make the work clearer. If you see another angle, I would like to hear it.",
+      reader: {
+        copied: data.notesPage?.readerLabels?.copied || "Copied",
+        copy: data.notesPage?.readerLabels?.copy || "Copy link",
+        feedback: data.notesPage?.readerLabels?.feedback || "Send feedback",
+        sectionCount: data.notesPage?.readerLabels?.sectionCount || "sections",
+        share: data.notesPage?.readerLabels?.share || "Share",
+        toolsBadge: data.notesPage?.readerLabels?.toolsBadge || "Tools",
+        toolsHeading:
+          data.notesPage?.readerLabels?.toolsHeading || "Reading tools",
+        typeface: data.notesPage?.readerLabels?.typeface || "Typeface",
+      },
       relatedHeading: data.notesPage?.relatedHeading || "Continue reading",
     },
     note:
@@ -266,9 +284,20 @@ export async function getNoteDetail(slug: string): Promise<NoteDetailData> {
         ? {
             ...currentSummary,
             author: data.profile?.fullName || "Abdulrahman Itseghosime Bello",
+            authorEmail: data.profile?.email || undefined,
             body,
             coverImage: toImage(data.note.coverImage),
+            editorialContext: {
+              sectionLabel:
+                data.note.editorialContext?.sectionLabel ||
+                currentSummary.categoryLabel,
+              seriesLabel:
+                data.note.editorialContext?.seriesLabel || "Architecture notes",
+            },
             headings: getHeadings(body),
+            socialImage:
+              toImage(data.note.seo?.image) || toImage(data.note.coverImage),
+            updatedAt: data.note._updatedAt,
           }
         : null,
     related:

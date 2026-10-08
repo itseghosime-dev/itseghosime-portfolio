@@ -39,8 +39,6 @@ export type NotesPageModel = {
   eyebrow: string;
   heading: string;
   introduction: string;
-  libraryEyebrow: string;
-  libraryHeading: string;
   seo?: {
     description?: string;
     image?: ImageAsset;
@@ -62,8 +60,26 @@ export type NoteHeading = {
 
 export type NoteDetailModel = NoteSummary & {
   author: string;
+  authorEmail?: string;
   body: NoteBodyBlock[];
+  editorialContext: {
+    sectionLabel: string;
+    seriesLabel: string;
+  };
   headings: NoteHeading[];
+  socialImage?: ImageAsset;
+  updatedAt: string;
+};
+
+export type NoteReaderLabels = {
+  copied: string;
+  copy: string;
+  feedback: string;
+  sectionCount: string;
+  share: string;
+  toolsBadge: string;
+  toolsHeading: string;
+  typeface: string;
 };
 
 export type NoteDetailData = {
@@ -76,6 +92,7 @@ export type NoteDetailData = {
     contents: string;
     feedbackHeading: string;
     feedbackMessage: string;
+    reader: NoteReaderLabels;
     relatedHeading: string;
   };
   note: NoteDetailModel | null;

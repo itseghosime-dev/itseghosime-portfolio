@@ -13,7 +13,9 @@ import { Container } from "@/components/ui/container";
 
 import { NoteBody } from "./note-body";
 import { formatNoteDate, formatVolumeNumber } from "./note-format";
+import { NoteImage } from "./note-image";
 import { NoteReadingProgress } from "./note-reading-progress";
+import { NoteReadingTools } from "./note-reading-tools";
 import { NoteShareActions } from "./note-share-actions";
 import { NoteTableOfContents } from "./note-table-of-contents";
 
@@ -24,7 +26,7 @@ function RelatedNoteCard({ note }: { note: NoteSummary }) {
       href={`/notes/${note.slug}`}
     >
       <div className="flex h-full flex-col justify-between gap-8">
-        <div>
+        <div className="flex flex-col gap-4">
           <p className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent">
             Note {formatVolumeNumber(note.volumeNumber)} · {note.categoryLabel}
           </p>
@@ -51,6 +53,7 @@ function RelatedNoteCard({ note }: { note: NoteSummary }) {
 export function NoteDetail({ data }: { data: NoteDetailData }) {
   if (!data.note) return null;
   const { note } = data;
+  const readingBodyId = "note-reading-body";
 
   return (
     <>
@@ -66,29 +69,37 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
           </Link>
 
           <div className="mt-8 grid gap-10 border-t border-black/[0.09] pt-8 lg:grid-cols-12 lg:gap-12 xl:gap-16">
-            <aside className="order-2 lg:order-1 lg:col-span-3">
+            <aside className="hidden lg:order-1 lg:col-span-3 lg:block lg:pr-2">
               <div className="lg:sticky lg:top-28">
                 <NoteTableOfContents
                   headings={note.headings}
                   label={data.labels.contents}
+                  sectionCountLabel={data.labels.reader.sectionCount}
                 />
-                <div className="mt-7 hidden border border-black/[0.09] bg-surface p-4 lg:block">
-                  <p className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-accent">Article information</p>
-                  <dl className="mt-4 grid gap-3 text-xs">
-                    <div className="flex justify-between gap-4"><dt className="text-ink-muted">Author</dt><dd className="text-right text-ink">{note.author}</dd></div>
-                    <div className="flex justify-between gap-4"><dt className="text-ink-muted">Volume</dt><dd className="font-mono text-ink">{formatVolumeNumber(note.volumeNumber)}</dd></div>
-                    <div className="flex justify-between gap-4"><dt className="text-ink-muted">Read</dt><dd className="font-mono text-ink">{note.readingTimeMinutes} min</dd></div>
-                  </dl>
-                  <div className="mt-5 border-t border-black/[0.09] pt-4"><NoteShareActions title={note.title} /></div>
+                <div className="mt-10">
+                  <NoteReadingTools
+                    articleId={readingBodyId}
+                    email={note.authorEmail}
+                    labels={data.labels.reader}
+                    title={note.title}
+                  />
                 </div>
               </div>
             </aside>
 
             <article className="order-1 min-w-0 lg:order-2 lg:col-span-9 lg:mx-auto lg:w-full lg:max-w-[46.25rem]">
-              <header className="border-b border-black/[0.09] pb-10 sm:pb-12">
-                <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.11em] text-accent">
-                  Note {formatVolumeNumber(note.volumeNumber)} / {note.categoryLabel}
-                </p>
+              <header className="border-b border-black/[0.09] pb-10 sm:pb-12 space-y-5">
+                <div className="flex flex-wrap items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.1em]">
+                  <span className="font-medium text-ink">
+                    {note.editorialContext.sectionLabel}
+                  </span>
+                  <span className="text-ink-muted">/</span>
+                  <span className="font-semibold text-accent">
+                    {note.editorialContext.seriesLabel}
+                    {" // Vol "}
+                    {formatVolumeNumber(note.volumeNumber)}
+                  </span>
+                </div>
                 <h1 className="mt-5 max-w-[44rem] font-serif text-[clamp(2.75rem,5.2vw,3.25rem)] leading-[1.08] tracking-[-0.035em] text-ink">
                   {note.title}
                 </h1>
@@ -102,36 +113,53 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
                       <dt className="flex items-center gap-2 font-mono text-[0.625rem] uppercase tracking-[0.08em]">
                         <CalendarDays aria-hidden="true" size={13} /> Published
                       </dt>
-                      <dd className="mt-1.5 text-ink">{formatNoteDate(note.publishedAt)}</dd>
+                      <dd className="mt-1.5 text-ink">
+                        {formatNoteDate(note.publishedAt)}
+                      </dd>
                     </div>
                     <div>
                       <dt className="flex items-center gap-2 font-mono text-[0.625rem] uppercase tracking-[0.08em]">
                         <Clock3 aria-hidden="true" size={13} /> Reading time
                       </dt>
-                      <dd className="mt-1.5 text-ink">{note.readingTimeMinutes} minutes</dd>
+                      <dd className="mt-1.5 text-ink">
+                        {note.readingTimeMinutes} minutes
+                      </dd>
                     </div>
                     <div>
-                      <dt className="font-mono text-[0.625rem] uppercase tracking-[0.08em]">Written by</dt>
+                      <dt className="font-mono text-[0.625rem] uppercase tracking-[0.08em]">
+                        Written by
+                      </dt>
                       <dd className="mt-1.5 text-ink">{note.author}</dd>
                     </div>
                   </dl>
                 </div>
 
-                <div className="mt-5 lg:hidden"><NoteShareActions title={note.title} /></div>
+                <div className="mt-5 lg:hidden">
+                  <NoteShareActions title={note.title} />
+                </div>
 
                 <div className="mt-5 flex flex-wrap gap-2">
-                  {[...note.technologies, ...note.topics].slice(0, 6).map((item) => (
-                    <span
-                      className="border border-black/10 bg-surface px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.06em] text-ink-muted"
-                      key={item}
-                    >
-                      {item}
-                    </span>
-                  ))}
+                  {[...note.technologies, ...note.topics]
+                    .slice(0, 6)
+                    .map((item) => (
+                      <span
+                        className="border border-black/10 bg-surface px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.06em] text-ink-muted"
+                        key={item}
+                      >
+                        {item}
+                      </span>
+                    ))}
                 </div>
               </header>
 
-              <div className="pt-10 sm:pt-12">
+              {note.coverImage ? (
+                <NoteImage image={note.coverImage} priority variant="cover" />
+              ) : null}
+
+              <div
+                className={note.coverImage ? "pt-2 sm:pt-4" : "pt-10 sm:pt-12"}
+                id={readingBodyId}
+              >
                 <NoteBody body={note.body} headings={note.headings} />
               </div>
             </article>
@@ -139,7 +167,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
 
           <section className="mt-20 border-y border-black/[0.09] py-8 sm:mt-24 sm:py-10">
             <div className="grid gap-7 md:grid-cols-[1fr_auto] md:items-center">
-              <div className="max-w-2xl">
+              <div className="max-w-2xl flex flex-col gap-4">
                 <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
                   Working note / open conversation
                 </p>
@@ -159,7 +187,10 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
             </div>
           </section>
 
-          <nav aria-label="Adjacent notes" className="mt-10 grid border-l border-t border-black/[0.09] sm:grid-cols-2">
+          <nav
+            aria-label="Adjacent notes"
+            className="mt-10 grid border-l border-t border-black/[0.09] sm:grid-cols-2"
+          >
             {data.adjacent.previous ? (
               <Link
                 className="group border-b border-r border-black/[0.09] bg-surface p-6 no-underline transition-colors hover:bg-surface-layer"
@@ -169,7 +200,11 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
                   Previous note
                 </span>
                 <span className="mt-3 flex items-start gap-3 font-serif text-2xl leading-tight group-hover:text-accent">
-                  <ArrowLeft aria-hidden="true" className="mt-1 shrink-0" size={17} />
+                  <ArrowLeft
+                    aria-hidden="true"
+                    className="mt-1 shrink-0"
+                    size={17}
+                  />
                   {data.adjacent.previous.title}
                 </span>
               </Link>
@@ -186,7 +221,11 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
                 </span>
                 <span className="mt-3 flex items-start justify-end gap-3 font-serif text-2xl leading-tight group-hover:text-accent">
                   {data.adjacent.next.title}
-                  <ArrowRight aria-hidden="true" className="mt-1 shrink-0" size={17} />
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="mt-1 shrink-0"
+                    size={17}
+                  />
                 </span>
               </Link>
             ) : null}
@@ -195,7 +234,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
           {data.related.length ? (
             <section className="py-16 sm:py-20">
               <div className="mb-8 flex items-end justify-between gap-6">
-                <div>
+                <div className="flex flex-col gap-3">
                   <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
                     Related notes
                   </p>
@@ -203,7 +242,10 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
                     {data.labels.relatedHeading}
                   </h2>
                 </div>
-                <Link className="hidden text-xs font-semibold no-underline hover:text-accent sm:block" href="/notes">
+                <Link
+                  className="hidden text-xs font-semibold no-underline hover:text-accent sm:block"
+                  href="/notes"
+                >
                   Full archive →
                 </Link>
               </div>

@@ -415,10 +415,18 @@ export const NOTES_ARCHIVE_QUERY = defineQuery(`{
     heading,
     introduction,
     archiveNote,
-    libraryEyebrow,
-    libraryHeading,
     backLabel,
     contentsLabel,
+    readerLabels{
+      sectionCount,
+      toolsHeading,
+      toolsBadge,
+      share,
+      copy,
+      copied,
+      typeface,
+      feedback
+    },
     relatedHeading,
     feedbackHeading,
     feedbackMessage,
@@ -463,9 +471,15 @@ export const NOTE_SLUGS_QUERY = defineQuery(`
 
 export const NOTE_METADATA_QUERY = defineQuery(`
   *[_type == "note" && slug.current == $slug][0]{
+    _updatedAt,
     title,
     excerpt,
+    publishedAt,
     preview{label, summary, code},
+    editorialContext{
+      sectionLabel,
+      seriesLabel
+    },
     "seo": seo{
       title,
       description,
@@ -484,10 +498,15 @@ export const NOTE_DETAIL_QUERY = defineQuery(`{
     publishedAt <= now()
   ][0]{
     _id,
+    _updatedAt,
     title,
     "slug": slug.current,
     excerpt,
     preview{label, summary, code},
+    editorialContext{
+      sectionLabel,
+      seriesLabel
+    },
     publishedAt,
     category,
     volumeNumber,
@@ -527,6 +546,16 @@ export const NOTE_DETAIL_QUERY = defineQuery(`{
   "notesPage": *[_id == "notesPage"][0]{
     backLabel,
     contentsLabel,
+    readerLabels{
+      sectionCount,
+      toolsHeading,
+      toolsBadge,
+      share,
+      copy,
+      copied,
+      typeface,
+      feedback
+    },
     relatedHeading,
     feedbackHeading,
     feedbackMessage
@@ -548,5 +577,26 @@ export const NOTE_DETAIL_QUERY = defineQuery(`{
     readingTimeMinutes,
     topics,
     "technologies": technologies[]->{_id, name}
+  }
+}`);
+
+export const SITEMAP_QUERY = defineQuery(`{
+  "projects": *[
+    _type == "project" &&
+    defined(slug.current) &&
+    seo.noIndex != true
+  ]{
+    "path": "/work/" + slug.current,
+    _updatedAt
+  },
+  "notes": *[
+    _type == "note" &&
+    defined(slug.current) &&
+    defined(publishedAt) &&
+    publishedAt <= now() &&
+    seo.noIndex != true
+  ]{
+    "path": "/notes/" + slug.current,
+    _updatedAt
   }
 }`);

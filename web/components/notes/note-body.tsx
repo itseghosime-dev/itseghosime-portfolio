@@ -3,11 +3,11 @@ import {
   type PortableTextBlock,
   type PortableTextComponents,
 } from "@portabletext/react";
-import Image from "next/image";
-
 import type { NoteBodyBlock, NoteHeading } from "@/types/notes";
+import type { ImageAsset } from "@/types/home";
 
 import { NoteCodePanel } from "./note-code-panel";
+import { NoteImage } from "./note-image";
 
 type RichBlockValue = PortableTextBlock & { _key: string };
 
@@ -21,7 +21,10 @@ function blockText(value: RichBlockValue): string {
 function ComparisonPreview({ index }: { index: number }) {
   if (index === 0) {
     return (
-      <div className="grid h-24 place-items-center border border-black/[0.08] bg-white" aria-hidden="true">
+      <div
+        className="grid h-24 place-items-center border border-black/[0.08] bg-white"
+        aria-hidden="true"
+      >
         <span className="size-6 animate-spin rounded-full border-2 border-black/15 border-t-accent motion-reduce:animate-none" />
       </div>
     );
@@ -29,7 +32,10 @@ function ComparisonPreview({ index }: { index: number }) {
 
   if (index === 1) {
     return (
-      <div className="grid h-24 content-center gap-2 border border-black/[0.08] bg-white px-4" aria-hidden="true">
+      <div
+        className="grid h-24 content-center gap-2 border border-black/[0.08] bg-white px-4"
+        aria-hidden="true"
+      >
         <span className="h-2 w-2/3 animate-pulse bg-black/10 motion-reduce:animate-none" />
         <span className="h-2 w-full animate-pulse bg-black/[0.07] motion-reduce:animate-none" />
         <span className="h-2 w-4/5 animate-pulse bg-black/[0.07] motion-reduce:animate-none" />
@@ -38,7 +44,10 @@ function ComparisonPreview({ index }: { index: number }) {
   }
 
   return (
-    <div className="grid h-24 grid-cols-[2rem_1fr] gap-2 border border-accent/20 bg-white p-3" aria-hidden="true">
+    <div
+      className="grid h-24 grid-cols-[2rem_1fr] gap-2 border border-accent/20 bg-white p-3"
+      aria-hidden="true"
+    >
       <span className="row-span-3 bg-accent/10" />
       <span className="h-2 w-3/5 bg-accent/25" />
       <span className="h-2 w-full bg-black/[0.07]" />
@@ -54,7 +63,9 @@ export function NoteBody({
   body: NoteBodyBlock[];
   headings: NoteHeading[];
 }) {
-  const headingIds = new Map(headings.map((heading) => [heading.title, heading.id]));
+  const headingIds = new Map(
+    headings.map((heading) => [heading.title, heading.id]),
+  );
 
   const components = {
     block: {
@@ -80,7 +91,9 @@ export function NoteBody({
         </h3>
       ),
       normal: ({ children }) => (
-        <p className="my-0 text-[1.0625rem] leading-8 text-ink-soft">{children}</p>
+        <p className="my-0 text-[1.0625rem] leading-8 text-ink-soft">
+          {children}
+        </p>
       ),
     },
     list: {
@@ -106,7 +119,8 @@ export function NoteBody({
         </code>
       ),
       link: ({ children, value }) => {
-        const link = value as { href?: string; openInNewTab?: boolean } | undefined;
+        const link = value as
+          { href?: string; openInNewTab?: boolean } | undefined;
         if (!link?.href) return <>{children}</>;
         return (
           <a
@@ -126,28 +140,23 @@ export function NoteBody({
           alt?: string;
           caption?: string;
           height?: number;
+          lqip?: string;
           url?: string;
           width?: number;
         };
-        if (!image.url || !image.alt || !image.width || !image.height) return null;
+        if (!image.url || !image.alt || !image.width || !image.height)
+          return null;
 
-        return (
-          <figure className="my-12 border border-black/[0.09] bg-surface p-2 sm:my-14">
-            <Image
-              alt={image.alt}
-              className="h-auto w-full"
-              height={image.height}
-              sizes="(min-width: 1024px) 720px, calc(100vw - 48px)"
-              src={image.url}
-              width={image.width}
-            />
-            {image.caption ? (
-              <figcaption className="px-3 py-3 text-xs leading-5 text-ink-muted">
-                {image.caption}
-              </figcaption>
-            ) : null}
-          </figure>
-        );
+        const imageAsset: ImageAsset = {
+          alt: image.alt,
+          blurDataUrl: image.lqip,
+          caption: image.caption,
+          height: image.height,
+          url: image.url,
+          width: image.width,
+        };
+
+        return <NoteImage image={imageAsset} />;
       },
       codeBlock: ({ value }) => {
         const code = value as {
@@ -192,7 +201,9 @@ export function NoteBody({
                   <p className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent">
                     {item.label}
                   </p>
-                  <div className="mt-4"><ComparisonPreview index={index} /></div>
+                  <div className="mt-4">
+                    <ComparisonPreview index={index} />
+                  </div>
                   <h4 className="mt-4 text-sm font-semibold tracking-[-0.01em] text-ink">
                     {item.title}
                   </h4>

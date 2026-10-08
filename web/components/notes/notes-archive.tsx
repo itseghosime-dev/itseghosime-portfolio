@@ -5,11 +5,7 @@ import { Check, Copy, Search, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import type {
-  NoteCategory,
-  NoteSummary,
-  NotesPageModel,
-} from "@/types/notes";
+import type { NoteCategory, NoteSummary, NotesPageModel } from "@/types/notes";
 
 import { NoteArchiveRow } from "./note-archive-row";
 
@@ -79,7 +75,10 @@ export function NotesArchive({
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (
+      !root ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       return;
     }
 
@@ -109,13 +108,16 @@ export function NotesArchive({
 
   return (
     <div className="mx-auto max-w-[70rem]" ref={rootRef}>
-      <header className="border-b border-black/[0.09] pb-10 pt-2 sm:pb-12 sm:pt-4">
+      <header className="border-b border-black/[0.09] pb-10 pt-2 sm:pb-12 sm:pt-4 space-y-8">
         <div className="flex flex-col gap-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.11em] sm:flex-row sm:items-center sm:justify-between">
           <p className="flex items-center gap-2 text-accent">
-            <span aria-hidden="true" className="size-1.5 rounded-full bg-accent" />
+            <span
+              aria-hidden="true"
+              className="size-1.5 rounded-full bg-accent"
+            />
             {page.eyebrow}
           </p>
-          <p className="text-ink-muted">Index 2024–2026 · Updated as ideas develop</p>
+          <p className="text-ink-muted">· Updated as ideas develop</p>
         </div>
 
         <h1 className="mt-10 max-w-[50rem] font-serif text-[clamp(2.75rem,5vw,3.375rem)] leading-[1.02] tracking-[-0.035em] text-ink">
@@ -127,22 +129,33 @@ export function NotesArchive({
 
         <dl className="mt-10 grid border-y border-black/[0.09] sm:grid-cols-3">
           <div className="border-b border-black/[0.09] py-4 sm:border-b-0 sm:border-r sm:pr-6">
-            <dt className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">Published</dt>
-            <dd className="mt-1 font-serif text-2xl">{String(notes.length).padStart(2, "0")} notes</dd>
+            <dt className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">
+              Published
+            </dt>
+            <dd className="mt-1 font-serif text-2xl">
+              {String(notes.length).padStart(2, "0")} notes
+            </dd>
           </div>
           <div className="border-b border-black/[0.09] py-4 sm:border-b-0 sm:border-r sm:px-6">
-            <dt className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">Core disciplines</dt>
+            <dt className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">
+              Core disciplines
+            </dt>
             <dd className="mt-1 font-serif text-2xl">Frontend systems</dd>
           </div>
           <div className="py-4 sm:pl-6">
-            <dt className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">Format</dt>
+            <dt className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">
+              Format
+            </dt>
             <dd className="mt-1 font-serif text-2xl">Working notebook</dd>
           </div>
         </dl>
       </header>
 
       <section className="scroll-mt-24 py-8 sm:py-10" ref={archiveRef}>
-        <nav aria-label="Note categories" className="overflow-x-auto border-b border-black/[0.09]">
+        <nav
+          aria-label="Note categories"
+          className="overflow-x-auto border-b border-black/[0.09]"
+        >
           <div className="flex min-w-max gap-2 pb-4">
             {visibleCategories.map((category) => {
               const isActive = category === activeFilter;
@@ -171,12 +184,21 @@ export function NotesArchive({
         </div>
 
         <div className="mt-8 grid gap-5 border border-black/[0.09] bg-surface p-5 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:p-6">
-          <span className="grid size-10 place-items-center border border-black/10 bg-white font-serif text-xl text-accent">i</span>
+          <span className="grid size-10 place-items-center border border-black/10 bg-white font-serif text-xl text-accent">
+            i
+          </span>
           <div>
-            <p className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent">Editorial curation</p>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-ink-muted">{page.archiveNote}</p>
+            <p className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent">
+              Editorial curation
+            </p>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-ink-muted">
+              {page.archiveNote}
+            </p>
           </div>
-          <Link className="text-xs font-semibold underline decoration-black/20 underline-offset-4 hover:text-accent" href="/about">
+          <Link
+            className="text-xs font-semibold underline decoration-black/20 underline-offset-4 hover:text-accent"
+            href="/about"
+          >
             About this notebook
           </Link>
         </div>
@@ -184,27 +206,73 @@ export function NotesArchive({
 
       <section className="border-t border-black/[0.09] py-16 sm:py-20">
         <div className="max-w-2xl">
-          <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">Interaction system</p>
-          <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3.25rem)] leading-[1.04] tracking-[-0.035em]">Small signals that make an editorial archive feel responsive.</h2>
-          <p className="mt-4 text-sm leading-6 text-ink-muted">The states below are the same quiet feedback patterns used throughout the portfolio.</p>
+          <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
+            Interaction system
+          </p>
+          <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3.25rem)] leading-[1.04] tracking-[-0.035em]">
+            Small signals that make an editorial archive feel responsive.
+          </h2>
+          <p className="mt-4 text-sm leading-6 text-ink-muted">
+            The states below are the same quiet feedback patterns used
+            throughout the portfolio.
+          </p>
         </div>
 
         <div className="mt-9 grid border-l border-t border-black/[0.09] sm:grid-cols-2 lg:grid-cols-4">
           <article className="min-h-48 border-b border-r border-black/[0.09] p-5">
-            <p className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">01 / Link</p>
-            <Link className="mt-14 inline-block font-serif text-xl underline decoration-accent/40 underline-offset-8 transition-[text-underline-offset] hover:underline-offset-[12px]" href="/about">Read the profile</Link>
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">
+              01 / Link
+            </p>
+            <Link
+              className="mt-14 inline-block font-serif text-xl underline decoration-accent/40 underline-offset-8 transition-[text-underline-offset] hover:underline-offset-[12px]"
+              href="/about"
+            >
+              Read the profile
+            </Link>
           </article>
           <article className="min-h-48 border-b border-r border-black/[0.09] p-5">
-            <p className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">02 / Filter</p>
-            <button className="mt-12 inline-flex min-h-11 items-center gap-2 border border-black/15 px-4 text-xs font-semibold transition-colors hover:border-ink hover:bg-ink hover:text-white" onClick={focusArchive} type="button"><SlidersHorizontal aria-hidden="true" size={15} /> Browse topics</button>
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">
+              02 / Filter
+            </p>
+            <button
+              className="mt-12 inline-flex min-h-11 items-center gap-2 border border-black/15 px-4 text-xs font-semibold transition-colors hover:border-ink hover:bg-ink hover:text-white"
+              onClick={focusArchive}
+              type="button"
+            >
+              <SlidersHorizontal aria-hidden="true" size={15} /> Browse topics
+            </button>
           </article>
           <article className="min-h-48 border-b border-r border-black/[0.09] p-5">
-            <p className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">03 / Quick command</p>
-            <button className="mt-12 inline-flex min-h-11 items-center gap-2 border-b border-black/20 text-sm font-medium hover:border-accent hover:text-accent" onClick={focusArchive} type="button"><Search aria-hidden="true" size={15} /> Find a note <kbd className="ml-2 border border-black/10 bg-surface px-1.5 py-0.5 font-mono text-[0.625rem]">N</kbd></button>
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">
+              03 / Quick command
+            </p>
+            <button
+              className="mt-12 inline-flex min-h-11 items-center gap-2 border-b border-black/20 text-sm font-medium hover:border-accent hover:text-accent"
+              onClick={focusArchive}
+              type="button"
+            >
+              <Search aria-hidden="true" size={15} /> Find a note{" "}
+              <kbd className="ml-2 border border-black/10 bg-surface px-1.5 py-0.5 font-mono text-[0.625rem]">
+                N
+              </kbd>
+            </button>
           </article>
           <article className="min-h-48 border-b border-r border-black/[0.09] p-5">
-            <p className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">04 / Feedback</p>
-            <button className="mt-12 inline-flex min-h-11 items-center gap-2 bg-ink px-4 text-xs font-semibold text-white transition-colors hover:bg-accent" onClick={copyArchiveLink} type="button">{copied ? <Check aria-hidden="true" size={15} /> : <Copy aria-hidden="true" size={15} />}{copied ? "Link copied" : "Copy archive link"}</button>
+            <p className="font-mono text-[0.625rem] uppercase tracking-[0.09em] text-ink-muted">
+              04 / Feedback
+            </p>
+            <button
+              className="mt-12 inline-flex min-h-11 items-center gap-2 bg-ink px-4 text-xs font-semibold text-white transition-colors hover:bg-accent"
+              onClick={copyArchiveLink}
+              type="button"
+            >
+              {copied ? (
+                <Check aria-hidden="true" size={15} />
+              ) : (
+                <Copy aria-hidden="true" size={15} />
+              )}
+              {copied ? "Link copied" : "Copy archive link"}
+            </button>
           </article>
         </div>
       </section>
