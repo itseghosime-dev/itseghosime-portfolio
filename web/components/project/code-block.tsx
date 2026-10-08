@@ -36,9 +36,9 @@ export function CodeBlock({
 
               return (
                 <span
+                  key={lineIndex}
                   {...lineProps}
                   className={`${lineProps.className ?? ""} grid grid-cols-[2.75rem_minmax(0,1fr)] px-4 sm:px-5`}
-                  key={lineIndex}
                 >
                   <span
                     aria-hidden="true"
@@ -50,8 +50,8 @@ export function CodeBlock({
                   <span key="line-content">
                     {line.map((token, tokenIndex) => (
                       <span
-                        {...getTokenProps({ token })}
                         key={`${lineIndex}-${tokenIndex}`}
+                        {...getTokenProps({ token })}
                       />
                     ))}
                   </span>
