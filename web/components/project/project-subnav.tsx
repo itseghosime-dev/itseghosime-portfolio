@@ -32,7 +32,7 @@ export function ProjectSubnav({ sections }: { sections: ProjectSection[] }) {
   return (
     <nav
       aria-label="Case study sections"
-      className="sticky top-20 z-40 border-b border-black/[0.06] bg-background/92 opacity-100 backdrop-blur-md transition-[transform,opacity] duration-500 ease-out data-[sandbox-active=true]:pointer-events-none data-[sandbox-active=true]:-translate-y-[130%] data-[sandbox-active=true]:opacity-0 motion-reduce:transition-none"
+      className="sticky top-20 z-40 border-b border-black/[0.06] bg-background/92 opacity-100 backdrop-blur-md transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] data-[sandbox-active=true]:pointer-events-none data-[sandbox-active=true]:-translate-y-[210%] data-[sandbox-active=true]:opacity-0 motion-reduce:transition-none"
       data-project-subnav
     >
       <div className="mx-auto flex max-w-[77.5rem] gap-5 overflow-x-auto px-6 py-3 [scrollbar-width:none] md:px-12">

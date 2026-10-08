@@ -20,7 +20,10 @@ export function SiteHeader({
   siteName,
 }: SiteHeaderProps) {
   return (
-    <header className="sticky top-0 z-50 h-20 border-b border-black/[0.06] bg-background/90 backdrop-blur-md">
+    <header
+      className="sticky top-0 z-50 h-20 border-b border-black/[0.06] bg-background/90 opacity-100 backdrop-blur-md transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] data-[sandbox-active=true]:pointer-events-none data-[sandbox-active=true]:-translate-y-full data-[sandbox-active=true]:opacity-0 motion-reduce:transition-none"
+      data-site-header
+    >
       <Container className="flex h-full items-center justify-between gap-6">
         <Link
           className="inline-flex min-h-11 items-center gap-3 text-base font-bold tracking-[-0.02em] no-underline"

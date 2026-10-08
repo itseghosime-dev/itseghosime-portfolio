@@ -27,7 +27,7 @@ const viewportWidths = {
 } as const;
 type PreviewViewport = keyof typeof viewportWidths;
 type VisitorDevice = "desktop" | "tablet" | "mobile";
-type SandboxStatus = "loading" | "ready" | "timeout";
+type SandboxStatus = "loading" | "ready" | "error" | "timeout";
 
 const preferredViewport: Record<VisitorDevice, PreviewViewport> = {
   desktop: "desktop",
@@ -88,7 +88,9 @@ export function SandboxSection({
       ? section.initialViewport
       : (available[0] ?? "desktop");
   const [viewport, setViewport] = useState<PreviewViewport>(initial);
-  const [visitorDevice, setVisitorDevice] = useState<VisitorDevice | null>(null);
+  const [visitorDevice, setVisitorDevice] = useState<VisitorDevice | null>(
+    null,
+  );
   const [isInteractive, setIsInteractive] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
   const [sandboxStatus, setSandboxStatus] = useState<SandboxStatus>("loading");
@@ -112,7 +114,7 @@ export function SandboxSection({
         setCanLoadSandbox(true);
         observer.disconnect();
       },
-      {rootMargin: "800px 0px"},
+      { rootMargin: "0px", threshold: 0.05 },
     );
 
     observer.observe(node);
@@ -126,7 +128,7 @@ export function SandboxSection({
       setSandboxStatus((current) =>
         current === "loading" ? "timeout" : current,
       );
-    }, 12_000);
+    }, 10_000);
 
     return () => window.clearTimeout(timeout);
   }, [canLoadSandbox, embedUrl, reloadKey, sandboxStatus]);
@@ -141,7 +143,9 @@ export function SandboxSection({
       setViewport((current) => {
         if (options.includes(current)) return current;
         const preferred = preferredViewport[nextDevice];
-        return options.includes(preferred) ? preferred : (options[0] ?? current);
+        return options.includes(preferred)
+          ? preferred
+          : (options[0] ?? current);
       });
     };
 
@@ -267,6 +271,7 @@ export function SandboxSection({
                         className={`h-full w-full border-0 transition-opacity duration-500 ${sandboxStatus === "ready" ? "opacity-100" : "opacity-0"} ${isInteractive ? "pointer-events-auto" : "pointer-events-none"}`}
                         data-sandbox-active={isInteractive ? "true" : "false"}
                         key={reloadKey}
+                        onError={() => setSandboxStatus("error")}
                         onLoad={() => setSandboxStatus("ready")}
                         referrerPolicy="strict-origin-when-cross-origin"
                         sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
@@ -291,7 +296,11 @@ export function SandboxSection({
                             <span className="absolute inset-0 animate-spin rounded-full border border-dashed border-black/20 motion-reduce:animate-none" />
                             <span className="absolute inset-6 rotate-12 border border-black/12" />
                             <span className="grid size-20 place-items-center bg-surface-container text-accent">
-                              <LoaderCircle aria-hidden="true" className="animate-spin motion-reduce:animate-none" size={28} />
+                              <LoaderCircle
+                                aria-hidden="true"
+                                className="animate-spin motion-reduce:animate-none"
+                                size={28}
+                              />
                             </span>
                           </div>
                           <p className="mt-5 font-mono text-[0.6875rem] uppercase tracking-[0.1em] text-ink-muted">
@@ -304,8 +313,12 @@ export function SandboxSection({
                         </div>
                       </div>
                     ) : null}
-                    {sandboxStatus === "timeout" ? (
-                      <div className="absolute inset-0 grid place-items-center overflow-hidden bg-surface p-6 text-center sm:p-10" role="alert">
+                    {sandboxStatus === "timeout" ||
+                    sandboxStatus === "error" ? (
+                      <div
+                        className="absolute inset-0 grid place-items-center overflow-hidden bg-surface p-6 text-center sm:p-10"
+                        role="alert"
+                      >
                         <ProjectImage
                           className="absolute inset-0 h-full w-full object-cover opacity-[0.08]"
                           image={section.fallbackImage}
@@ -318,7 +331,9 @@ export function SandboxSection({
                             Preview unavailable in this frame.
                           </h3>
                           <p className="mt-3 text-sm leading-7 text-ink-muted">
-                            The live site may be blocking embedded access, or the preview took too long to respond. The production page can still be opened safely in a new tab.
+                            The live site may be blocking embedded access, or
+                            the preview took too long to respond. The production
+                            page can still be opened safely in a new tab.
                           </p>
                           <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
                             <a
@@ -327,14 +342,16 @@ export function SandboxSection({
                               rel="noreferrer"
                               target="_blank"
                             >
-                              Open live platform <ArrowUpRight aria-hidden="true" size={15} />
+                              Open live platform{" "}
+                              <ArrowUpRight aria-hidden="true" size={15} />
                             </a>
                             <button
                               className="inline-flex min-h-11 items-center justify-center gap-2 border border-black/20 px-5 text-sm font-semibold hover:border-ink"
                               onClick={retrySandbox}
                               type="button"
                             >
-                              <RefreshCw aria-hidden="true" size={15} /> Retry preview
+                              <RefreshCw aria-hidden="true" size={15} /> Retry
+                              preview
                             </button>
                             <button
                               className="inline-flex min-h-11 items-center justify-center px-4 text-sm font-medium text-ink-muted hover:text-accent"

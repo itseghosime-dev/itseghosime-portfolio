@@ -17,7 +17,11 @@ export function ProjectMotion({ children }: { children: ReactNode }) {
     gsap.registerPlugin(ScrollTrigger);
 
     const subnav = root.querySelector<HTMLElement>("[data-project-subnav]");
+    const siteHeader =
+      document.querySelector<HTMLElement>("[data-site-header]");
     const sandbox = root.querySelector<HTMLElement>("[data-project-sandbox]");
+    const sandboxFocus =
+      sandbox?.querySelector<HTMLElement>("[data-sandbox-frame]") ?? sandbox;
     const sections = Array.from(
       root.querySelectorAll<HTMLElement>("[data-project-section]"),
     );
@@ -45,39 +49,75 @@ export function ProjectMotion({ children }: { children: ReactNode }) {
     const sandboxObserver = sandbox
       ? new IntersectionObserver(
           ([entry]) => {
-            if (!subnav) return;
-            if (entry?.isIntersecting) {
-              subnav.setAttribute("data-sandbox-active", "true");
-            } else {
-              subnav.removeAttribute("data-sandbox-active");
-            }
+            const isActive = Boolean(entry?.isIntersecting);
+            [siteHeader, subnav].forEach((navigation) => {
+              if (isActive)
+                navigation?.setAttribute("data-sandbox-active", "true");
+              else navigation?.removeAttribute("data-sandbox-active");
+            });
           },
-          { rootMargin: "-8% 0px -8% 0px", threshold: 0 },
+          { rootMargin: "-4% 0px -4% 0px", threshold: 0.04 },
         )
       : null;
 
-    if (sandbox && sandboxObserver) sandboxObserver.observe(sandbox);
+    if (sandboxFocus && sandboxObserver) sandboxObserver.observe(sandboxFocus);
 
     const context = gsap.context(() => {
       if (!prefersReducedMotion) {
-        gsap.utils
+        const heroReveals = gsap.utils
           .toArray<HTMLElement>("[data-project-reveal]", root)
-          .forEach((element, index) => {
-            gsap.fromTo(
-              element,
-              { opacity: 0, y: index < 4 ? 20 : 34 },
-              {
-                duration: 0.9,
-                ease: "power3.out",
-                opacity: 1,
-                scrollTrigger:
-                  index < 4
-                    ? undefined
-                    : { once: true, start: "top 88%", trigger: element },
-                y: 0,
+          .filter((element) => !element.closest("[data-project-section]"));
+
+        gsap.fromTo(
+          heroReveals,
+          { opacity: 0, y: 28 },
+          {
+            duration: 1.05,
+            ease: "power4.out",
+            opacity: 1,
+            stagger: 0.1,
+            y: 0,
+          },
+        );
+
+        sections.forEach((section, sectionIndex) => {
+          const reveals = Array.from(
+            section.querySelectorAll<HTMLElement>("[data-project-reveal]"),
+          );
+          if (reveals.length === 0) return;
+
+          const sectionType = section.dataset.sectionType;
+          const entersFromSide = sectionType === "narrativeSection";
+          const isTechnical = sectionType === "codeShowcaseSection";
+          const x = entersFromSide ? (sectionIndex % 2 === 0 ? -42 : 42) : 0;
+
+          gsap.fromTo(
+            reveals,
+            {
+              clipPath: isTechnical ? "inset(0 0 12% 0)" : "inset(0 0 0% 0)",
+              opacity: 0,
+              scale: sectionType === "interactiveSandboxSection" ? 0.975 : 1,
+              x,
+              y: entersFromSide ? 18 : 42,
+            },
+            {
+              clearProps: "clipPath,opacity,transform",
+              clipPath: "inset(0 0 0% 0)",
+              duration: 1.05,
+              ease: "power4.out",
+              opacity: 1,
+              scale: 1,
+              scrollTrigger: {
+                once: true,
+                start: "top 84%",
+                trigger: section,
               },
-            );
-          });
+              stagger: 0.11,
+              x: 0,
+              y: 0,
+            },
+          );
+        });
 
         gsap.utils
           .toArray<HTMLElement>("[data-project-media]", root)
@@ -111,7 +151,7 @@ export function ProjectMotion({ children }: { children: ReactNode }) {
             const timeline = gsap.timeline({
               scrollTrigger: {
                 end: "bottom 25%",
-                scrub: 0.55,
+                scrub: 0.9,
                 start: "top 82%",
                 trigger: story,
               },
@@ -154,7 +194,7 @@ export function ProjectMotion({ children }: { children: ReactNode }) {
                 scale: 1,
                 scrollTrigger: {
                   end: "top 28%",
-                  scrub: 0.6,
+                  scrub: 0.95,
                   start: "top 88%",
                   trigger: sandbox,
                 },
@@ -172,7 +212,7 @@ export function ProjectMotion({ children }: { children: ReactNode }) {
                 scale: 1.08,
                 scrollTrigger: {
                   end: "bottom 35%",
-                  scrub: 0.8,
+                  scrub: 1.1,
                   start: "top 85%",
                   trigger: sandbox,
                 },
@@ -202,6 +242,8 @@ export function ProjectMotion({ children }: { children: ReactNode }) {
       window.removeEventListener("load", refresh);
       sandboxObserver?.disconnect();
       chapterObserver.disconnect();
+      siteHeader?.removeAttribute("data-sandbox-active");
+      subnav?.removeAttribute("data-sandbox-active");
       context.revert();
     };
   }, []);

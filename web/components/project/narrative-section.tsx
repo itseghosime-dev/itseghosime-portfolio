@@ -100,13 +100,15 @@ export function NarrativeSection({
   );
 
   return (
-    <section className="border-b border-black/[0.08] py-20 sm:py-24 lg:py-32">
+    <section
+      className={`border-b border-black/[0.08] py-20 sm:py-24 ${isStickyNarrative ? "lg:py-0" : "lg:py-32"}`}
+    >
       <Container>
         <div
           className={`mx-auto grid max-w-[65rem] gap-12 lg:gap-16 ${isStickyNarrative ? "lg:grid-cols-[minmax(17rem,0.78fr)_minmax(0,1.22fr)] lg:items-start" : hasMedia ? "lg:grid-cols-12 lg:items-center" : "md:grid-cols-[minmax(13rem,0.72fr)_minmax(0,1.28fr)] md:gap-16"}`}
         >
           <header
-            className={`${isStickyNarrative ? "lg:sticky lg:top-1/2 lg:self-start lg:-translate-y-1/2" : hasMedia && section.presentation === "mediaLeft" ? "lg:order-2 lg:col-span-5" : hasMedia ? "lg:col-span-5" : ""}`}
+            className={`${isStickyNarrative ? "lg:sticky lg:top-32 lg:flex lg:min-h-[calc(100svh-8rem)] lg:items-center lg:self-start" : hasMedia && section.presentation === "mediaLeft" ? "lg:order-2 lg:col-span-5" : hasMedia ? "lg:col-span-5" : ""}`}
           >
             <div className="grid content-start gap-5" data-project-reveal>
               {section.eyebrow ? (
@@ -121,7 +123,7 @@ export function NarrativeSection({
           </header>
 
           <div
-            className={`${isStickyNarrative ? "min-w-0 gap-10 lg:pb-[18vh]" : hasMedia && section.presentation === "mediaLeft" ? "lg:order-1 lg:col-span-7" : hasMedia ? "lg:col-span-7" : ""} grid gap-7`}
+            className={`${isStickyNarrative ? "min-w-0 gap-10 lg:py-32 lg:pb-[18vh]" : hasMedia && section.presentation === "mediaLeft" ? "lg:order-1 lg:col-span-7" : hasMedia ? "lg:col-span-7" : ""} grid gap-7`}
             data-project-reveal
           >
             {hasMedia ? (
