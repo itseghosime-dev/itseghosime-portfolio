@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
 
 import { SanityLive } from "@/sanity/lib/live";
+import { SITE_URL } from "@/lib/site";
 
 import "lenis/dist/lenis.css";
 import "./globals.css";
@@ -21,6 +22,7 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "ITSEGHOSIME | Frontend Developer Portfolio",
     template: "%s | ITSEGHOSIME",
@@ -28,8 +30,8 @@ export const metadata: Metadata = {
   description:
     "The portfolio of Abdulrahman Itseghosime Bello, a frontend developer and software engineer building thoughtful digital experiences.",
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

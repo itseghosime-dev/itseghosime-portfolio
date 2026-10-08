@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { NotesArchive } from "@/components/notes/notes-archive";
 import { Container } from "@/components/ui/container";
+import { SITE_NAME } from "@/lib/site";
 import { getHomePage } from "@/sanity/lib/home";
 import { getNotesArchive } from "@/sanity/lib/notes";
 
@@ -14,26 +15,46 @@ export async function generateMetadata(): Promise<Metadata> {
   const description =
     page.seo?.description ||
     "Practical notes on React, Next.js, interface architecture, accessibility, and frontend performance.";
+  const image = page.seo?.image;
+  const shouldIndex = page.seo?.noIndex !== true;
 
   return {
     title,
     description,
-    robots: page.seo?.noIndex ? { follow: false, index: false } : undefined,
+    alternates: { canonical: "/notes" },
+    robots: {
+      follow: shouldIndex,
+      index: shouldIndex,
+      googleBot: { follow: shouldIndex, index: shouldIndex },
+    },
     openGraph: {
+      type: "website",
       title,
       description,
-      images: page.seo?.image?.url
-        ? [{ alt: page.seo.image.alt, url: page.seo.image.url }]
+      siteName: SITE_NAME,
+      url: "/notes",
+      images: image?.url
+        ? [
+            {
+              alt: image.alt,
+              height: image.height,
+              url: image.url,
+              width: image.width,
+            },
+          ]
         : undefined,
+    },
+    twitter: {
+      card: image?.url ? "summary_large_image" : "summary",
+      title,
+      description,
+      images: image?.url ? [image.url] : undefined,
     },
   };
 }
 
 export default async function NotesPage() {
-  const [site, archive] = await Promise.all([
-    getHomePage(),
-    getNotesArchive(),
-  ]);
+  const [site, archive] = await Promise.all([getHomePage(), getNotesArchive()]);
 
   if (!site) notFound();
 
