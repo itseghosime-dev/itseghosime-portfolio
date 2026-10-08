@@ -1,6 +1,7 @@
 import type { PROJECT_PAGE_QUERY_RESULT } from "@/sanity.types";
 
 import { sanityFetch } from "./live";
+import { getContentFetchOptions } from "./fetch-options";
 import {
   PROJECT_METADATA_QUERY,
   PROJECT_PAGE_QUERY,
@@ -10,11 +11,11 @@ import {
 export async function getProjectPage(
   slug: string,
 ): Promise<PROJECT_PAGE_QUERY_RESULT> {
+  const fetchOptions = await getContentFetchOptions();
   const { data } = await sanityFetch({
+    ...fetchOptions,
     params: { slug },
-    perspective: "published",
     query: PROJECT_PAGE_QUERY,
-    stega: false,
   });
 
   return data;

@@ -16,6 +16,7 @@ import type {
 } from "@/types/notes";
 
 import { sanityFetch } from "./live";
+import { getContentFetchOptions } from "./fetch-options";
 import {
   NOTES_ARCHIVE_QUERY,
   NOTE_DETAIL_QUERY,
@@ -185,10 +186,10 @@ function getHeadings(body: NoteBodyBlock[]): NoteHeading[] {
 }
 
 export async function getNotesArchive(): Promise<NotesArchiveData> {
+  const fetchOptions = await getContentFetchOptions();
   const { data } = (await sanityFetch({
+    ...fetchOptions,
     query: NOTES_ARCHIVE_QUERY,
-    perspective: "published",
-    stega: false,
   })) as { data: NOTES_ARCHIVE_QUERY_RESULT };
 
   return {
@@ -224,11 +225,11 @@ export async function getNoteMetadata(
 }
 
 export async function getNoteDetail(slug: string): Promise<NoteDetailData> {
+  const fetchOptions = await getContentFetchOptions();
   const { data } = (await sanityFetch({
+    ...fetchOptions,
     query: NOTE_DETAIL_QUERY,
     params: { slug },
-    perspective: "published",
-    stega: false,
   })) as { data: NOTE_DETAIL_QUERY_RESULT };
 
   const summaries = data.noteNavigation.flatMap((note, index) => {

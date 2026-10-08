@@ -3,6 +3,7 @@ import type {AboutMilestone, AboutMilestoneKind, AboutProfileModel} from '@/type
 import type {ImageAsset} from '@/types/home'
 
 import {sanityFetch} from './live'
+import {getContentFetchOptions} from './fetch-options'
 import {ABOUT_PROFILE_QUERY} from './queries'
 
 const monthFormatter = new Intl.DateTimeFormat('en', {
@@ -137,10 +138,10 @@ function toMilestones(milestones: Array<QueryMilestone | null> | null): AboutMil
 }
 
 export async function getAboutProfile(): Promise<AboutProfileModel | null> {
+  const fetchOptions = await getContentFetchOptions()
   const {data} = await sanityFetch({
-    perspective: 'published',
+    ...fetchOptions,
     query: ABOUT_PROFILE_QUERY,
-    stega: false,
   })
   const {aboutPage, profile} = data
 

@@ -10,6 +10,7 @@ import type {
 } from '@/types/home'
 
 import {sanityFetch} from './live'
+import {getContentFetchOptions} from './fetch-options'
 import {HOME_PAGE_QUERY} from './queries'
 
 type SanityImage = NonNullable<
@@ -232,10 +233,10 @@ function toLabExperiments(
 }
 
 export async function getHomePage(): Promise<HomePageModel | null> {
+  const fetchOptions = await getContentFetchOptions()
   const {data} = await sanityFetch({
+    ...fetchOptions,
     query: HOME_PAGE_QUERY,
-    perspective: 'published',
-    stega: false,
   })
 
   const {profile, settings} = data

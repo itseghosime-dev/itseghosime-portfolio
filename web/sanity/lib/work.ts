@@ -3,6 +3,7 @@ import type {ImageAsset} from '@/types/home'
 import type {ArchiveCategory, ArchiveEntry} from '@/types/work'
 
 import {sanityFetch} from './live'
+import {getContentFetchOptions} from './fetch-options'
 import {WORK_ARCHIVE_QUERY} from './queries'
 
 type SanityArchiveImage = NonNullable<
@@ -160,10 +161,10 @@ function toLabEntries(
 }
 
 export async function getWorkArchive(): Promise<ArchiveEntry[]> {
+  const fetchOptions = await getContentFetchOptions()
   const {data} = await sanityFetch({
+    ...fetchOptions,
     query: WORK_ARCHIVE_QUERY,
-    perspective: 'published',
-    stega: false,
   })
 
   return [...toProjectEntries(data.projects), ...toLabEntries(data.labExperiments)].slice(0, 8)

@@ -9,6 +9,7 @@ import type {
 } from "@/types/lab";
 
 import { sanityFetch } from "./live";
+import { getContentFetchOptions } from "./fetch-options";
 import { LAB_PAGE_QUERY } from "./queries";
 
 const defaultLabPage: LabPageModel = {
@@ -116,10 +117,10 @@ function toPageModel(page: LAB_PAGE_QUERY_RESULT["labPage"]): LabPageModel {
 }
 
 export async function getLabPage(): Promise<LabPageData> {
+  const fetchOptions = await getContentFetchOptions();
   const { data } = (await sanityFetch({
+    ...fetchOptions,
     query: LAB_PAGE_QUERY,
-    perspective: "published",
-    stega: false,
   })) as { data: LAB_PAGE_QUERY_RESULT };
 
   const experiments = (data?.labExperiments ?? []).flatMap<LabExperimentModel>(

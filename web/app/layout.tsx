@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import { Hanken_Grotesk, Newsreader } from "next/font/google";
+import { VisualEditing } from "next-sanity/visual-editing";
 
 import { SmoothScrollProvider } from "@/components/motion/smooth-scroll-provider";
 import { ConnectivityStatus } from "@/components/system/connectivity-status";
@@ -77,7 +79,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const { isEnabled: isDraftMode } = await draftMode();
+
   return (
     <html
       lang="en"
@@ -93,7 +97,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <SmoothScrollProvider>
           {children}
-          <SanityLive includeDrafts={false} />
+          <SanityLive includeDrafts={isDraftMode} />
+          {isDraftMode ? <VisualEditing /> : null}
         </SmoothScrollProvider>
       </body>
     </html>
