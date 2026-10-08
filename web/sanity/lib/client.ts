@@ -14,5 +14,6 @@ export const sanityClient = createClient({
   dataset,
   apiVersion: '2026-10-06',
   perspective: 'published',
-  useCdn: true,
+  // Query Content Lake directly so a cache invalidation never refetches a stale CDN response.
+  useCdn: false,
 })
