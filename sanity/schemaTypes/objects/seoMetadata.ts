@@ -12,7 +12,7 @@ export const seoMetadata = defineType({
       name: 'title',
       title: 'Search title',
       description:
-        'Optional. Overrides the project title in search results. Aim for approximately 50–60 characters.',
+        'Optional. Overrides the content title in search results. Aim for approximately 50–60 characters.',
       type: 'string',
       validation: (rule) =>
         rule.max(60).warning('Search engines may truncate titles longer than 60 characters.'),
@@ -35,14 +35,14 @@ export const seoMetadata = defineType({
       name: 'image',
       title: 'Social sharing image',
       description:
-        'Used when this project is shared on LinkedIn and social platforms. Recommended size: 1200 × 630 pixels.',
+        'Used when this page is shared on LinkedIn and social platforms. Recommended size: 1200 × 630 pixels.',
       type: 'accessibleImage',
     }),
 
     defineField({
       name: 'noIndex',
       title: 'Hide from search engines',
-      description: 'Turn this on only when the project should not appear in search results.',
+      description: 'Turn this on only when the page should not appear in search results.',
       type: 'boolean',
       initialValue: false,
     }),
@@ -57,8 +57,8 @@ export const seoMetadata = defineType({
 
     prepare({title, description, media}) {
       return {
-        title: title || 'Default project metadata',
-        subtitle: description || 'Project title and summary will be used.',
+        title: title || 'Default page metadata',
+        subtitle: description || 'The page title and summary will be used.',
         media: media || SearchIcon,
       }
     },

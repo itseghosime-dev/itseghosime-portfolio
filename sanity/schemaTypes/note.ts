@@ -41,9 +41,33 @@ export const note = defineType({
       validation: (rule) => rule.required().max(220),
     }),
     defineField({
+      name: 'editorialContext',
+      title: 'Reading-page context',
+      description: 'Controls the editorial hierarchy shown above this note.',
+      type: 'object',
+      group: 'editorial',
+      fields: [
+        defineField({
+          name: 'sectionLabel',
+          title: 'Section label',
+          description: 'For example, Frontend / UI and resilience.',
+          type: 'string',
+          validation: (rule) => rule.max(80),
+        }),
+        defineField({
+          name: 'seriesLabel',
+          title: 'Series label',
+          description: 'For example, Architecture notes.',
+          type: 'string',
+          validation: (rule) => rule.max(60),
+        }),
+      ],
+    }),
+    defineField({
       name: 'preview',
       title: 'Archive preview',
-      description: 'Optional editorial preview shown when a reader explores this note in the archive.',
+      description:
+        'Optional editorial preview shown when a reader explores this note in the archive.',
       type: 'object',
       group: 'editorial',
       fields: [
@@ -73,6 +97,8 @@ export const note = defineType({
     defineField({
       name: 'coverImage',
       title: 'Cover image',
+      description:
+        'The featured image shown below the note header. Add alt text and an optional caption.',
       type: 'accessibleImage',
       group: 'editorial',
     }),
@@ -118,6 +144,8 @@ export const note = defineType({
     defineField({
       name: 'body',
       title: 'Note content',
+      description:
+        'Write the article here. Use Insert → Accessible image to place images between sections.',
       type: 'richText',
       group: 'content',
       validation: (rule) => rule.required().min(1),
