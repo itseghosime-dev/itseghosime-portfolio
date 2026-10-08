@@ -42,8 +42,11 @@ export function NotesArchive({
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const archiveRef = useRef<HTMLElement>(null);
+  const filterRef = useRef<HTMLButtonElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
   const { scrollTo } = useSmoothScroll();
   const [activeFilter, setActiveFilter] = useState<NoteFilter>("all");
+  const [query, setQuery] = useState("");
   const [copied, setCopied] = useState(false);
 
   const counts = useMemo(
@@ -72,9 +75,25 @@ export function NotesArchive({
   const visibleCategories = categoryOrder.filter(
     (category) => category === "all" || counts[category] > 0,
   );
-  const visibleNotes = notes.filter(
-    (note) => activeFilter === "all" || note.category === activeFilter,
-  );
+  const visibleNotes = notes.filter((note) => {
+    const matchesCategory =
+      activeFilter === "all" || note.category === activeFilter;
+    const normalizedQuery = query.trim().toLowerCase();
+    const searchable = [
+      note.title,
+      note.excerpt,
+      note.categoryLabel,
+      ...(note.technologies ?? []),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return (
+      matchesCategory &&
+      (!normalizedQuery || searchable.includes(normalizedQuery))
+    );
+  });
 
   useEffect(() => {
     const root = rootRef.current;
@@ -97,7 +116,34 @@ export function NotesArchive({
         y: 0,
       },
     );
-  }, [activeFilter]);
+  }, [activeFilter, query]);
+
+  useEffect(() => {
+    function handleQuickFind(event: KeyboardEvent) {
+      const target = event.target;
+      const isTyping =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        (target instanceof HTMLElement && target.isContentEditable);
+
+      if (
+        event.key.toLowerCase() !== "n" ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey ||
+        isTyping
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      focusSearch();
+    }
+
+    window.addEventListener("keydown", handleQuickFind);
+    return () => window.removeEventListener("keydown", handleQuickFind);
+  });
 
   useEffect(() => {
     const root = rootRef.current;
@@ -156,13 +202,24 @@ export function NotesArchive({
     window.setTimeout(() => setCopied(false), 1800);
   }
 
-  function focusArchive() {
-    if (archiveRef.current) scrollTo(archiveRef.current);
+  function focusFilters() {
+    if (!archiveRef.current) return;
+    scrollTo(archiveRef.current);
+    window.setTimeout(() => filterRef.current?.focus(), 500);
+  }
+
+  function focusSearch() {
+    if (!archiveRef.current) return;
+    scrollTo(archiveRef.current);
+    window.setTimeout(() => searchRef.current?.focus(), 500);
   }
 
   return (
     <div className="mx-auto max-w-[70rem]" ref={rootRef}>
-      <header className="border-b border-black/[0.09] pb-10 pt-2 sm:pb-12 sm:pt-4 space-y-8" data-notes-intro>
+      <header
+        className="border-b border-black/[0.09] pb-10 pt-2 sm:pb-12 sm:pt-4 space-y-8"
+        data-notes-intro
+      >
         <div className="flex flex-col gap-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.11em] sm:flex-row sm:items-center sm:justify-between">
           <p className="flex items-center gap-2 text-accent">
             <span
@@ -205,7 +262,36 @@ export function NotesArchive({
         </dl>
       </header>
 
-      <section className="scroll-mt-24 py-8 sm:py-10" data-notes-section ref={archiveRef}>
+      <section
+        className="scroll-mt-24 py-8 sm:py-10"
+        data-notes-section
+        ref={archiveRef}
+      >
+        <div className="mb-5 grid gap-3 border border-black/[0.09] bg-surface p-3 sm:grid-cols-[1fr_auto] sm:items-center">
+          <label className="relative block">
+            <span className="sr-only">Search notes</span>
+            <Search
+              aria-hidden="true"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted"
+              size={16}
+            />
+            <input
+              className="min-h-11 w-full border border-black/10 bg-background pl-10 pr-4 text-sm outline-none transition-colors placeholder:text-ink-muted focus:border-accent"
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search titles, topics or technologies"
+              ref={searchRef}
+              type="search"
+              value={query}
+            />
+          </label>
+          <p
+            aria-live="polite"
+            className="px-2 font-mono text-[0.625rem] uppercase tracking-[0.08em] text-ink-muted"
+          >
+            {String(visibleNotes.length).padStart(2, "0")} results
+          </p>
+        </div>
+
         <nav
           aria-label="Note categories"
           className="overflow-x-auto border-b border-black/[0.09]"
@@ -219,6 +305,7 @@ export function NotesArchive({
                   className={`inline-flex min-h-10 items-center gap-3 border px-3 font-mono text-[0.625rem] font-semibold uppercase tracking-[0.06em] transition-colors ${isActive ? "border-ink bg-ink text-white" : "border-black/10 bg-surface text-ink-muted hover:border-black/30 hover:text-ink"}`}
                   key={category}
                   onClick={() => setActiveFilter(category)}
+                  ref={category === "all" ? filterRef : undefined}
                   type="button"
                 >
                   {categoryLabels[category]}
@@ -235,6 +322,24 @@ export function NotesArchive({
           {visibleNotes.map((note) => (
             <NoteArchiveRow key={note.id} note={note} />
           ))}
+          {visibleNotes.length === 0 ? (
+            <div className="grid min-h-48 place-items-center border-b border-black/[0.09] py-12 text-center">
+              <div>
+                <p className="font-serif text-2xl">No matching notes.</p>
+                <button
+                  className="mt-4 text-xs font-semibold text-accent underline underline-offset-4"
+                  onClick={() => {
+                    setActiveFilter("all");
+                    setQuery("");
+                    searchRef.current?.focus();
+                  }}
+                  type="button"
+                >
+                  Clear search and filters
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <div className="mt-8 grid gap-5 border border-black/[0.09] bg-surface p-5 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:p-6">
@@ -258,7 +363,10 @@ export function NotesArchive({
         </div>
       </section>
 
-      <section className="border-t border-black/[0.09] py-16 sm:py-20" data-notes-section>
+      <section
+        className="border-t border-black/[0.09] py-16 sm:py-20"
+        data-notes-section
+      >
         <div className="max-w-2xl">
           <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
             Interaction system
@@ -290,7 +398,7 @@ export function NotesArchive({
             </p>
             <button
               className="mt-12 inline-flex min-h-11 items-center gap-2 border border-black/15 px-4 text-xs font-semibold transition-colors hover:border-ink hover:bg-ink hover:text-white"
-              onClick={focusArchive}
+              onClick={focusFilters}
               type="button"
             >
               <SlidersHorizontal aria-hidden="true" size={15} /> Browse topics
@@ -302,7 +410,7 @@ export function NotesArchive({
             </p>
             <button
               className="mt-12 inline-flex min-h-11 items-center gap-2 border-b border-black/20 text-sm font-medium hover:border-accent hover:text-accent"
-              onClick={focusArchive}
+              onClick={focusSearch}
               type="button"
             >
               <Search aria-hidden="true" size={15} /> Find a note{" "}
