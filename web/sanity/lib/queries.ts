@@ -1,4 +1,4 @@
-import {defineQuery} from 'next-sanity'
+import { defineQuery } from "next-sanity";
 
 const IMAGE_PROJECTION = `{
   alt,
@@ -7,7 +7,7 @@ const IMAGE_PROJECTION = `{
   "width": asset->metadata.dimensions.width,
   "height": asset->metadata.dimensions.height,
   "lqip": asset->metadata.lqip
-}`
+}`;
 
 export const HOME_PAGE_QUERY = defineQuery(`{
   "profile": *[_id == "profile"][0]{
@@ -95,7 +95,7 @@ export const HOME_PAGE_QUERY = defineQuery(`{
     summary,
     status
   }
-}`)
+}`);
 
 export const HOME_METADATA_QUERY = defineQuery(`{
   "profile": *[_id == "profile"][0]{fullName, professionalTitle},
@@ -112,7 +112,7 @@ export const HOME_METADATA_QUERY = defineQuery(`{
       "image": image ${IMAGE_PROJECTION}
     }
   }
-}`)
+}`);
 
 export const ABOUT_PROFILE_QUERY = defineQuery(`{
   "aboutPage": *[_id == "aboutPage"][0]{
@@ -206,7 +206,7 @@ export const ABOUT_PROFILE_QUERY = defineQuery(`{
     },
     "portrait": portrait ${IMAGE_PROJECTION}
   }
-}`)
+}`);
 
 export const WORK_ARCHIVE_QUERY = defineQuery(`{
   "projects": *[
@@ -246,4 +246,117 @@ export const WORK_ARCHIVE_QUERY = defineQuery(`{
     "coverImage": coverImage ${IMAGE_PROJECTION},
     "technologies": technologies[]->{name}
   }
-}`)
+}`);
+
+export const PROJECT_SLUGS_QUERY = defineQuery(`
+  *[_type == "project" && defined(slug.current)]{"slug": slug.current}
+`);
+
+export const PROJECT_METADATA_QUERY = defineQuery(`
+  *[_type == "project" && slug.current == $slug][0]{
+    title,
+    subtitle,
+    summary,
+    "seo": seo{
+      title,
+      description,
+      noIndex,
+      "image": image ${IMAGE_PROJECTION}
+    },
+    "coverImage": coverImage ${IMAGE_PROJECTION}
+  }
+`);
+
+export const PROJECT_PAGE_QUERY = defineQuery(`{
+  "project": *[_type == "project" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current,
+    subtitle,
+    summary,
+    role,
+    client,
+    year,
+    timeline,
+    projectType,
+    status,
+    liveUrl,
+    repositoryUrl,
+    "technologyStack": technologyStack[]->{_id, name},
+    "coverImage": coverImage ${IMAGE_PROJECTION},
+    "supportingImage": supportingImage ${IMAGE_PROJECTION},
+    sections[]{
+      _key,
+      _type,
+      eyebrow,
+      heading,
+      headline,
+      introduction,
+      presentation,
+      body[]{
+        _key,
+        _type,
+        style,
+        listItem,
+        level,
+        children[]{_key, _type, text, marks},
+        markDefs[]{_key, _type, href, openInNewTab}
+      },
+      "image": image ${IMAGE_PROJECTION},
+      items[]{
+        _key,
+        _type,
+        label,
+        title,
+        description,
+        kind,
+        value,
+        mediaType,
+        videoUrl,
+        caption,
+        displayContext,
+        "image": image ${IMAGE_PROJECTION},
+        "posterImage": posterImage ${IMAGE_PROJECTION}
+      },
+      steps[]{
+        _key,
+        _type,
+        phase,
+        title,
+        description,
+        deliverables,
+        "image": image ${IMAGE_PROJECTION}
+      },
+      snippets[]{
+        _key,
+        _type,
+        title,
+        filename,
+        language,
+        code,
+        explanation,
+        sourceUrl
+      },
+      embedUrl,
+      "fallbackImage": fallbackImage ${IMAGE_PROJECTION},
+      fallbackMessage,
+      instructions[]{_key, _type, title, description},
+      availableViewports,
+      initialViewport,
+      frameHeight,
+      summary,
+      closingNote
+    }
+  },
+  "projectNavigation": *[
+    _type == "project" &&
+    defined(slug.current)
+  ] | order(displayOrder asc, year desc){
+    _id,
+    title,
+    "slug": slug.current,
+    subtitle,
+    projectType,
+    "coverImage": coverImage ${IMAGE_PROJECTION}
+  }
+}`);

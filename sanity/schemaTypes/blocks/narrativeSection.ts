@@ -128,6 +128,10 @@ export const narrativeSection = defineType({
             title: 'Image on the right',
             value: 'mediaRight',
           },
+          {
+            title: 'Sticky heading with scrolling story',
+            value: 'stickyText',
+          },
         ],
         layout: 'radio',
       },

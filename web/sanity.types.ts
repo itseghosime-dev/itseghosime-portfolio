@@ -567,7 +567,7 @@ export type NarrativeSection = {
     _key: string;
   }>;
   image?: AccessibleImage;
-  presentation?: "textOnly" | "mediaLeft" | "mediaRight";
+  presentation?: "textOnly" | "mediaLeft" | "mediaRight" | "stickyText";
 };
 
 export type HeroSection = {
@@ -1322,6 +1322,435 @@ export type WORK_ARCHIVE_QUERY_RESULT = {
   }>;
 };
 
+// Source: ../web/sanity/lib/queries.ts
+// Variable: PROJECT_SLUGS_QUERY
+// Query: *[_type == "project" && defined(slug.current)]{"slug": slug.current}
+export type PROJECT_SLUGS_QUERY_RESULT = Array<{
+  slug: string | null;
+}>;
+
+// Source: ../web/sanity/lib/queries.ts
+// Variable: PROJECT_METADATA_QUERY
+// Query: *[_type == "project" && slug.current == $slug][0]{    title,    subtitle,    summary,    "seo": seo{      title,      description,      noIndex,      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}    },    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}  }
+export type PROJECT_METADATA_QUERY_RESULT = {
+  title: string | null;
+  subtitle: string | null;
+  summary: string | null;
+  seo: {
+    title: string | null;
+    description: string | null;
+    noIndex: boolean | null;
+    image: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+  } | null;
+  coverImage: {
+    alt: string | null;
+    caption: string | null;
+    url: string | null;
+    width: number | null;
+    height: number | null;
+    lqip: string | null;
+  } | null;
+} | null;
+
+// Source: ../web/sanity/lib/queries.ts
+// Variable: PROJECT_PAGE_QUERY
+// Query: {  "project": *[_type == "project" && slug.current == $slug][0]{    _id,    title,    "slug": slug.current,    subtitle,    summary,    role,    client,    year,    timeline,    projectType,    status,    liveUrl,    repositoryUrl,    "technologyStack": technologyStack[]->{_id, name},    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    "supportingImage": supportingImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},    sections[]{      _key,      _type,      eyebrow,      heading,      headline,      introduction,      presentation,      body[]{        _key,        _type,        style,        listItem,        level,        children[]{_key, _type, text, marks},        markDefs[]{_key, _type, href, openInNewTab}      },      "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},      items[]{        _key,        _type,        label,        title,        description,        kind,        value,        mediaType,        videoUrl,        caption,        displayContext,        "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},        "posterImage": posterImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}      },      steps[]{        _key,        _type,        phase,        title,        description,        deliverables,        "image": image {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}      },      snippets[]{        _key,        _type,        title,        filename,        language,        code,        explanation,        sourceUrl      },      embedUrl,      "fallbackImage": fallbackImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip},      fallbackMessage,      instructions[]{_key, _type, title, description},      availableViewports,      initialViewport,      frameHeight,      summary,      closingNote    }  },  "projectNavigation": *[    _type == "project" &&    defined(slug.current)  ] | order(displayOrder asc, year desc){    _id,    title,    "slug": slug.current,    subtitle,    projectType,    "coverImage": coverImage {  alt,  caption,  "url": asset->url,  "width": asset->metadata.dimensions.width,  "height": asset->metadata.dimensions.height,  "lqip": asset->metadata.lqip}  }}
+export type PROJECT_PAGE_QUERY_RESULT = {
+  project: {
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    subtitle: string | null;
+    summary: string | null;
+    role: string | null;
+    client: string | null;
+    year: number | null;
+    timeline: string | null;
+    projectType:
+      | "automation"
+      | "concept"
+      | "experiment"
+      | "softwareProduct"
+      | "webApplication"
+      | "website"
+      | null;
+    status: "archived" | "concept" | "inProgress" | "live" | null;
+    liveUrl: string | null;
+    repositoryUrl: string | null;
+    technologyStack: Array<{
+      _id: string;
+      name: string | null;
+    }> | null;
+    coverImage: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+    supportingImage: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+    sections: Array<
+      | {
+          _key: string;
+          _type: "codeShowcaseSection";
+          eyebrow: string | null;
+          heading: string | null;
+          headline: null;
+          introduction: string | null;
+          presentation: "stacked" | "tabs" | null;
+          body: null;
+          image: null;
+          items: null;
+          steps: null;
+          snippets: Array<{
+            _key: string;
+            _type: "codeSnippet";
+            title: string | null;
+            filename: string | null;
+            language:
+              | "css"
+              | "groq"
+              | "html"
+              | "javascript"
+              | "json"
+              | "jsx"
+              | "markdown"
+              | "shell"
+              | "tsx"
+              | "typescript"
+              | null;
+            code: string | null;
+            explanation: string | null;
+            sourceUrl: string | null;
+          }> | null;
+          embedUrl: null;
+          fallbackImage: null;
+          fallbackMessage: null;
+          instructions: null;
+          availableViewports: null;
+          initialViewport: null;
+          frameHeight: null;
+          summary: null;
+          closingNote: null;
+        }
+      | {
+          _key: string;
+          _type: "contributionGridSection";
+          eyebrow: string | null;
+          heading: string | null;
+          headline: null;
+          introduction: string | null;
+          presentation: "grid" | "list" | null;
+          body: null;
+          image: null;
+          items: Array<{
+            _key: string;
+            _type: "contribution";
+            label: string | null;
+            title: string | null;
+            description: string | null;
+            kind: null;
+            value: null;
+            mediaType: null;
+            videoUrl: null;
+            caption: null;
+            displayContext: null;
+            image: null;
+            posterImage: null;
+          }> | null;
+          steps: null;
+          snippets: null;
+          embedUrl: null;
+          fallbackImage: null;
+          fallbackMessage: null;
+          instructions: null;
+          availableViewports: null;
+          initialViewport: null;
+          frameHeight: null;
+          summary: null;
+          closingNote: null;
+        }
+      | {
+          _key: string;
+          _type: "heroSection";
+          eyebrow: string | null;
+          heading: null;
+          headline: string | null;
+          introduction: string | null;
+          presentation: "editorial" | "immersive" | "split" | null;
+          body: null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+          items: null;
+          steps: null;
+          snippets: null;
+          embedUrl: null;
+          fallbackImage: null;
+          fallbackMessage: null;
+          instructions: null;
+          availableViewports: null;
+          initialViewport: null;
+          frameHeight: null;
+          summary: null;
+          closingNote: null;
+        }
+      | {
+          _key: string;
+          _type: "interactiveSandboxSection";
+          eyebrow: string | null;
+          heading: string | null;
+          headline: null;
+          introduction: string | null;
+          presentation: null;
+          body: null;
+          image: null;
+          items: null;
+          steps: null;
+          snippets: null;
+          embedUrl: string | null;
+          fallbackImage: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+          fallbackMessage: string | null;
+          instructions: Array<{
+            _key: string;
+            _type: "sandboxInstruction";
+            title: string | null;
+            description: string | null;
+          }> | null;
+          availableViewports: Array<string> | null;
+          initialViewport: "desktop" | "mobile" | "tablet" | null;
+          frameHeight: "standard" | "tall" | "viewport" | null;
+          summary: null;
+          closingNote: null;
+        }
+      | {
+          _key: string;
+          _type: "mediaShowcaseSection";
+          eyebrow: string | null;
+          heading: string | null;
+          headline: null;
+          introduction: string | null;
+          presentation: "carousel" | "grid" | "sequence" | null;
+          body: null;
+          image: null;
+          items: Array<{
+            _key: string;
+            _type: "mediaItem";
+            label: null;
+            title: string | null;
+            description: null;
+            kind: null;
+            value: null;
+            mediaType: "externalVideo" | "image" | null;
+            videoUrl: string | null;
+            caption: string | null;
+            displayContext: "browser" | "mobile" | "none" | null;
+            image: {
+              alt: string | null;
+              caption: string | null;
+              url: string | null;
+              width: number | null;
+              height: number | null;
+              lqip: string | null;
+            } | null;
+            posterImage: {
+              alt: string | null;
+              caption: string | null;
+              url: string | null;
+              width: number | null;
+              height: number | null;
+              lqip: string | null;
+            } | null;
+          }> | null;
+          steps: null;
+          snippets: null;
+          embedUrl: null;
+          fallbackImage: null;
+          fallbackMessage: null;
+          instructions: null;
+          availableViewports: null;
+          initialViewport: null;
+          frameHeight: null;
+          summary: null;
+          closingNote: null;
+        }
+      | {
+          _key: string;
+          _type: "narrativeSection";
+          eyebrow: string | null;
+          heading: string | null;
+          headline: null;
+          introduction: null;
+          presentation:
+            "mediaLeft" | "mediaRight" | "stickyText" | "textOnly" | null;
+          body: Array<{
+            _key: string;
+            _type: "block";
+            style: "blockquote" | "normal" | null;
+            listItem: "bullet" | "number" | null;
+            level: number | null;
+            children: Array<{
+              _key: string;
+              _type: "span";
+              text: string | null;
+              marks: Array<string> | null;
+            }> | null;
+            markDefs: Array<{
+              _key: string;
+              _type: "link";
+              href: string | null;
+              openInNewTab: boolean | null;
+            }> | null;
+          }> | null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            url: string | null;
+            width: number | null;
+            height: number | null;
+            lqip: string | null;
+          } | null;
+          items: null;
+          steps: null;
+          snippets: null;
+          embedUrl: null;
+          fallbackImage: null;
+          fallbackMessage: null;
+          instructions: null;
+          availableViewports: null;
+          initialViewport: null;
+          frameHeight: null;
+          summary: null;
+          closingNote: null;
+        }
+      | {
+          _key: string;
+          _type: "outcomesSection";
+          eyebrow: string | null;
+          heading: string | null;
+          headline: null;
+          introduction: null;
+          presentation: null;
+          body: null;
+          image: null;
+          items: Array<{
+            _key: string;
+            _type: "outcomeItem";
+            label: null;
+            title: string | null;
+            description: string | null;
+            kind: "learning" | "metric" | "qualitative" | null;
+            value: string | null;
+            mediaType: null;
+            videoUrl: null;
+            caption: null;
+            displayContext: null;
+            image: null;
+            posterImage: null;
+          }> | null;
+          steps: null;
+          snippets: null;
+          embedUrl: null;
+          fallbackImage: null;
+          fallbackMessage: null;
+          instructions: null;
+          availableViewports: null;
+          initialViewport: null;
+          frameHeight: null;
+          summary: string | null;
+          closingNote: string | null;
+        }
+      | {
+          _key: string;
+          _type: "processSection";
+          eyebrow: string | null;
+          heading: string | null;
+          headline: null;
+          introduction: string | null;
+          presentation: "cards" | "editorial" | "numbered" | null;
+          body: null;
+          image: null;
+          items: null;
+          steps: Array<{
+            _key: string;
+            _type: "processStep";
+            phase: string | null;
+            title: string | null;
+            description: string | null;
+            deliverables: Array<string> | null;
+            image: {
+              alt: string | null;
+              caption: string | null;
+              url: string | null;
+              width: number | null;
+              height: number | null;
+              lqip: string | null;
+            } | null;
+          }> | null;
+          snippets: null;
+          embedUrl: null;
+          fallbackImage: null;
+          fallbackMessage: null;
+          instructions: null;
+          availableViewports: null;
+          initialViewport: null;
+          frameHeight: null;
+          summary: null;
+          closingNote: null;
+        }
+    > | null;
+  } | null;
+  projectNavigation: Array<{
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    subtitle: string | null;
+    projectType:
+      | "automation"
+      | "concept"
+      | "experiment"
+      | "softwareProduct"
+      | "webApplication"
+      | "website"
+      | null;
+    coverImage: {
+      alt: string | null;
+      caption: string | null;
+      url: string | null;
+      width: number | null;
+      height: number | null;
+      lqip: string | null;
+    } | null;
+  }>;
+};
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
@@ -1329,6 +1758,9 @@ declare global {
     '{\n  "profile": *[_id == "profile"][0]{fullName, professionalTitle},\n  "settings": *[_id == "siteSettings"][0]{\n    siteName,\n    siteDescription,\n    canonicalUrl,\n    indexing,\n    googleSiteVerification,\n    defaultSeo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    }\n  }\n}': HOME_METADATA_QUERY_RESULT;
     '{\n  "aboutPage": *[_id == "aboutPage"][0]{\n    heroEyebrow,\n    heroHeading,\n    heroIntroduction,\n    identityFacts[]{_key, label, value},\n    primaryAction{label, href},\n    secondaryAction{label, href},\n    storyEyebrow,\n    quickFacts,\n    focusHeading,\n    focusLabel,\n    focusItems[]{_key, title, description},\n    toolsHeading,\n    toolsLabel,\n    technologyGroups[]{\n      _key,\n      label,\n      technologies[]->{_id, name}\n    },\n    experienceHeading,\n    experienceLabel,\n    experienceMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      engagementType,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    educationHeading,\n    learningHeading,\n    educationMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    learningMilestones[]->{\n      _id,\n      title,\n      milestoneType,\n      organisation,\n      location,\n      status,\n      startDate,\n      endDate,\n      expectedEndDate,\n      summary,\n      highlights,\n      credentialTitle,\n      credentialUrl\n    },\n    principlesHeading,\n    principlesLabel,\n    ctaEyebrow,\n    ctaHeading,\n    ctaMessage,\n    ctaLabel\n  },\n  "profile": *[_id == "profile"][0]{\n    fullName,\n    professionalTitle,\n    location,\n    availability,\n    email,\n    workingPrinciples,\n    "biography": biography[]{\n      _key,\n      _type,\n      style,\n      children[]{_key, _type, text, marks}\n    },\n    "portrait": portrait {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n}': ABOUT_PROFILE_QUERY_RESULT;
     '{\n  "projects": *[\n    _type == "project" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc)[0...8]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologyStack[]->{name}\n  },\n  "labExperiments": *[\n    _type == "labExperiment" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, _createdAt asc)[0...8]{\n    _id,\n    title,\n    "slug": slug.current,\n    summary,\n    status,\n    startedAt,\n    completedAt,\n    demoUrl,\n    repositoryUrl,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "technologies": technologies[]->{name}\n  }\n}': WORK_ARCHIVE_QUERY_RESULT;
+    '\n  *[_type == "project" && defined(slug.current)]{"slug": slug.current}\n': PROJECT_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "project" && slug.current == $slug][0]{\n    title,\n    subtitle,\n    summary,\n    "seo": seo{\n      title,\n      description,\n      noIndex,\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n    },\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n': PROJECT_METADATA_QUERY_RESULT;
+    '{\n  "project": *[_type == "project" && slug.current == $slug][0]{\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    summary,\n    role,\n    client,\n    year,\n    timeline,\n    projectType,\n    status,\n    liveUrl,\n    repositoryUrl,\n    "technologyStack": technologyStack[]->{_id, name},\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    "supportingImage": supportingImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n    sections[]{\n      _key,\n      _type,\n      eyebrow,\n      heading,\n      headline,\n      introduction,\n      presentation,\n      body[]{\n        _key,\n        _type,\n        style,\n        listItem,\n        level,\n        children[]{_key, _type, text, marks},\n        markDefs[]{_key, _type, href, openInNewTab}\n      },\n      "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n      items[]{\n        _key,\n        _type,\n        label,\n        title,\n        description,\n        kind,\n        value,\n        mediaType,\n        videoUrl,\n        caption,\n        displayContext,\n        "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n        "posterImage": posterImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n      },\n      steps[]{\n        _key,\n        _type,\n        phase,\n        title,\n        description,\n        deliverables,\n        "image": image {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n      },\n      snippets[]{\n        _key,\n        _type,\n        title,\n        filename,\n        language,\n        code,\n        explanation,\n        sourceUrl\n      },\n      embedUrl,\n      "fallbackImage": fallbackImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n},\n      fallbackMessage,\n      instructions[]{_key, _type, title, description},\n      availableViewports,\n      initialViewport,\n      frameHeight,\n      summary,\n      closingNote\n    }\n  },\n  "projectNavigation": *[\n    _type == "project" &&\n    defined(slug.current)\n  ] | order(displayOrder asc, year desc){\n    _id,\n    title,\n    "slug": slug.current,\n    subtitle,\n    projectType,\n    "coverImage": coverImage {\n  alt,\n  caption,\n  "url": asset->url,\n  "width": asset->metadata.dimensions.width,\n  "height": asset->metadata.dimensions.height,\n  "lqip": asset->metadata.lqip\n}\n  }\n}': PROJECT_PAGE_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
