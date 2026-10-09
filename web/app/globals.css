@@ -15,9 +15,10 @@
 
   --ink: #161719;
   --ink-soft: #383b40;
-  --ink-muted: #6c727a;
+  --ink-muted: #626870;
   --ink-inverse: #f5f4ef;
   --accent: #4169e1;
+  --accent-text: #2c59d9;
   --accent-hover: #3457c4;
   --accent-soft: #dce1ff;
   --error: #ba1a1a;
@@ -81,6 +82,7 @@
   --color-ink-soft: var(--ink-soft);
   --color-ink-muted: var(--ink-muted);
   --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
   --font-sans: var(--font-body);
   --font-serif: var(--font-display);
 }

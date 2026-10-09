@@ -37,7 +37,7 @@ export function ProjectHero({ project, section }: ProjectHeroProps) {
         <div className="mx-auto grid max-w-[65rem] gap-12 lg:gap-16">
           <div className="grid gap-8" data-project-reveal>
             <p className="font-mono text-xs font-semibold uppercase tracking-[0.11em] text-ink-muted">
-              <span className="text-accent">01</span> /{" "}
+              <span className="text-accent-text">01</span> /{" "}
               {section?.eyebrow ?? "Selected project"} /{" "}
               {projectTypeLabels[project.projectType ?? "website"]}
             </p>

@@ -21,7 +21,7 @@ export function MilestoneSection({eyebrow, milestones, title}: MilestoneSectionP
         <div className="mx-auto max-w-[65rem]">
           <div className="mb-10 flex items-end justify-between gap-6" data-about-reveal>
             <div>
-              <p className="mb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
+              <p className="mb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-text">
                 {eyebrow}
               </p>
               <h2 className="headline-md font-serif text-[clamp(2.2rem,4.2vw,3rem)] tracking-[-0.03em]">
@@ -43,7 +43,7 @@ export function MilestoneSection({eyebrow, milestones, title}: MilestoneSectionP
                 <div className="grid content-start gap-2 font-mono text-xs text-ink-muted">
                   <p className="font-semibold text-ink">{milestone.dateLabel}</p>
                   {milestone.status ? (
-                    <span className="inline-flex w-fit items-center gap-1.5 border border-accent/25 bg-accent/5 px-2 py-0.5 text-[0.625rem] uppercase tracking-[0.08em] text-accent">
+                    <span className="inline-flex w-fit items-center gap-1.5 border border-accent/25 bg-accent/5 px-2 py-0.5 text-[0.625rem] uppercase tracking-[0.08em] text-accent-text">
                       <span className="size-1 rounded-full bg-accent" />
                       {milestone.status}
                     </span>
@@ -84,7 +84,7 @@ export function MilestoneSection({eyebrow, milestones, title}: MilestoneSectionP
 
                   {milestone.credentialUrl ? (
                     <a
-                      className="inline-flex w-fit items-center gap-2 font-mono text-xs font-semibold text-accent no-underline transition-colors hover:text-ink"
+                      className="inline-flex w-fit items-center gap-2 font-mono text-xs font-semibold text-accent-text no-underline transition-colors hover:text-ink"
                       href={milestone.credentialUrl}
                       rel="noreferrer"
                       target="_blank"

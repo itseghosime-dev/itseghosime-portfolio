@@ -195,7 +195,7 @@ export function SandboxSection({
             />
             {embedUrl ? (
               <a
-                className="inline-flex min-h-10 shrink-0 items-center gap-2 text-xs font-semibold text-accent no-underline"
+                className="inline-flex min-h-10 shrink-0 items-center gap-2 text-xs font-semibold text-accent-text no-underline"
                 href={embedUrl}
                 rel="noreferrer"
                 target="_blank"
@@ -207,11 +207,10 @@ export function SandboxSection({
 
           <div
             className="overflow-hidden rounded-[1.25rem] border border-black/15 bg-[#14171c] p-1.5 shadow-[0_45px_110px_-52px_rgba(15,18,24,0.72)]"
-            data-project-reveal
             data-sandbox-frame
           >
-            <div className="flex min-h-12 flex-wrap items-center justify-between gap-3 px-3 py-2 text-white sm:px-4">
-              <p className="font-mono text-xs uppercase tracking-[0.08em] text-white/58">
+            <div className="flex min-h-12 flex-wrap items-center justify-between gap-3 bg-[#14171c] px-3 py-2 text-white sm:px-4">
+              <p className="font-mono text-xs uppercase tracking-[0.08em] text-white/90">
                 <span
                   className={`mr-2 inline-block size-2 rounded-full ${effectiveStatus === "ready" ? "bg-[#6ee7a8] shadow-[0_0_16px_rgba(110,231,168,0.72)]" : effectiveStatus === "loading" ? "animate-pulse bg-[#f2c866] motion-reduce:animate-none" : "bg-[#ff817a]"}`}
                 />
@@ -423,7 +422,7 @@ export function SandboxSection({
                   className="border-b border-r border-black/[0.08] p-6"
                   key={instruction._key}
                 >
-                  <p className="font-mono text-xs uppercase tracking-[0.08em] text-accent">
+                  <p className="font-mono text-xs uppercase tracking-[0.08em] text-accent-text">
                     Tour {String(index + 1).padStart(2, "0")}
                   </p>
                   <h3 className="mt-3 text-sm font-semibold">

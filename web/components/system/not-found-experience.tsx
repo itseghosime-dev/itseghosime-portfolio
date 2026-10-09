@@ -73,11 +73,11 @@ export function NotFoundExperience() {
               />
               <span className="font-semibold text-ink">System</span>
               <span>/</span>
-              <span className="text-accent">404 not found</span>
+              <span className="text-accent-text">404 not found</span>
             </p>
             <div className="flex min-w-0 items-center gap-2 border border-black/10 bg-surface px-3 py-2 normal-case tracking-normal">
               <span className="shrink-0 uppercase tracking-[0.08em]">Path</span>
-              <code className="min-w-0 truncate text-accent">{pathname}</code>
+              <code className="min-w-0 truncate text-accent-text">{pathname}</code>
               <button
                 aria-label="Copy requested path"
                 className="grid size-8 shrink-0 place-items-center text-ink-muted transition-colors hover:text-ink"
@@ -125,7 +125,7 @@ export function NotFoundExperience() {
               </div>
               <div className="mt-12 flex flex-wrap gap-x-6 gap-y-2 border-t border-black/10 pt-5 font-mono text-[0.625rem] uppercase tracking-[0.08em] text-ink-muted">
                 <span>HTTP status: 404</span>
-                <span className="text-accent">Index missing</span>
+                <span className="text-accent-text">Index missing</span>
                 <span>No location data collected</span>
               </div>
             </div>
@@ -175,7 +175,7 @@ export function NotFoundExperience() {
           >
             <div className="flex items-end justify-between gap-6">
               <div>
-                <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
+                <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent-text">
                   Recovery routes
                 </p>
                 <h2

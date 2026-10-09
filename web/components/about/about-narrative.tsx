@@ -72,7 +72,7 @@ export function AboutNarrative({ story }: AboutNarrativeProps) {
           </aside>
 
           <div className="grid content-start gap-8" data-about-reveal>
-            <div className="flex items-center gap-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
+            <div className="flex items-center gap-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-text">
               <span className="h-px w-6 bg-accent" aria-hidden="true" />
               <span>{story.eyebrow}</span>
             </div>

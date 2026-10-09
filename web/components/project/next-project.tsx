@@ -24,14 +24,14 @@ export function NextProject({
           <div className="grid grid-8">
             <div className="flex items-baseline-last justify-between gap-8">
               <div className="flex flex-col gap-4">
-                <p className="font-mono text-xs uppercase tracking-[0.09em] text-accent">
+                <p className="font-mono text-xs uppercase tracking-[0.09em] text-accent-text">
                   Next case study
                 </p>
                 <h2 className="mt-2 font-serif text-[clamp(2.7rem,7vw,5rem)] leading-[0.95] tracking-[-0.04em]">
                   {project.title}
                 </h2>
               </div>
-              <span className="hidden items-center gap-2 text-xs font-semibold text-accent sm:inline-flex">
+              <span className="hidden items-center gap-2 text-xs font-semibold text-accent-text sm:inline-flex">
                 Explore project{" "}
                 <ArrowUpRight
                   aria-hidden="true"

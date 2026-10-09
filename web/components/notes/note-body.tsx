@@ -124,7 +124,7 @@ export function NoteBody({
         if (!link?.href) return <>{children}</>;
         return (
           <a
-            className="font-medium text-accent underline decoration-accent/30 underline-offset-4"
+            className="font-medium text-accent-text underline decoration-accent-text/30 underline-offset-4"
             href={link.href}
             rel={link.openInNewTab ? "noreferrer" : undefined}
             target={link.openInNewTab ? "_blank" : undefined}

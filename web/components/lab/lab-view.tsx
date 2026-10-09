@@ -83,7 +83,7 @@ export function LabView({ experiments, page }: LabViewProps) {
           data-lab-reveal
         >
           <div className="flex flex-col gap-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] sm:flex-row sm:items-center sm:justify-between">
-            <p className="flex items-center gap-2 text-accent">
+            <p className="flex items-center gap-2 text-accent-text">
               <span
                 aria-hidden="true"
                 className="size-1.5 rounded-full bg-accent"
@@ -135,7 +135,7 @@ export function LabView({ experiments, page }: LabViewProps) {
                   >
                     {categoryLabels[category]}{" "}
                     <span
-                      className={isActive ? "text-accent" : "text-ink-muted/70"}
+                      className={isActive ? "text-accent-text" : "text-ink-muted"}
                     >
                       {String(counts[category]).padStart(2, "0")}
                     </span>

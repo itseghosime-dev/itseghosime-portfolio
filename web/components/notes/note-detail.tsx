@@ -28,7 +28,7 @@ function RelatedNoteCard({ note }: { note: NoteSummary }) {
     >
       <div className="flex h-full flex-col justify-between gap-8">
         <div className="flex flex-col gap-4">
-          <p className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent">
+          <p className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent-text">
             Note {formatVolumeNumber(note.volumeNumber)} · {note.categoryLabel}
           </p>
           <h3 className="mt-5 font-serif text-2xl leading-[1.08] tracking-[-0.025em]">
@@ -95,7 +95,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
                     {note.editorialContext.sectionLabel}
                   </span>
                   <span className="text-ink-muted">/</span>
-                  <span className="font-semibold text-accent">
+                  <span className="font-semibold text-accent-text">
                     {note.editorialContext.seriesLabel}
                     {" // Vol "}
                     {formatVolumeNumber(note.volumeNumber)}
@@ -169,7 +169,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
           <section className="mt-20 border-y border-black/[0.09] py-8 sm:mt-24 sm:py-10" data-note-detail-section>
             <div className="grid gap-7 md:grid-cols-[1fr_auto] md:items-center">
               <div className="max-w-2xl flex flex-col gap-4">
-                <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
+                <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent-text">
                   Working note / open conversation
                 </p>
                 <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.035em]">
@@ -237,7 +237,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
             <section className="py-16 sm:py-20" data-note-detail-section>
               <div className="mb-8 flex items-end justify-between gap-6">
                 <div className="flex flex-col gap-3">
-                  <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
+                  <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent-text">
                     Related notes
                   </p>
                   <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,3.25rem)] leading-none tracking-[-0.04em]">

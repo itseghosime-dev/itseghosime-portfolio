@@ -19,7 +19,7 @@ export function TechnologySection({groups, heading, label}: TechnologySectionPro
         <div className="mx-auto max-w-[65rem]">
           <div className="mb-10 flex items-end justify-between gap-6" data-about-reveal>
             <div>
-              <p className="mb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
+              <p className="mb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-text">
                 {label}
               </p>
               <h2 className="headline-md font-serif text-[clamp(2.2rem,4.2vw,3rem)] tracking-[-0.03em]">
@@ -44,7 +44,7 @@ export function TechnologySection({groups, heading, label}: TechnologySectionPro
                   key={group.id}
                 >
                   <div className="flex items-center justify-between border-b border-black/[0.08] pb-4">
-                    <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.1em] text-accent">
+                    <h3 className="font-mono text-xs font-semibold uppercase tracking-[0.1em] text-accent-text">
                       {group.label}
                     </h3>
                     <span className="font-mono text-[0.625rem] text-ink-muted">

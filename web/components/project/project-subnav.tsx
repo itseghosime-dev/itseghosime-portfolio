@@ -37,7 +37,7 @@ export function ProjectSubnav({ sections }: { sections: ProjectSection[] }) {
     >
       <div className="mx-auto flex max-w-[77.5rem] gap-5 overflow-x-auto px-6 py-3 [scrollbar-width:none] md:px-12">
         <Link
-          className="shrink-0 font-mono text-xs uppercase tracking-[0.08em] text-ink-muted no-underline transition-colors hover:text-ink data-[active=true]:text-accent"
+          className="shrink-0 font-mono text-xs uppercase tracking-[0.08em] text-ink-muted no-underline transition-colors hover:text-ink data-[active=true]:text-accent-text"
           data-active="true"
           href="#project-overview"
         >
@@ -45,7 +45,7 @@ export function ProjectSubnav({ sections }: { sections: ProjectSection[] }) {
         </Link>
         {links.map((link) => (
           <Link
-            className="shrink-0 font-mono text-xs uppercase tracking-[0.08em] text-ink-muted no-underline transition-colors hover:text-accent data-[active=true]:text-accent"
+            className="shrink-0 font-mono text-xs uppercase tracking-[0.08em] text-ink-muted no-underline transition-colors hover:text-accent-text data-[active=true]:text-accent-text"
             href={link.href}
             key={link.key}
           >

@@ -58,7 +58,7 @@ export function HeroSection() {
             <span className="text-ink-muted" aria-hidden="true">
               ·
             </span>
-            <span className="font-body text-lg italic text-accent">
+            <span className="font-body text-lg italic text-accent-text">
               Call me Osi.
             </span>
           </div>

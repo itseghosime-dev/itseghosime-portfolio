@@ -29,7 +29,7 @@ export function PrinciplesSection({
                 data-about-reveal
               >
                 <div>
-                  <p className="mb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
+                  <p className="mb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-text">
                     {principles.label}
                   </p>
                   <h2 className="headline-md font-serif text-[clamp(2.2rem,4.2vw,3rem)] tracking-[-0.03em]">
@@ -50,7 +50,7 @@ export function PrinciplesSection({
                     key={principle}
                   >
                     <div className="flex items-center justify-between border-b border-black/[0.08] pb-3">
-                      <span className="font-mono text-xs font-semibold text-accent">
+                      <span className="font-mono text-xs font-semibold text-accent-text">
                         RULE {String(index + 1).padStart(2, "0")}
                       </span>
                       <Sparkles
@@ -81,7 +81,7 @@ export function PrinciplesSection({
             data-about-reveal
           >
             <div className="grid max-w-2xl gap-5">
-              <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
+              <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-text">
                 {cta.eyebrow}
               </p>
               <h2

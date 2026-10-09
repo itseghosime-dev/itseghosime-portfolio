@@ -109,7 +109,7 @@ export function ContactExperience({
       <section className="border-b border-black/[0.08] py-12 sm:py-16 lg:py-20" data-contact-section>
         <Container className="grid gap-8">
           <header className="grid max-w-3xl gap-5" data-contact-intro>
-            <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
+            <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-text">
               Contact <span aria-hidden="true">{"//"}</span> 2026 engagements
             </p>
             <h1 className="font-serif text-[clamp(2.75rem,7vw,5.5rem)] leading-[0.98] tracking-[-0.035em]">

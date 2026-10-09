@@ -17,7 +17,7 @@ export function FocusSection({focus}: FocusSectionProps) {
         <div className="mx-auto max-w-[65rem]">
           <div className="mb-10 flex items-end justify-between gap-6" data-about-reveal>
             <div>
-              <p className="mb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
+              <p className="mb-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-text">
                 {focus.label}
               </p>
               <h2 className="headline-md font-serif text-[clamp(2.2rem,4.2vw,3rem)] tracking-[-0.03em]">
@@ -37,7 +37,7 @@ export function FocusSection({focus}: FocusSectionProps) {
                 key={capability.id}
               >
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-xs font-semibold text-accent transition-transform group-hover:translate-x-0.5">
+                  <span className="font-mono text-xs font-semibold text-accent-text transition-transform group-hover:translate-x-0.5">
                     {String(index + 1).padStart(2, "0")} /
                   </span>
                   <h3 className="font-mono text-sm font-semibold tracking-[-0.01em] text-ink">

@@ -19,7 +19,7 @@ export function NoteArchiveRow({ note }: { note: NoteSummary }) {
     >
       <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
         <div className="flex max-w-[48rem] items-start gap-5 sm:gap-9">
-          <span className="mt-2 shrink-0 font-mono text-[0.6875rem] font-semibold tracking-[0.08em] text-accent">
+          <span className="mt-2 shrink-0 font-mono text-[0.6875rem] font-semibold tracking-[0.08em] text-accent-text">
             {formatVolumeNumber(note.volumeNumber)}
           </span>
           <div className="min-w-0">
@@ -59,7 +59,7 @@ export function NoteArchiveRow({ note }: { note: NoteSummary }) {
         className="pointer-events-none absolute right-14 top-1/2 z-20 hidden w-80 -translate-y-[46%] scale-[0.985] border border-black/15 bg-white p-5 opacity-0 shadow-[0_24px_70px_-30px_rgba(15,18,24,0.45)] transition-[opacity,transform] duration-200 ease-out group-hover:-translate-y-1/2 group-hover:scale-100 group-hover:opacity-100 group-focus-within:-translate-y-1/2 group-focus-within:scale-100 group-focus-within:opacity-100 xl:block"
       >
         <div className="flex items-center justify-between gap-3 border-b border-black/[0.09] pb-3">
-          <span className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent">
+          <span className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent-text">
             Preview // {formatVolumeNumber(note.volumeNumber)}
           </span>
           <span className="truncate font-mono text-[0.625rem] text-ink-muted">

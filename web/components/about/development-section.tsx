@@ -14,7 +14,7 @@ type DevelopmentSectionProps = {
 function DevelopmentItem({milestone}: {milestone: AboutMilestone}) {
   return (
     <li className="border-b border-black/[0.08] py-6 first:pt-0 last:border-0 last:pb-0">
-      <div className="flex items-center justify-between font-mono text-[0.625rem] text-accent">
+      <div className="flex items-center justify-between font-mono text-[0.625rem] text-accent-text">
         <span className="font-semibold uppercase tracking-[0.08em]">{milestone.dateLabel}</span>
         {milestone.status ? <span className="text-ink-muted">{milestone.status}</span> : null}
       </div>
@@ -27,7 +27,7 @@ function DevelopmentItem({milestone}: {milestone: AboutMilestone}) {
       </p>
       {milestone.credentialUrl ? (
         <a
-          className="mt-3.5 inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-accent no-underline transition-colors hover:text-ink"
+          className="mt-3.5 inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-accent-text no-underline transition-colors hover:text-ink"
           href={milestone.credentialUrl}
           rel="noreferrer"
           target="_blank"
@@ -60,7 +60,7 @@ export function DevelopmentSection({
               data-about-reveal
             >
               <div className="mb-8 flex items-center justify-between border-b border-black/[0.08] pb-4">
-                <p className="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-accent">
+                <p className="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-accent-text">
                   {educationHeading}
                 </p>
                 <span className="font-mono text-[0.625rem] text-ink-muted">
@@ -81,7 +81,7 @@ export function DevelopmentSection({
               data-about-reveal
             >
               <div className="mb-8 flex items-center justify-between border-b border-black/[0.08] pb-4">
-                <p className="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-accent">
+                <p className="font-mono text-xs font-semibold uppercase tracking-[0.12em] text-accent-text">
                   {learningHeading}
                 </p>
                 <span className="font-mono text-[0.625rem] text-ink-muted">

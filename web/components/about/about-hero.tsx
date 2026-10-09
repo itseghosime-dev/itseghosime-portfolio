@@ -25,7 +25,7 @@ export function AboutHero({ hero, onOpenBrief, resume }: AboutHeroProps) {
             className="flex flex-col gap-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] sm:flex-row sm:items-center sm:justify-between"
             data-about-reveal
           >
-            <p className="flex items-center gap-2 text-accent">
+            <p className="flex items-center gap-2 text-accent-text">
               <span
                 className="size-1.5 rounded-full bg-accent"
                 aria-hidden="true"

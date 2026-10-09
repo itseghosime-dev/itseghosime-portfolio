@@ -221,7 +221,7 @@ export function NotesArchive({
         data-notes-intro
       >
         <div className="flex flex-col gap-3 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.11em] sm:flex-row sm:items-center sm:justify-between">
-          <p className="flex items-center gap-2 text-accent">
+          <p className="flex items-center gap-2 text-accent-text">
             <span
               aria-hidden="true"
               className="size-1.5 rounded-full bg-accent"
@@ -347,7 +347,7 @@ export function NotesArchive({
             i
           </span>
           <div>
-            <p className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent">
+            <p className="font-mono text-[0.625rem] font-semibold uppercase tracking-[0.09em] text-accent-text">
               Editorial curation
             </p>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-ink-muted">
@@ -368,7 +368,7 @@ export function NotesArchive({
         data-notes-section
       >
         <div className="max-w-2xl">
-          <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent">
+          <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.1em] text-accent-text">
             Interaction system
           </p>
           <h2 className="mt-3 font-serif text-[clamp(2rem,4vw,3.25rem)] leading-[1.04] tracking-[-0.035em]">
