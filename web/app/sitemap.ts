@@ -11,6 +11,8 @@ type SitemapDocument = {
 
 const staticRoutes = ["/", "/about", "/work", "/lab", "/notes", "/contact"];
 
+export const revalidate = 600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const data = await sanityClient.fetch<{

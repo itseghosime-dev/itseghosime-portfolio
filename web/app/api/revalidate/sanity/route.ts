@@ -23,6 +23,8 @@ export async function POST(request: NextRequest) {
     }
 
     revalidatePath("/", "layout");
+    revalidatePath("/sitemap.xml");
+    revalidatePath("/feed.xml");
 
     return NextResponse.json({
       revalidated: true,
