@@ -70,7 +70,7 @@ export function NoteBody({
   const components = {
     block: {
       blockquote: ({ children }) => (
-        <blockquote className="my-10 border-l-2 border-accent bg-surface px-6 py-5 font-serif text-[clamp(1.35rem,2.4vw,1.75rem)] italic leading-[1.4] text-ink shadow-[inset_0_0_0_1px_rgba(22,23,25,0.04)]">
+        <blockquote className="my-10 border-l-2 border-accent bg-surface px-6 py-5 font-serif-italic text-[clamp(1.35rem,2.4vw,1.75rem)] italic leading-[1.4] text-ink shadow-[inset_0_0_0_1px_rgba(22,23,25,0.04)]">
           {children}
         </blockquote>
       ),

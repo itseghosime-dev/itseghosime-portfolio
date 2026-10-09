@@ -23,8 +23,17 @@ const newsreader = Newsreader({
   variable: "--font-newsreader",
   subsets: ["latin"],
   display: "swap",
-  style: ["normal", "italic"],
+  style: "normal",
   axes: ["opsz"],
+});
+
+const newsreaderItalic = Newsreader({
+  variable: "--font-newsreader-italic",
+  subsets: ["latin"],
+  display: "swap",
+  style: "italic",
+  axes: ["opsz"],
+  preload: false,
 });
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -84,7 +93,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${hankenGrotesk.variable} ${newsreader.variable}`}
+      className={`${hankenGrotesk.variable} ${newsreader.variable} ${newsreaderItalic.variable}`}
     >
       <body>
         <ConnectivityStatus />

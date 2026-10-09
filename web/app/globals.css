@@ -31,6 +31,7 @@
   /* Type families are supplied by next/font in app/layout.tsx. */
   --font-body: var(--font-hanken-grotesk), "Helvetica Neue", Arial, sans-serif;
   --font-display: var(--font-newsreader), Georgia, serif;
+  --font-display-italic: var(--font-newsreader-italic), Georgia, serif;
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -85,6 +86,7 @@
   --color-accent-text: var(--accent-text);
   --font-sans: var(--font-body);
   --font-serif: var(--font-display);
+  --font-serif-italic: var(--font-display-italic);
 }
 
 *,
