@@ -46,8 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
     settings?.indexing === "allow" && settings.defaultSeo?.noIndex !== true;
   const googleVerification =
     settings?.googleSiteVerification ||
-    process.env.GOOGLE_SITE_VERIFICATION ||
-    process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+    process.env.GOOGLE_SITE_VERIFICATION;
 
   return {
     metadataBase: new URL(SITE_URL),
