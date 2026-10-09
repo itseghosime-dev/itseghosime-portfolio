@@ -24,7 +24,7 @@ const newsreader = Newsreader({
   subsets: ["latin"],
   display: "swap",
   style: "normal",
-  axes: ["opsz"],
+  weight: "400",
 });
 
 const newsreaderItalic = Newsreader({
