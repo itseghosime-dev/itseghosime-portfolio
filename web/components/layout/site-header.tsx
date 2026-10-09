@@ -35,7 +35,7 @@ export function SiteHeader({
         </Link>
 
         <nav
-          className="mx-auto hidden md:block"
+          className="mx-auto hidden lg:block"
           aria-label="Primary navigation"
         >
           <ul className="m-0 flex list-none items-center gap-8 p-0">
@@ -59,7 +59,7 @@ export function SiteHeader({
         </nav>
 
         <div className="flex items-center gap-3">
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <ButtonLink href={contactHref}>Get in touch</ButtonLink>
           </div>
           <MobileNavigation navigation={navigation} siteName={siteName} />

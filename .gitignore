@@ -22,6 +22,7 @@
 **/*.tsbuildinfo
 **/next-env.d.ts
 **/*.log
+.baseline-screenshots/
 
 # Deployment tools
 **/.vercel/

@@ -1,7 +1,7 @@
 "use client";
 
 import gsap from "gsap";
-import {ArrowRight, ArrowUpRight, Menu, X} from "lucide-react";
+import { ArrowRight, ArrowUpRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -162,7 +162,7 @@ export function MobileNavigation({
   const menu = isOpen ? (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-[999] flex min-h-dvh flex-col overflow-y-auto bg-background px-6 py-5 md:hidden"
+      className="fixed inset-0 z-[999] flex min-h-dvh flex-col overflow-y-auto bg-background px-6 py-5 lg:hidden"
       data-lenis-prevent
       id="mobile-navigation"
       role="dialog"
@@ -216,9 +216,19 @@ export function MobileNavigation({
                     {item.label}
                   </span>
                   {isExternal ? (
-                    <ArrowUpRight aria-hidden="true" className="text-ink-muted" size={20} strokeWidth={1.5} />
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="text-ink-muted"
+                      size={20}
+                      strokeWidth={1.5}
+                    />
                   ) : (
-                    <ArrowRight aria-hidden="true" className="text-ink-muted" size={20} strokeWidth={1.5} />
+                    <ArrowRight
+                      aria-hidden="true"
+                      className="text-ink-muted"
+                      size={20}
+                      strokeWidth={1.5}
+                    />
                   )}
                 </a>
               </li>
@@ -247,7 +257,7 @@ export function MobileNavigation({
   ) : null;
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         ref={triggerRef}
         className="grid size-11 cursor-pointer place-content-center gap-1.5 bg-transparent"
