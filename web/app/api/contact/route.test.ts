@@ -133,4 +133,3 @@ describe('Contact API route handler', () => {
     expect(json.error).toBe('Message delivery timed out.')
   })
 })
-

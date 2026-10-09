@@ -25,4 +25,3 @@ describe('site utilities', () => {
     expect(absoluteUrl('about')).toBe('https://www.itseghosime.com/about')
   })
 })
-

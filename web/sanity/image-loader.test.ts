@@ -39,4 +39,3 @@ describe('Sanity image loader', () => {
     expect(sanityImageLoader({ src: externalSrc, width: 800 })).toBe(externalSrc)
   })
 })
-

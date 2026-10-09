@@ -82,4 +82,3 @@ describe('RSS feed generator', () => {
     expect(xml).not.toContain('<item>')
   })
 })
-

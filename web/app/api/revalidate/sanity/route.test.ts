@@ -87,4 +87,3 @@ describe('Sanity revalidation webhook API route', () => {
     expect(JSON.stringify(json)).not.toContain('super-secret-key-12345')
   })
 })
-

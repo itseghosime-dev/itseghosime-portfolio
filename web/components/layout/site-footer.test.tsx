@@ -22,4 +22,3 @@ describe('SiteFooter component', () => {
     expect(screen.getByText('Custom Crafted Engineering')).toBeDefined()
   })
 })
-

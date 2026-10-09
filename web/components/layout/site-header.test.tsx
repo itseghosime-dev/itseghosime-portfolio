@@ -46,4 +46,3 @@ describe('SiteHeader component', () => {
     expect(contactLink.getAttribute('href')).toBe('/contact')
   })
 })
-

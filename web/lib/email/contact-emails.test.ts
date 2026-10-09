@@ -69,4 +69,3 @@ describe('contact email batch builder', () => {
     expect(visitorEmail.html).toContain('Thank you for reaching out, Evil.')
   })
 })
-

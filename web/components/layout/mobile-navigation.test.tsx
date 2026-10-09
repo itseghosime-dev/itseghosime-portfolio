@@ -92,4 +92,3 @@ describe('MobileNavigation component', () => {
     expect(document.body.style.overflow).not.toBe('hidden')
   })
 })
-
