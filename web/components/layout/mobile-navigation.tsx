@@ -1,6 +1,5 @@
 "use client";
 
-import gsap from "gsap";
 import { ArrowRight, ArrowUpRight, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
@@ -25,7 +24,7 @@ export function MobileNavigation({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const isClosingRef = useRef(false);
 
-  const closeMenu = useCallback(() => {
+  const closeMenu = useCallback(async () => {
     const overlay = overlayRef.current;
     if (!overlay || isClosingRef.current) {
       return;
@@ -43,6 +42,14 @@ export function MobileNavigation({
       return;
     }
 
+    if (document.readyState !== "complete") {
+      setIsOpen(false);
+      isClosingRef.current = false;
+      triggerRef.current?.focus();
+      return;
+    }
+
+    const { default: gsap } = await import("gsap");
     gsap
       .timeline({
         onComplete: () => {
@@ -83,37 +90,43 @@ export function MobileNavigation({
     const shouldReduceMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const context = gsap.context(() => {
-      if (shouldReduceMotion) {
-        gsap.set(currentOverlay, { autoAlpha: 1 });
-        return;
-      }
+    let cancelled = false;
+    let revertMotion: (() => void) | undefined;
 
-      gsap.fromTo(
-        currentOverlay,
-        { autoAlpha: 0 },
-        { autoAlpha: 1, duration: 0.32, ease: "power2.out" },
-      );
-      gsap.fromTo(
-        currentOverlay.querySelectorAll("[data-menu-item]"),
-        { opacity: 0, y: 24 },
-        {
-          delay: 0.08,
-          duration: 0.42,
-          ease: "power3.out",
-          opacity: 1,
-          stagger: 0.055,
-          y: 0,
-        },
-      );
-    }, currentOverlay);
+    if (!shouldReduceMotion && document.readyState === "complete") {
+      void import("gsap").then(({ default: gsap }) => {
+        if (cancelled) return;
+
+        const context = gsap.context(() => {
+          gsap.fromTo(
+            currentOverlay,
+            { autoAlpha: 0 },
+            { autoAlpha: 1, duration: 0.32, ease: "power2.out" },
+          );
+          gsap.fromTo(
+            currentOverlay.querySelectorAll("[data-menu-item]"),
+            { opacity: 0, y: 24 },
+            {
+              delay: 0.08,
+              duration: 0.42,
+              ease: "power3.out",
+              opacity: 1,
+              stagger: 0.055,
+              y: 0,
+            },
+          );
+        }, currentOverlay);
+
+        revertMotion = () => context.revert();
+      });
+    }
 
     closeButtonRef.current?.focus();
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         event.preventDefault();
-        closeMenu();
+        void closeMenu();
         return;
       }
 
@@ -152,7 +165,8 @@ export function MobileNavigation({
     window.addEventListener("resize", handleDesktopResize);
 
     return () => {
-      context.revert();
+      cancelled = true;
+      revertMotion?.();
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleDesktopResize);
@@ -207,7 +221,7 @@ export function MobileNavigation({
                   href={item.href}
                   rel={isExternal ? "noreferrer" : undefined}
                   target={isExternal ? "_blank" : undefined}
-                  onClick={closeMenu}
+                  onClick={() => void closeMenu()}
                 >
                   <span className="text-xs font-semibold tracking-[0.06em] text-accent">
                     {String(index + 1).padStart(2, "0")}
@@ -245,7 +259,7 @@ export function MobileNavigation({
         <Link
           className="min-h-11 text-sm font-semibold"
           href="/contact"
-          onClick={closeMenu}
+          onClick={() => void closeMenu()}
         >
           <span className="inline-flex items-center gap-2">
             Start a conversation

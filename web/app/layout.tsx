@@ -5,6 +5,7 @@ import { VisualEditing } from "next-sanity/visual-editing";
 
 import { SmoothScrollProvider } from "@/components/motion/smooth-scroll-provider";
 import { ConnectivityStatus } from "@/components/system/connectivity-status";
+import { DeferredSanityLive } from "@/components/system/deferred-sanity-live";
 import { SanityLive, sanityFetch } from "@/sanity/lib/live";
 import { SITE_URL } from "@/lib/site";
 import { resolveSocialImage } from "@/lib/seo";
@@ -105,7 +106,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <SmoothScrollProvider>
           {children}
-          <SanityLive includeDrafts={isDraftMode} />
+          {isDraftMode ? (
+            <SanityLive includeDrafts />
+          ) : (
+            <DeferredSanityLive />
+          )}
           {isDraftMode ? <VisualEditing /> : null}
         </SmoothScrollProvider>
       </body>

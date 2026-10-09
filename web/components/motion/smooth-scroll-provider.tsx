@@ -61,6 +61,12 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const contextValue = useMemo(() => ({ scrollTo }), [scrollTo]);
 
   useEffect(() => {
+    const desktopMotion = window.matchMedia(
+      "(min-width: 64rem) and (hover: hover) and (pointer: fine)",
+    );
+
+    if (!desktopMotion.matches) return;
+
     let cancelled = false;
     let cleanupMotion: (() => void) | undefined;
     let idleId: number | undefined;
@@ -130,43 +136,28 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       };
     };
 
-    const initializeFromIntent = () => void initializeMotion();
-    const delayId = window.setTimeout(() => {
+    const startMotion = () => {
       if ("requestIdleCallback" in window) {
         idleId = window.requestIdleCallback(() => void initializeMotion(), {
-          timeout: 1_200,
+          timeout: 1_500,
         });
       } else {
-        void initializeMotion();
+        setTimeout(() => void initializeMotion(), 0);
       }
-    }, 600);
+    };
 
-    window.addEventListener("wheel", initializeFromIntent, {
-      once: true,
-      passive: true,
-    });
-    window.addEventListener("pointermove", initializeFromIntent, {
-      once: true,
-      passive: true,
-    });
-    window.addEventListener("touchstart", initializeFromIntent, {
-      once: true,
-      passive: true,
-    });
-    window.addEventListener("focusin", initializeFromIntent, { once: true });
-    window.addEventListener("keydown", initializeFromIntent, { once: true });
+    if (document.readyState === "complete") {
+      startMotion();
+    } else {
+      window.addEventListener("load", startMotion, { once: true });
+    }
 
     return () => {
       cancelled = true;
-      window.clearTimeout(delayId);
+      window.removeEventListener("load", startMotion);
       if (idleId !== undefined && "cancelIdleCallback" in window) {
         window.cancelIdleCallback(idleId);
       }
-      window.removeEventListener("wheel", initializeFromIntent);
-      window.removeEventListener("pointermove", initializeFromIntent);
-      window.removeEventListener("touchstart", initializeFromIntent);
-      window.removeEventListener("focusin", initializeFromIntent);
-      window.removeEventListener("keydown", initializeFromIntent);
       cleanupMotion?.();
     };
   }, []);
