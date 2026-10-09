@@ -6,7 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run lib sanity",
+    "test:integration": "vitest run app/api",
+    "test:component": "vitest run components",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "node test/e2e/runner.mjs",
+    "test:accessibility": "node test/a11y/runner.mjs",
+    "test:quality": "node test/quality/runner.mjs",
+    "test:lighthouse": "node test/lighthouse/runner.mjs",
+    "test:all": "vitest run && node test/e2e/runner.mjs && node test/a11y/runner.mjs && node test/quality/runner.mjs && node test/lighthouse/runner.mjs"
   },
   "dependencies": {
     "@portabletext/react": "^8.0.1",
@@ -21,13 +31,23 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^5.0.3",
+    "axe-core": "^4.13.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
+    "jsdom": "^29.1.1",
+    "lighthouse": "^13.5.0",
+    "puppeteer": "^25.13.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^5.0.3"
   },
   "optionalDependencies": {
     "@tailwindcss/oxide-linux-x64-gnu": "4.3.3",

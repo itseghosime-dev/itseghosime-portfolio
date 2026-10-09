@@ -19,6 +19,7 @@
 
 # Test and build output
 **/coverage/
+**/test-results/
 **/*.tsbuildinfo
 **/next-env.d.ts
 **/*.log
