@@ -29,7 +29,12 @@ export function CodeBlock({
       theme={themes.nightOwl}
     >
       {({ getLineProps, getTokenProps, tokens }) => (
-        <pre className="m-0 max-h-[36rem] overflow-auto bg-[#101318] py-5 font-mono text-xs leading-6 [tab-size:2]" data-lenis-prevent>
+        <pre
+          aria-label="Scrollable code example"
+          className="m-0 max-h-[36rem] overflow-auto bg-[#101318] py-5 font-mono text-xs leading-6 [tab-size:2]"
+          data-lenis-prevent
+          tabIndex={0}
+        >
           <code className="grid min-w-max">
             {tokens.map((line, lineIndex) => {
               const lineProps = getLineProps({ line });

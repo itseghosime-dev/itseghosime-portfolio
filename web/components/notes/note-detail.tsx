@@ -144,7 +144,7 @@ export function NoteDetail({ data }: { data: NoteDetailData }) {
                     .slice(0, 6)
                     .map((item) => (
                       <span
-                        className="border border-black/10 bg-surface px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.06em] text-ink-muted"
+                        className="border border-black/10 bg-surface px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.06em] text-ink-soft"
                         key={item}
                       >
                         {item}

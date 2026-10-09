@@ -256,7 +256,7 @@ export function LabView({ experiments, page }: LabViewProps) {
               </Link>
               <a
                 className="text-ink-muted no-underline hover:text-ink"
-                href="https://github.com/itseghosime-dev"
+                href="https://github.com/itseghosime"
                 rel="noreferrer"
                 target="_blank"
               >

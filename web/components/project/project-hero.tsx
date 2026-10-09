@@ -107,7 +107,7 @@ export function ProjectHero({ project, section }: ProjectHeroProps) {
             ) : null}
             {project.repositoryUrl ? (
               <a
-                className="inline-flex min-h-11 items-center gap-2 px-3 py-2.5 text-xs font-semibold text-ink-muted no-underline hover:text-ink"
+                className="inline-flex min-h-11 items-center gap-2 px-3 py-2.5 text-xs font-semibold text-ink-soft no-underline hover:text-ink"
                 href={project.repositoryUrl}
                 rel="noreferrer"
                 target="_blank"
