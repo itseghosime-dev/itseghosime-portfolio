@@ -165,16 +165,32 @@ export function HomeMotion() {
     }
 
     const context = gsap.context(() => {
-      const heroItems = document.querySelectorAll('[data-hero-reveal]')
+      const heroTitle = document.querySelector<HTMLElement>('#hero-title')
+      const secondaryHeroItems = document.querySelectorAll(
+        '[data-hero-reveal]:not(#hero-title)',
+      )
+
+      if (heroTitle) {
+        gsap.fromTo(
+          heroTitle,
+          { y: 14 },
+          {
+            duration: 0.68,
+            ease: 'power3.out',
+            y: 0,
+          },
+        )
+      }
+
       gsap.fromTo(
-        heroItems,
-        {opacity: 0, y: 18},
+        secondaryHeroItems,
+        { opacity: 0, y: 14 },
         {
-          delay: 0.08,
+          delay: 0.06,
           duration: 0.62,
           ease: 'power3.out',
           opacity: 1,
-          stagger: 0.075,
+          stagger: 0.08,
           y: 0,
         },
       )
