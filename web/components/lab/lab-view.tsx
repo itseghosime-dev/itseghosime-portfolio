@@ -175,7 +175,7 @@ export function LabView({ experiments, page }: LabViewProps) {
               >
                 <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
                   <div>
-                    <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
+                    <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-text">
                       {page.archiveEyebrow}
                     </p>
                     <h2 className="mt-2 font-serif text-[clamp(2rem,4vw,2.75rem)] tracking-[-0.03em] text-ink">
@@ -195,7 +195,7 @@ export function LabView({ experiments, page }: LabViewProps) {
                       data-lab-card
                       key={experiment.id}
                     >
-                      <span className="font-mono text-xs font-semibold text-accent">
+                      <span className="font-mono text-xs font-semibold text-accent-text">
                         {experiment.number}
                       </span>
                       <div>
@@ -237,7 +237,7 @@ export function LabView({ experiments, page }: LabViewProps) {
         >
           <div className="flex flex-col justify-between gap-10 md:flex-row md:items-end">
             <div className="max-w-xl space-y-4">
-              <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent">
+              <p className="font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-accent-text">
                 {page.closingEyebrow}
               </p>
               <h2 className="font-serif text-[clamp(2.5rem,4.5vw,3.5rem)] leading-none tracking-[-0.04em] text-ink">

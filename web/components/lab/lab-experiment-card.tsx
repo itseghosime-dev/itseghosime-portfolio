@@ -51,7 +51,7 @@ function ExperimentCopy({ experiment }: { experiment: LabExperimentModel }) {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-4 border-b border-black/[0.08] pb-3 font-mono text-[0.6875rem] uppercase tracking-[0.1em]">
-        <span className="font-semibold text-accent">
+        <span className="font-semibold text-accent-text">
           {experiment.number} {"//"} {experiment.categoryLabel}
         </span>
         <span className="shrink-0 text-ink-muted">
@@ -93,7 +93,7 @@ export function LabExperimentCard({
         <div className="flex flex-col justify-between gap-8 p-7 sm:p-9 lg:p-10">
           <div className="space-y-5">
             <div className="flex items-center justify-between gap-4 font-mono text-[0.625rem] font-semibold uppercase tracking-[0.12em]">
-              <span className="text-accent">
+              <span className="text-accent-text">
                 Featured // {experiment.number}
               </span>
               {experiment.status ? (
