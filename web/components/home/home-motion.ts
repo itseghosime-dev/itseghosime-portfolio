@@ -1,7 +1,6 @@
 'use client'
 
 import gsap from 'gsap'
-import {ScrollTrigger} from 'gsap/ScrollTrigger'
 import {useEffect} from 'react'
 
 function formatLocalDateTime() {
@@ -37,7 +36,6 @@ export function HomeMotion() {
       return
     }
 
-    gsap.registerPlugin(ScrollTrigger)
     const heroSurface = document.querySelector<HTMLElement>('[data-hero-surface]')
     const pointerGlow = document.querySelector<HTMLElement>('[data-hero-pointer-glow]')
     const impactRing = document.querySelector<HTMLElement>('[data-hero-impact-ring]')
@@ -206,48 +204,91 @@ export function HomeMotion() {
         yoyo: true,
       })
 
-      const heroContent = document.querySelector<HTMLElement>('[data-hero-content]')
-      if (heroSurface && heroContent) {
-        gsap.to(heroContent, {
-          ease: 'none',
-          opacity: 0.28,
-          scrollTrigger: {
-            end: 'bottom 22%',
-            scrub: 0.55,
-            start: 'top top',
-            trigger: heroSurface,
-          },
-          y: -72,
-        })
-      }
-
-      const revealItems = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'))
-      revealItems.forEach((item, index) => {
-        const variant = index % 3
-        const from =
-          variant === 0
-            ? {clipPath: 'inset(0 0 14% 0)', opacity: 0, y: 52}
-            : variant === 1
-              ? {clipPath: 'inset(0 8% 0 0)', opacity: 0, x: -38}
-              : {opacity: 0, scale: 0.965, y: 28}
-
-        gsap.fromTo(item, from, {
-          clearProps: 'clipPath,opacity,transform',
-          clipPath: 'inset(0 0 0% 0)',
-          duration: 0.95,
-          ease: 'power3.out',
-          opacity: 1,
-          scale: 1,
-          scrollTrigger: {
-            once: true,
-            start: 'top 86%',
-            trigger: item,
-          },
-          x: 0,
-          y: 0,
-        })
-      })
     })
+
+    let cancelled = false
+    let scrollContext: gsap.Context | undefined
+    let idleId: number | undefined
+
+    const initializeScrollMotion = async () => {
+      if (cancelled || scrollContext) return
+
+      const {ScrollTrigger} = await import('gsap/ScrollTrigger')
+      if (cancelled || scrollContext) return
+
+      gsap.registerPlugin(ScrollTrigger)
+      scrollContext = gsap.context(() => {
+        const heroContent = document.querySelector<HTMLElement>('[data-hero-content]')
+        if (heroSurface && heroContent) {
+          gsap.to(heroContent, {
+            ease: 'none',
+            opacity: 0.28,
+            scrollTrigger: {
+              end: 'bottom 22%',
+              scrub: 0.55,
+              start: 'top top',
+              trigger: heroSurface,
+            },
+            y: -72,
+          })
+        }
+
+        const revealItems = Array.from(
+          document.querySelectorAll<HTMLElement>('[data-reveal]'),
+        )
+        revealItems.forEach((item, index) => {
+          const variant = index % 3
+          const from =
+            variant === 0
+              ? {clipPath: 'inset(0 0 14% 0)', opacity: 0, y: 52}
+              : variant === 1
+                ? {clipPath: 'inset(0 8% 0 0)', opacity: 0, x: -38}
+                : {opacity: 0, scale: 0.965, y: 28}
+
+          gsap.fromTo(item, from, {
+            clearProps: 'clipPath,opacity,transform',
+            clipPath: 'inset(0 0 0% 0)',
+            duration: 0.95,
+            ease: 'power3.out',
+            opacity: 1,
+            scale: 1,
+            scrollTrigger: {
+              once: true,
+              start: 'top 86%',
+              trigger: item,
+            },
+            x: 0,
+            y: 0,
+          })
+        })
+
+        ScrollTrigger.refresh()
+      })
+    }
+
+    const initializeFromIntent = () => void initializeScrollMotion()
+    const delayId = window.setTimeout(() => {
+      if ('requestIdleCallback' in window) {
+        idleId = window.requestIdleCallback(
+          () => void initializeScrollMotion(),
+          {timeout: 1_200},
+        )
+      } else {
+        void initializeScrollMotion()
+      }
+    }, 600)
+
+    window.addEventListener('wheel', initializeFromIntent, {once: true, passive: true})
+    window.addEventListener('pointermove', initializeFromIntent, {
+      once: true,
+      passive: true,
+    })
+    window.addEventListener('touchstart', initializeFromIntent, {
+      once: true,
+      passive: true,
+    })
+    window.addEventListener('focusin', initializeFromIntent, {once: true})
+    window.addEventListener('keydown', initializeFromIntent, {once: true})
 
     updateCursorTime()
     const timeInterval = window.setInterval(updateCursorTime, 1_000)
@@ -258,11 +299,22 @@ export function HomeMotion() {
     heroSurface?.addEventListener('pointerleave', handlePointerLeave)
 
     return () => {
+      cancelled = true
+      window.clearTimeout(delayId)
+      if (idleId !== undefined && 'cancelIdleCallback' in window) {
+        window.cancelIdleCallback(idleId)
+      }
+      window.removeEventListener('wheel', initializeFromIntent)
+      window.removeEventListener('pointermove', initializeFromIntent)
+      window.removeEventListener('touchstart', initializeFromIntent)
+      window.removeEventListener('focusin', initializeFromIntent)
+      window.removeEventListener('keydown', initializeFromIntent)
       window.clearInterval(timeInterval)
       heroSurface?.removeEventListener('pointerenter', handlePointerEnter)
       heroSurface?.removeEventListener('pointermove', handlePointerMove)
       heroSurface?.removeEventListener('pointerdown', handlePointerDown)
       heroSurface?.removeEventListener('pointerleave', handlePointerLeave)
+      scrollContext?.revert()
       context.revert()
     }
   }, [])

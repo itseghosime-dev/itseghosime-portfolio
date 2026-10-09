@@ -1,8 +1,6 @@
 "use client";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
+import type Lenis from "lenis";
 import { usePathname } from "next/navigation";
 import {
   createContext,
@@ -63,61 +61,113 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const contextValue = useMemo(() => ({ scrollTo }), [scrollTo]);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    let cancelled = false;
+    let cleanupMotion: (() => void) | undefined;
+    let idleId: number | undefined;
 
-    const lenis = new Lenis({
-      anchors: {
-        duration: 1.3,
+    const initializeMotion = async () => {
+      if (cancelled || lenisRef.current) return;
+
+      const [{ default: gsap }, { ScrollTrigger }, { default: LenisRuntime }] =
+        await Promise.all([
+          import("gsap"),
+          import("gsap/ScrollTrigger"),
+          import("lenis"),
+        ]);
+
+      if (cancelled || lenisRef.current) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+      const lenis = new LenisRuntime({
+        anchors: {
+          duration: 1.3,
+          easing: cinematicEase,
+          offset: -96,
+        },
+        autoRaf: false,
+        autoResize: true,
+        autoToggle: false,
+        duration: 1.25,
         easing: cinematicEase,
-        offset: -96,
-      },
-      autoRaf: false,
-      autoResize: true,
-      autoToggle: false,
-      duration: 1.25,
-      easing: cinematicEase,
-      overscroll: true,
-      respectReducedMotion: true,
-      smoothWheel: true,
-      stopInertiaOnNavigate: true,
-      syncTouch: false,
-      touchMultiplier: 1.05,
-      wheelMultiplier: 0.92,
-    });
+        overscroll: true,
+        respectReducedMotion: true,
+        smoothWheel: true,
+        stopInertiaOnNavigate: true,
+        syncTouch: false,
+        touchMultiplier: 1.05,
+        wheelMultiplier: 0.92,
+      });
 
-    lenisRef.current = lenis;
+      lenisRef.current = lenis;
+      let previousScroll = lenis.scroll;
+      const updateScroll = (instance: Lenis) => {
+        ScrollTrigger.update();
+        const delta = instance.scroll - previousScroll;
+        if (Math.abs(delta) > 0.5) {
+          document.documentElement.dataset.scrollDirection =
+            delta > 0 ? "forward" : "backward";
+        }
+        previousScroll = instance.scroll;
+      };
+      const tick = (time: number) => lenis.raf(time * 1000);
+      const refresh = () => {
+        lenis.resize();
+        ScrollTrigger.refresh();
+      };
 
-    let previousScroll = lenis.scroll;
-    const updateScroll = (instance: Lenis) => {
-      ScrollTrigger.update();
+      lenis.on("scroll", updateScroll);
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
+      window.addEventListener("load", refresh, { once: true });
+      document.fonts.ready.then(refresh).catch(() => undefined);
 
-      const delta = instance.scroll - previousScroll;
-      if (Math.abs(delta) > 0.5) {
-        document.documentElement.dataset.scrollDirection =
-          delta > 0 ? "forward" : "backward";
+      cleanupMotion = () => {
+        window.removeEventListener("load", refresh);
+        gsap.ticker.remove(tick);
+        lenis.off("scroll", updateScroll);
+        lenis.destroy();
+        lenisRef.current = null;
+      };
+    };
+
+    const initializeFromIntent = () => void initializeMotion();
+    const delayId = window.setTimeout(() => {
+      if ("requestIdleCallback" in window) {
+        idleId = window.requestIdleCallback(() => void initializeMotion(), {
+          timeout: 1_200,
+        });
+      } else {
+        void initializeMotion();
       }
-      previousScroll = instance.scroll;
-    };
-    const tick = (time: number) => lenis.raf(time * 1000);
+    }, 600);
 
-    lenis.on("scroll", updateScroll);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
-
-    const refresh = () => {
-      lenis.resize();
-      ScrollTrigger.refresh();
-    };
-
-    window.addEventListener("load", refresh, { once: true });
-    document.fonts.ready.then(refresh).catch(() => undefined);
+    window.addEventListener("wheel", initializeFromIntent, {
+      once: true,
+      passive: true,
+    });
+    window.addEventListener("pointermove", initializeFromIntent, {
+      once: true,
+      passive: true,
+    });
+    window.addEventListener("touchstart", initializeFromIntent, {
+      once: true,
+      passive: true,
+    });
+    window.addEventListener("focusin", initializeFromIntent, { once: true });
+    window.addEventListener("keydown", initializeFromIntent, { once: true });
 
     return () => {
-      window.removeEventListener("load", refresh);
-      gsap.ticker.remove(tick);
-      lenis.off("scroll", updateScroll);
-      lenis.destroy();
-      lenisRef.current = null;
+      cancelled = true;
+      window.clearTimeout(delayId);
+      if (idleId !== undefined && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId);
+      }
+      window.removeEventListener("wheel", initializeFromIntent);
+      window.removeEventListener("pointermove", initializeFromIntent);
+      window.removeEventListener("touchstart", initializeFromIntent);
+      window.removeEventListener("focusin", initializeFromIntent);
+      window.removeEventListener("keydown", initializeFromIntent);
+      cleanupMotion?.();
     };
   }, []);
 
@@ -127,7 +177,9 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
       if (!lenis) return;
 
       lenis.resize();
-      ScrollTrigger.refresh();
+      void import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
+        ScrollTrigger.refresh();
+      });
     });
 
     return () => window.cancelAnimationFrame(frame);
