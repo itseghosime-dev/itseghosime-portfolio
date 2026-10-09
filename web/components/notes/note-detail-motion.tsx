@@ -51,11 +51,10 @@ export function NoteDetailMotion({ children }: { children: ReactNode }) {
         .forEach((element) => {
           gsap.fromTo(
             element,
-            { opacity: 0.3, y: 18 },
+            { y: 18 },
             {
               duration: 0.68,
               ease: "power2.out",
-              opacity: 1,
               scrollTrigger: {
                 once: true,
                 start: "top 91%",
@@ -76,13 +75,11 @@ export function NoteDetailMotion({ children }: { children: ReactNode }) {
                 index % 2 === 0
                   ? "inset(0 7% 0 0)"
                   : "inset(0 0 0 7%)",
-              opacity: 0.25,
             },
             {
               clipPath: "inset(0 0 0 0)",
               duration: 0.9,
               ease: "power3.out",
-              opacity: 1,
               scrollTrigger: {
                 once: true,
                 start: "top 88%",

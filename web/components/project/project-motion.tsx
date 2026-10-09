@@ -187,10 +187,9 @@ export function ProjectMotion({ children }: { children: ReactNode }) {
           if (sandboxFrame) {
             gsap.fromTo(
               sandboxFrame,
-              { opacity: 0.55, scale: 0.93, y: 56 },
+              { scale: 0.93, y: 56 },
               {
                 ease: "none",
-                opacity: 1,
                 scale: 1,
                 scrollTrigger: {
                   end: "top 28%",
