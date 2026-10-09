@@ -10,7 +10,6 @@ import { getWorkArchive } from "@/sanity/lib/work";
 import { getStaticPageSeo } from "@/sanity/lib/seo";
 import { createPageMetadata } from "@/lib/seo";
 import { absoluteUrl, SITE_URL } from "@/lib/site";
-import type { ArchiveFilter } from "@/types/work";
 
 export async function generateMetadata(): Promise<Metadata> {
   const data = await getStaticPageSeo();
@@ -28,17 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function WorkPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ filter?: string }>;
-}) {
-  const { filter } = await searchParams;
+export default async function WorkPage() {
   const [page, entries] = await Promise.all([getHomePage(), getWorkArchive()]);
-  const initialFilter: ArchiveFilter =
-    filter === "client" || filter === "web" || filter === "experimental"
-      ? filter
-      : "all";
 
   if (!page) {
     notFound();
@@ -80,7 +70,7 @@ export default async function WorkPage({
           }}
           type="application/ld+json"
         />
-        <WorkArchive entries={entries} initialFilter={initialFilter} />
+        <WorkArchive entries={entries} />
         <ArchiveContactSection contact={page.contact} />
       </main>
       <SiteFooter footerText={page.footerText} siteName={page.siteName} />

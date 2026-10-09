@@ -11,6 +11,12 @@ type SocialImageLike = {
   width?: number | null;
 };
 
+type ShareReadyImage = SocialImageLike & {
+  height: number;
+  url: string;
+  width: number;
+};
+
 type PageMetadataInput = {
   defaultImage?: SocialImageLike | null;
   description: string;
@@ -31,20 +37,31 @@ export function resolveSocialImage(
   image?: SocialImageLike | null,
   defaultImage?: SocialImageLike | null,
 ): ImageAsset {
-  if (image?.url) {
+  const isShareReady = (
+    candidate?: SocialImageLike | null,
+  ): candidate is ShareReadyImage =>
+    Boolean(
+      candidate?.url &&
+      candidate.width &&
+      candidate.height &&
+      candidate.width >= 1200 &&
+      candidate.height >= 630,
+    );
+
+  if (isShareReady(image)) {
     return {
       alt: image.alt || DEFAULT_SOCIAL_IMAGE.alt,
-      height: image.height || DEFAULT_SOCIAL_IMAGE.height,
+      height: image.height,
       url: image.url,
-      width: image.width || DEFAULT_SOCIAL_IMAGE.width,
+      width: image.width,
     };
   }
-  if (defaultImage?.url) {
+  if (isShareReady(defaultImage)) {
     return {
       alt: defaultImage.alt || DEFAULT_SOCIAL_IMAGE.alt,
-      height: defaultImage.height || DEFAULT_SOCIAL_IMAGE.height,
+      height: defaultImage.height,
       url: defaultImage.url,
-      width: defaultImage.width || DEFAULT_SOCIAL_IMAGE.width,
+      width: defaultImage.width,
     };
   }
   return DEFAULT_SOCIAL_IMAGE;

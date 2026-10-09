@@ -115,7 +115,20 @@ export function WorkArchive({
   entries,
   initialFilter = "all",
 }: WorkArchiveProps) {
-  const [filter, setFilter] = useState<ArchiveFilter>(initialFilter);
+  const [filter, setFilter] = useState<ArchiveFilter>(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const paramFilter = params.get("filter");
+      if (
+        paramFilter === "client" ||
+        paramFilter === "web" ||
+        paramFilter === "experimental"
+      ) {
+        return paramFilter;
+      }
+    }
+    return initialFilter;
+  });
   const [query, setQuery] = useState("");
   const [viewOverride, setViewOverride] = useState<ArchiveView | null>(null);
   const view: ArchiveView = viewOverride ?? "visual";
