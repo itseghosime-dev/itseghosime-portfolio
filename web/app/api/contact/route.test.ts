@@ -6,8 +6,8 @@ describe('Contact API route handler', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     process.env.RESEND_API_KEY = 'test-resend-key'
-    process.env.CONTACT_FROM_EMAIL = 'ITSEGHOSIME <contact@itseghosime.com>'
-    process.env.CONTACT_TO_EMAIL = 'info.itseghosime@gmail.com'
+    process.env.CONTACT_FROM_EMAIL = 'ITSEGHOSIME <hello@itseghosime.com>'
+    process.env.CONTACT_TO_EMAIL = 'hello@itseghosime.com'
     process.env.NEXT_PUBLIC_SITE_URL = 'https://www.itseghosime.com'
   })
 

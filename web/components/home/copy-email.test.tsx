@@ -4,9 +4,9 @@ import { CopyEmail } from './copy-email'
 
 describe('CopyEmail component', () => {
   it('renders the email address and initial "Click to copy" state', () => {
-    render(<CopyEmail email="info.itseghosime@gmail.com" />)
+    render(<CopyEmail email="hello@itseghosime.com" />)
 
-    expect(screen.getByText('info.itseghosime@gmail.com')).toBeDefined()
+    expect(screen.getByText('hello@itseghosime.com')).toBeDefined()
     expect(screen.getByText('Click to copy')).toBeDefined()
   })
 
@@ -18,12 +18,12 @@ describe('CopyEmail component', () => {
       value: { writeText: writeTextSpy },
     })
 
-    render(<CopyEmail email="info.itseghosime@gmail.com" />)
+    render(<CopyEmail email="hello@itseghosime.com" />)
 
     const button = screen.getByRole('button')
     fireEvent.click(button)
 
-    expect(writeTextSpy).toHaveBeenCalledWith('info.itseghosime@gmail.com')
+    expect(writeTextSpy).toHaveBeenCalledWith('hello@itseghosime.com')
 
     await waitFor(() => {
       expect(screen.getByText('Email address copied to clipboard.')).toBeDefined()
@@ -39,7 +39,7 @@ describe('CopyEmail component', () => {
       value: { writeText: writeTextSpy },
     })
 
-    render(<CopyEmail email="info.itseghosime@gmail.com" />)
+    render(<CopyEmail email="hello@itseghosime.com" />)
 
     const button = screen.getByRole('button')
     fireEvent.click(button)

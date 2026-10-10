@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 
 import { BrandMark } from "@/components/ui/brand-mark";
+import { SITE_EMAIL } from "@/lib/site";
 
 import "./globals.css";
 
@@ -55,9 +56,9 @@ export default function GlobalError({
               <p>Root boundary exhausted{error.digest ? ` · Reference ${error.digest}` : ""}</p>
               <a
                 className="mt-2 inline-block normal-case tracking-normal text-accent"
-                href="mailto:info.itseghosime@gmail.com"
+                href={`mailto:${SITE_EMAIL}`}
               >
-                info.itseghosime@gmail.com
+                {SITE_EMAIL}
               </a>
             </div>
           </section>

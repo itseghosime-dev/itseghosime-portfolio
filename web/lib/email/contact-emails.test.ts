@@ -11,9 +11,9 @@ describe('contact email batch builder', () => {
   }
 
   const addresses = {
-    fromEmail: 'ITSEGHOSIME Portfolio <contact@itseghosime.com>',
+    fromEmail: 'ITSEGHOSIME <hello@itseghosime.com>',
     siteUrl: 'https://www.itseghosime.com',
-    toEmail: 'info.itseghosime@gmail.com',
+    toEmail: 'hello@itseghosime.com',
   }
 
   it('builds owner notification and visitor acknowledgement emails', () => {

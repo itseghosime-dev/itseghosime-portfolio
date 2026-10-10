@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 
 import { Container } from "@/components/ui/container";
+import { SITE_EMAIL } from "@/lib/site";
 
 import { SystemFooter, SystemHeader } from "./system-shell";
 
@@ -65,7 +66,7 @@ export function RouteErrorExperience({
                 </Link>
                 <a
                   className="inline-flex min-h-12 items-center justify-center gap-2 px-4 text-sm font-medium text-ink-muted no-underline hover:text-accent"
-                  href={`mailto:info.itseghosime@gmail.com?subject=${encodeURIComponent(`Portfolio issue${error.digest ? ` · ${error.digest}` : ""}`)}`}
+                  href={`mailto:${SITE_EMAIL}?subject=${encodeURIComponent(`Portfolio issue${error.digest ? ` · ${error.digest}` : ""}`)}`}
                 >
                   <Bug aria-hidden="true" size={16} /> Report the issue
                 </a>
