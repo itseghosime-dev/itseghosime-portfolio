@@ -49,6 +49,16 @@ describe('contact email batch builder', () => {
     expect(ownerEmail.html).toContain('Not supplied')
   })
 
+  it('keeps the email logo at a fixed size on narrow screens', () => {
+    const [ownerEmail, visitorEmail] = buildContactEmailBatch(sampleInput, addresses)
+
+    for (const email of [ownerEmail, visitorEmail]) {
+      expect(email.html).toContain('width="44" height="44"')
+      expect(email.html).toContain('width:44px !important;min-width:44px;max-width:44px')
+      expect(email.html).toContain('width:44px;min-width:44px;max-width:44px')
+    }
+  })
+
   it('properly escapes HTML special characters in inputs to prevent injection', () => {
     const maliciousInput: ContactEmailInput = {
       category: 'Other',

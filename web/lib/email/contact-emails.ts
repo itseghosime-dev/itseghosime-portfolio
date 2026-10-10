@@ -54,8 +54,8 @@ function emailShell(
                         <td valign="middle">
                           <table role="presentation" cellspacing="0" cellpadding="0">
                             <tr>
-                              <td valign="middle" style="padding-right:13px;">
-                                <img src="${safeLogoUrl}" width="44" height="44" alt="ITSEGHOSIME logo" style="display:block;width:44px;height:44px;border:0;border-radius:10px;" />
+                              <td width="44" valign="middle" style="width:44px;min-width:44px;max-width:44px;padding-right:13px;line-height:0;">
+                                <img src="${safeLogoUrl}" width="44" height="44" alt="ITSEGHOSIME logo" style="display:block;width:44px !important;min-width:44px;max-width:44px;height:44px !important;border:0;border-radius:10px;-ms-interpolation-mode:bicubic;" />
                               </td>
                               <td valign="middle">
                                 <p style="margin:0;color:#ffffff;font-size:14px;font-weight:800;letter-spacing:1.6px;line-height:1;text-transform:uppercase;">ITSEGHOSIME</p>
