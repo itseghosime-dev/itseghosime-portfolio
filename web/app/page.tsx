@@ -15,7 +15,7 @@ import { getHomePage } from "@/sanity/lib/home";
 import { sanityFetch } from "@/sanity/lib/live";
 import { HOME_METADATA_QUERY } from "@/sanity/lib/queries";
 import { resolveSocialImage } from "@/lib/seo";
-import { SITE_URL } from "@/lib/site";
+import { absoluteUrl, SITE_URL } from "@/lib/site";
 
 function safeUrl(value: string | null | undefined): URL | undefined {
   if (!value) {
@@ -96,10 +96,66 @@ export default async function Home() {
     notFound();
   }
 
+  const personId = `${SITE_URL}/#person`;
+  const websiteId = `${SITE_URL}/#website`;
+  const profilePageId = `${SITE_URL}/#profile-page`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@id": personId,
+        "@type": "Person",
+        name: page.hero.name,
+        jobTitle: page.hero.professionalTitle,
+        description: page.hero.introduction,
+        homeLocation: page.hero.location
+          ? {
+              "@type": "Place",
+              name: page.hero.location,
+            }
+          : undefined,
+        image: page.hero.portrait?.url,
+        knowsAbout: page.technologies.map((technology) => technology.name),
+        sameAs: page.contact.socialLinks.map((link) => link.url),
+        url: absoluteUrl("/about"),
+      },
+      {
+        "@id": websiteId,
+        "@type": "WebSite",
+        name: page.siteName,
+        description: page.hero.introduction,
+        inLanguage: "en",
+        publisher: {
+          "@id": personId,
+        },
+        url: SITE_URL,
+      },
+      {
+        "@id": profilePageId,
+        "@type": "ProfilePage",
+        name: `${page.hero.name} — ${page.hero.professionalTitle}`,
+        description: page.hero.introduction,
+        isPartOf: {
+          "@id": websiteId,
+        },
+        mainEntity: {
+          "@id": personId,
+        },
+        url: SITE_URL,
+      },
+    ],
+  };
+
   return (
     <>
       <SiteHeader navigation={page.navigation} siteName={page.siteName} />
       <main id="main-content">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+          }}
+          type="application/ld+json"
+        />
         <HeroSection />
         <WorkSection projects={page.projects} />
         <CapabilitiesSection capabilities={page.capabilities} />

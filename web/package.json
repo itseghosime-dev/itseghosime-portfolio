@@ -19,6 +19,7 @@
     "test:all": "vitest run && node test/e2e/runner.mjs && node test/a11y/runner.mjs && node test/quality/runner.mjs && node test/lighthouse/runner.mjs"
   },
   "dependencies": {
+    "@itseghosime/envguard": "^0.1.0",
     "@portabletext/react": "^8.0.1",
     "gsap": "3.15.0",
     "lenis": "^1.3.26",
